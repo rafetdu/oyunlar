@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<title>Perili Köşk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@500;700;900&display=swap">
+<style>
+:root{
+  --night:#12071F; --night2:#2A0F4A; --card:#1B0E2Ecc; --ink:#F6EEDC; --muted:#C9B8E0;
+  --pumpkin:#FF7A1A; --pumpkin2:#FFB347; --slime:#8BFF5A; --blood:#E23B3B; --line:#5A3B85;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--night);color:var(--ink);font-family:"Nunito",system-ui,sans-serif;font-size:17px;overflow:hidden}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block}
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding-inline:16px;padding-block:12px;box-sizing:border-box}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:"Creepster",cursive;font-size:1.6rem;letter-spacing:.04em;color:var(--pumpkin);text-shadow:0 0 18px #ff7a1a88}
+.timer{font-variant-numeric:tabular-nums;font-weight:900;font-size:1.4rem;background:#0008;border:1px solid var(--line);border-radius:999px;padding:4px 16px}
+.doors{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.door{width:18px;height:26px;border-radius:9px 9px 3px 3px;background:#3a2358;border:1px solid var(--line);transition:background .3s}
+.door.open{background:var(--slime);box-shadow:0 0 10px #8bff5a99}
+.door.now{background:var(--pumpkin);box-shadow:0 0 12px #ff7a1a}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.card{width:min(640px,100%);background:var(--card);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:0 20px 60px #0009;max-height:100%;overflow:auto;box-sizing:border-box}
+h1{font-family:"Creepster",cursive;font-weight:400;font-size:clamp(2.2rem,8vw,3.6rem);margin:0 0 6px;color:var(--pumpkin);text-shadow:0 0 24px #ff7a1a77;text-wrap:balance;line-height:1}
+h2{font-family:"Creepster",cursive;font-weight:400;font-size:1.7rem;margin:0 0 10px;color:var(--pumpkin2);text-wrap:balance}
+p{margin:0 0 12px;line-height:1.5}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input[type=text]{width:100%;box-sizing:border-box;font:inherit;font-size:1.1rem;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0b0416;color:var(--ink)}
+input[type=text]:focus{outline:2px solid var(--pumpkin);outline-offset:2px}
+a.btn{text-decoration:none;display:inline-block}
+.btn{font:inherit;font-weight:900;font-size:1.05rem;padding:12px 22px;border-radius:12px;border:0;background:var(--pumpkin);color:#1a0800;cursor:pointer;box-shadow:0 6px 0 #a34a08;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #a34a08}
+.btn:focus-visible{outline:3px solid var(--slime);outline-offset:3px}
+.btn.ghost{background:#0008;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.sentence{font-size:1.35rem;font-weight:700;line-height:1.5;margin:10px 0 16px}
+.blank{display:inline-block;min-width:5.5ch;border-bottom:3px dashed var(--pumpkin2);color:var(--pumpkin2);text-align:center;padding:0 6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:460px){.opts{grid-template-columns:1fr}}
+.opt{font:inherit;font-weight:700;font-size:1.05rem;padding:14px 12px;border-radius:12px;border:2px solid var(--line);background:#0b0416cc;color:var(--ink);cursor:pointer;text-align:left;transition:transform .1s,border-color .2s}
+.opt:hover{border-color:var(--pumpkin2)}
+.opt:focus-visible{outline:3px solid var(--slime);outline-offset:2px}
+.opt.right{border-color:var(--slime);background:#1f4d15}
+.opt.wrong{border-color:var(--blood);background:#4d1515;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.hint{min-height:1.5em;font-weight:700;color:var(--muted);margin-top:12px}
+.hint.bad{color:#ff8a8a}.hint.good{color:var(--slime)}
+.big{font-size:clamp(2.6rem,12vw,4.5rem);font-weight:900;font-variant-numeric:tabular-nums;color:var(--slime);text-shadow:0 0 30px #8bff5a66;line-height:1;margin:6px 0}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 16px}
+.stat b{display:block;font-size:1.4rem}
+.stat span{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.result{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0b0416;border:1px dashed var(--line);border-radius:10px;padding:12px;user-select:all;margin-bottom:12px;word-break:break-word}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.95rem;margin:12px 0 16px}
+.legend b{color:var(--pumpkin2)}
+.foot{font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<canvas id="scene"></canvas>
+<div id="app">
+  <div class="top">
+    <div class="brand">🎃 Perili Köşk</div>
+    <div class="timer" id="timer" hidden>00:00</div>
+  </div>
+  <div class="doors" id="doors" hidden></div>
+
+  <div class="stage">
+    <!-- GİRİŞ -->
+    <section class="card" id="intro">
+      <div class="eyebrow">Kapadokya Sınıfı • Bağlaç Escape Room</div>
+      <h1>Perili Köşk'ten Kaç!</h1>
+      <p>Köşkte 15 kilitli kapı var. Her kapıda bir cümle seni bekliyor. Boşluğa doğru bağlacı seç, kapı açılsın. Yanlış seçersen kapı kilitli kalır ve <b>+10 saniye</b> ceza alırsın. Süre, "Başla"ya bastığın anda başlıyor!</p>
+      <div class="legend">
+        <b>ama</b><span>zıt iki şey (Kapı açık <i>ama</i> oda karanlık.)</span>
+        <b>çünkü</b><span>sebep (Korkuyorum <i>çünkü</i> ev karanlık.)</span>
+        <b>bunun için / bu nedenle</b><span>sonuç (Hava soğuk. <i>Bu nedenle</i> palto giydim.)</span>
+        <b>-dığı için</b><span>sebep, fiile eklenir (Yağmur yağ<i>dığı için</i> eve koştuk.)</span>
+      </div>
+      <label for="name">Adın ne, cesur kâşif?</label>
+      <input type="text" id="name" placeholder="Adını yaz" autocomplete="off" maxlength="40">
+      <div class="hint bad" id="nameHint"></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="startBtn">🔦 Başla</button></div>
+    </section>
+
+    <!-- SORU -->
+    <section class="card" id="quiz" hidden>
+      <div class="eyebrow" id="roomLabel">Kapı 1 / 15</div>
+      <h2 id="roomName"></h2>
+      <div class="sentence" id="sentence"></div>
+      <div class="opts" id="opts"></div>
+      <div class="hint" id="hint"></div>
+    </section>
+
+    <!-- SONUÇ -->
+    <section class="card" id="done" hidden>
+      <div class="eyebrow">Kaçtın!</div>
+      <h1>Köşkten Çıktın! 🎃</h1>
+      <p id="doneName"></p>
+      <div class="big" id="doneTime">00:00</div>
+      <div class="stats">
+        <div class="stat"><b id="sSec">0</b><span>toplam saniye</span></div>
+        <div class="stat"><b id="sWrong">0</b><span>yanlış deneme</span></div>
+        <div class="stat"><b id="sPen">0</b><span>ceza saniyesi</span></div>
+      </div>
+      <div id="formWrap" hidden>
+        <p><b>Son adım:</b> aşağıdaki düğmeye bas. Açılan formda adın ve süren hazır yazılı, sadece <b>Gönder</b>'e tıkla.</p>
+        <div class="row" style="margin-bottom:14px"><a class="btn" id="formLink" href="#" target="_blank" rel="noopener">📨 Sonucu forma gönder</a></div>
+      </div>
+      <p>Yedek: aşağıdaki satırı kopyalayıp Classroom'a <i>özel yorum</i> olarak da yapıştırabilirsin.</p>
+      <div class="result" id="resultLine"></div>
+      <div class="row">
+        <button class="btn ghost" id="copyBtn">📋 Sonucu kopyala</button>
+        <button class="btn ghost" id="againBtn">Tekrar oyna</button>
+      </div>
+      <div class="hint good" id="copyHint"></div>
+    </section>
+    <!-- ÖĞRETMEN KONTROLÜ (#kontrol) -->
+    <section class="card" id="check" hidden>
+      <div class="eyebrow">Öğretmen ekranı</div>
+      <h2>Sonuç Doğrulama</h2>
+      <p>Formdaki satırdan bilgileri gir. Kod, ad + saniye + yanlış sayısından üretilir; öğrenci süreyi değiştirdiyse kod tutmaz.</p>
+      <label for="cName">Adı</label><input type="text" id="cName" autocomplete="off">
+      <div class="opts" style="margin-top:10px">
+        <div><label for="cSec">Saniye</label><input type="text" id="cSec" inputmode="numeric" placeholder="222"></div>
+        <div><label for="cWrong">Yanlış</label><input type="text" id="cWrong" inputmode="numeric" placeholder="2"></div>
+      </div>
+      <label for="cCode" style="margin-top:10px">Kod</label><input type="text" id="cCode" placeholder="AB12CD" autocomplete="off">
+      <div class="row" style="margin-top:12px"><button class="btn" id="cBtn">Kontrol et</button><button class="btn ghost" id="cBack">Oyuna dön</button></div>
+      <div class="hint" id="cOut"></div>
+    </section>
+  </div>
+  <div class="foot">Orhan Veli Türkçe Okulu • Cadılar Bayramı özel</div>
+</div>
+
+<script>
+// ---- İsteğe bağlı: Google Form'a otomatik kayıt. Form linki verilirse doldurulur. ----
+const FORM = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSfHi-HXukxYH-ePHpWdqoPQPyw8szNpgdTpaKwtLPAYZK835A/formResponse",
+  name: "entry.318248145",
+  time: "entry.1239265814",
+  wrong: ""
+};
+
+const ROOMS = [
+  {n:"Bahçe Kapısı",   s:"Bahçe kapısı kilitli ___ anahtar cebimde.",            o:["ama","çünkü","bunun için","bu nedenle"], a:["ama"]},
+  {n:"Karanlık Hol",   s:"Çok korkuyorum ___ ev çok karanlık.",                  o:["ama","çünkü","bunun için","bu nedenle"], a:["çünkü"]},
+  {n:"Soğuk Salon",    s:"Hava çok soğuk. ___ paltomu giydim.",                  o:["Ama","Çünkü","Bunun için","Bu nedenle"], a:["Bunun için","Bu nedenle"]},
+  {n:"Kara Kedi Odası",s:"Kedi kapkara ___ çok tatlı.",                          o:["ama","çünkü","bunun için","-dığı için"], a:["ama"]},
+  {n:"Fırtına Balkonu",s:"Yağmur ___ içeri koştuk.",                             o:["yağdığı ama","yağdığı için","yağdı çünkü","yağdı bunun için"], a:["yağdığı için"]},
+  {n:"Hayalet Merdiven",s:"Hayalet bağırdı. ___ herkes kaçtı.",                  o:["Ama","Çünkü","Bu nedenle","-dığı için"], a:["Bu nedenle"]},
+  {n:"Kostüm Dolabı",  s:"Kostümüm hazır ___ maskem yok.",                       o:["çünkü","ama","bunun için","bu nedenle"], a:["ama"]},
+  {n:"Şeker Mutfağı",  s:"Karnım ağrıyor ___ çok şeker yedim.",                  o:["ama","bunun için","çünkü","bu nedenle"], a:["çünkü"]},
+  {n:"Mum Odası",      s:"Işıklar ___ mum yaktık.",                              o:["söndü ama","söndü çünkü","söndüğü için","söndü bu nedenle"], a:["söndüğü için"]},
+  {n:"Örümcek Tavan Arası",s:"Örümcek çok büyüktü. ___ odaya girmedim.",         o:["Ama","Çünkü","Bunun için","Bu nedenle"], a:["Bunun için","Bu nedenle"]},
+  {n:"Cadı Kulesi",    s:"Cadı çok gülüyor ___ kimse korkmuyor.",                o:["çünkü","ama","bu nedenle","-dığı için"], a:["ama"]},
+  {n:"Komşu Kapısı",   s:"Kapıyı çaldık ___ şeker istiyoruz.",                   o:["ama","bunun için","çünkü","bu nedenle"], a:["çünkü"]},
+  {n:"Yorgun Koridor", s:"Çok ___ eve erken döndük.",                            o:["yorulduk ama","yorulduk çünkü","yorulduğumuz için","yorulduk bu nedenle"], a:["yorulduğumuz için"]},
+  {n:"Ay Işığı Terası",s:"Ay çok parlaktı. ___ yol aydınlıktı.",                 o:["Ama","Çünkü","Bu nedenle","Bunun için"], a:["Bu nedenle","Bunun için"]},
+  {n:"Son Kapı",       s:"Anahtarı ___ kapıyı açabildim.",                       o:["buldum ama","buldum çünkü","bulduğum için","buldum bu nedenle"], a:["bulduğum için"]},
+];
+const PENALTY = 10;
+const $ = id => document.getElementById(id);
+// Doğrulama kodu: ad + saniye + yanlış sayısından üretilir; elle değiştirilen sonuçta tutmaz.
+function norm(n){ return n.trim().toLocaleLowerCase("tr").replace(/\s+/g," "); }
+function code(name,sec,wrong){
+  const s=`${norm(name)}|${sec}|${wrong}|kosk-2026-kapadokya`;
+  let h1=0x811c9dc5, h2=0x9747b28c;
+  for(let i=0;i<s.length;i++){ const c=s.charCodeAt(i); h1=Math.imul(h1^c,16777619)>>>0; h2=Math.imul(h2^c,2246822519)>>>0; }
+  return (h1.toString(36)+h2.toString(36)).toUpperCase().slice(0,6);
+}
+function checkCode(){
+  const n=$("cName").value, sec=parseInt($("cSec").value,10), w=parseInt($("cWrong").value,10), k=$("cCode").value.trim().toUpperCase();
+  const out=$("cOut");
+  if(!n||isNaN(sec)||isNaN(w)||!k){ out.textContent="Dört alanı da doldur."; out.className="hint bad"; return; }
+  const ok=code(n,sec,w)===k;
+  out.textContent=ok?`✓ Geçerli: ${n} • ${fmt(sec)} • ${w} yanlış`:"✗ Kod tutmuyor: sonuç değiştirilmiş ya da yanlış yazılmış.";
+  out.className="hint "+(ok?"good":"bad");
+}
+let S = { name:"", i:0, start:0, wrong:0, done:false, finalSec:0, locked:false };
+let tick = null;
+
+function fmt(sec){ sec=Math.max(0,Math.round(sec)); return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0"); }
+function elapsed(){ return (Date.now()-S.start)/1000 + S.wrong*PENALTY; }
+
+function renderDoors(){
+  const d=$("doors"); d.innerHTML="";
+  ROOMS.forEach((_,k)=>{ const e=document.createElement("div"); e.className="door"+(k<S.i?" open":k===S.i?" now":""); d.appendChild(e); });
+}
+function showRoom(){
+  const r=ROOMS[S.i];
+  $("roomLabel").textContent=`Kapı ${S.i+1} / ${ROOMS.length}`;
+  $("roomName").textContent=r.n;
+  $("sentence").innerHTML=r.s.replace("___",'<span class="blank">___</span>');
+  const o=$("opts"); o.innerHTML="";
+  r.o.forEach(t=>{ const b=document.createElement("button"); b.className="opt"; b.textContent=t; b.onclick=()=>pick(b,t); o.appendChild(b); });
+  $("hint").textContent=""; $("hint").className="hint"; S.locked=false;
+  renderDoors(); drawScene(S.i+1);
+}
+function pick(btn,t){
+  if(S.locked) return;
+  const r=ROOMS[S.i];
+  if(r.a.includes(t)){
+    S.locked=true; btn.classList.add("right");
+    $("hint").textContent="🔓 Kapı açıldı!"; $("hint").className="hint good";
+    setTimeout(()=>{ S.i++; S.i>=ROOMS.length?finish():showRoom(); },700);
+  } else {
+    S.wrong++; btn.classList.add("wrong"); btn.disabled=true;
+    $("hint").textContent=`🔒 Kilitli kaldı! +${PENALTY} saniye. Tekrar dene.`; $("hint").className="hint bad";
+  }
+}
+function start(){
+  const name=$("name").value.trim();
+  if(!name){ $("nameHint").textContent="Önce adını yaz."; $("name").focus(); return; }
+  S={ name, i:0, start:Date.now(), wrong:0, done:false, finalSec:0, locked:false };
+  $("intro").hidden=true; $("done").hidden=true; $("quiz").hidden=false; $("timer").hidden=false; $("doors").hidden=false;
+  clearInterval(tick); tick=setInterval(()=>{ $("timer").textContent=fmt(elapsed()); },250);
+  showRoom();
+}
+function finish(){
+  clearInterval(tick); S.done=true; S.finalSec=Math.round(elapsed());
+  $("timer").textContent=fmt(S.finalSec);
+  renderDoors(); S.i=ROOMS.length; renderDoors();
+  $("quiz").hidden=true; $("done").hidden=false;
+  $("doneName").textContent=`Tebrikler ${S.name}! 15 kapıyı da açtın.`;
+  $("doneTime").textContent=fmt(S.finalSec);
+  $("sSec").textContent=S.finalSec; $("sWrong").textContent=S.wrong; $("sPen").textContent=S.wrong*PENALTY;
+  $("resultLine").textContent=`PERİLİ KÖŞK • ${S.name} • ${fmt(S.finalSec)} (${S.finalSec} sn) • ${S.wrong} yanlış • kod:${code(S.name,S.finalSec,S.wrong)}`;
+  $("copyHint").textContent="";
+  drawScene(99);
+  if(FORM.action){
+    const timeVal=`${fmt(S.finalSec)} (${S.finalSec} sn) • ${S.wrong} yanlış • kod:${code(S.name,S.finalSec,S.wrong)}`;
+    try{ const fd=new FormData(); fd.append(FORM.name,S.name); fd.append(FORM.time,timeVal); if(FORM.wrong) fd.append(FORM.wrong,String(S.wrong));
+      fetch(FORM.action,{method:"POST",mode:"no-cors",body:fd}).catch(()=>{}); }catch(e){}
+    const pre=FORM.action.replace("formResponse","viewform")+`?usp=pp_url&${FORM.name}=${encodeURIComponent(S.name)}&${FORM.time}=${encodeURIComponent(timeVal)}`;
+    $("formLink").href=pre; $("formWrap").hidden=false;
+  }
+}
+$("startBtn").onclick=start;
+$("name").addEventListener("keydown",e=>{ if(e.key==="Enter") start(); });
+$("againBtn").onclick=()=>{ $("done").hidden=true; $("intro").hidden=false; $("timer").hidden=true; $("doors").hidden=true; drawScene(0); };
+$("copyBtn").onclick=()=>{
+  const t=$("resultLine").textContent;
+  const sel=()=>{ const r=document.createRange(); r.selectNodeContents($("resultLine")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); $("copyHint").textContent="Metni seçtim, kopyalamak için Ctrl+C / uzun bas."; };
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>{ $("copyHint").textContent="Kopyalandı! Şimdi Classroom'a yapıştır."; }).catch(sel); } else sel();
+};
+
+// ---------- Cadılar Bayramı sahnesi (Canvas) ----------
+const cv=$("scene"), cx=cv.getContext("2d");
+let seedRoom=0;
+function rnd(seed){ let x=seed*9301+49297; return ()=>{ x=(x*9301+49297)%233280; return x/233280; }; }
+function drawScene(room){
+  seedRoom=room;
+  const W=cv.width=innerWidth*devicePixelRatio, H=cv.height=innerHeight*devicePixelRatio; cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  const w=innerWidth,h=innerHeight, R=rnd(room+7);
+  const hues=[[268,20],[280,26],[300,18],[255,22],[20,30],[140,18]]; const [hu,li]=hues[room%hues.length];
+  const g=cx.createLinearGradient(0,0,0,h); g.addColorStop(0,`hsl(${hu} 55% ${Math.max(6,li-12)}%)`); g.addColorStop(1,`hsl(${hu} 45% ${li}%)`);
+  cx.fillStyle=g; cx.fillRect(0,0,w,h);
+  // yıldızlar
+  for(let i=0;i<120;i++){ cx.fillStyle=`rgba(255,255,255,${0.3+R()*0.7})`; cx.fillRect(R()*w,R()*h*0.6,1.5,1.5); }
+  // ay
+  const mx=w*(0.15+R()*0.7), my=h*0.18, mr=Math.min(w,h)*0.09;
+  const mg=cx.createRadialGradient(mx,my,mr*0.5,mx,my,mr*3); mg.addColorStop(0,"rgba(255,200,90,.45)"); mg.addColorStop(1,"rgba(255,200,90,0)");
+  cx.fillStyle=mg; cx.fillRect(0,0,w,h);
+  cx.fillStyle=room===99?"#FFD36B":"#F8E7B0"; cx.beginPath(); cx.arc(mx,my,mr,0,7); cx.fill();
+  cx.fillStyle="rgba(0,0,0,.08)"; for(let i=0;i<4;i++){ cx.beginPath(); cx.arc(mx+(R()-.5)*mr*1.2,my+(R()-.5)*mr*1.2,mr*(0.08+R()*0.15),0,7); cx.fill(); }
+  // sis
+  for(let i=0;i<6;i++){ const fg=cx.createRadialGradient(R()*w,h*0.85,10,R()*w,h*0.85,w*0.35); fg.addColorStop(0,"rgba(200,190,230,.14)"); fg.addColorStop(1,"rgba(200,190,230,0)"); cx.fillStyle=fg; cx.fillRect(0,0,w,h); }
+  // tepeler
+  cx.fillStyle="#0A0412"; cx.beginPath(); cx.moveTo(0,h);
+  for(let x=0;x<=w;x+=20){ cx.lineTo(x,h*0.72+Math.sin(x/140+room)*18+Math.sin(x/47)*6); } cx.lineTo(w,h); cx.fill();
+  // perili köşk silueti
+  const bx=w*0.5+(R()-.5)*w*0.3, by=h*0.74, bw=Math.min(260,w*0.5), bh=bw*0.75;
+  cx.fillStyle="#07030D";
+  cx.fillRect(bx-bw/2,by-bh,bw,bh);
+  cx.beginPath(); cx.moveTo(bx-bw/2-12,by-bh); cx.lineTo(bx,by-bh-bh*0.45); cx.lineTo(bx+bw/2+12,by-bh); cx.fill();
+  cx.fillRect(bx+bw*0.28,by-bh-bh*0.7,bw*0.14,bh*0.8); cx.beginPath(); cx.moveTo(bx+bw*0.26,by-bh-bh*0.7); cx.lineTo(bx+bw*0.35,by-bh-bh*0.95); cx.lineTo(bx+bw*0.44,by-bh-bh*0.7); cx.fill();
+  // pencereler (ışıklı)
+  const lit=Math.min(6,room);
+  let k=0; for(let r=0;r<2;r++) for(let c=0;c<3;c++){ const on=k<lit||room===99; cx.fillStyle=on?"#FFB347":"#1a1030"; cx.fillRect(bx-bw*0.38+c*bw*0.3,by-bh*0.85+r*bh*0.38,bw*0.16,bh*0.22); k++; }
+  cx.fillStyle=room===99?"#8BFF5A":"#2b1a45"; cx.fillRect(bx-bw*0.09,by-bh*0.32,bw*0.18,bh*0.32);
+  // mezar taşları
+  for(let i=0;i<5;i++){ const gx=R()*w, gh=18+R()*18; cx.fillStyle="#1c1330"; cx.beginPath(); cx.roundRect(gx,by+10+R()*30-gh,14,gh,[7,7,0,0]); cx.fill(); }
+  // balkabakları
+  for(let i=0;i<3+room%3;i++){ const px=R()*w, py=by+20+R()*(h-by-30), pr=10+R()*10;
+    cx.fillStyle="#FF7A1A"; cx.beginPath(); cx.ellipse(px,py,pr*1.2,pr,0,0,7); cx.fill();
+    cx.fillStyle="#3b8f2a"; cx.fillRect(px-2,py-pr-6,4,7);
+    cx.fillStyle="#FFE28A"; cx.beginPath(); cx.moveTo(px-pr*0.5,py-2); cx.lineTo(px-pr*0.2,py-pr*0.4); cx.lineTo(px-pr*0.1,py-2); cx.fill();
+    cx.beginPath(); cx.moveTo(px+pr*0.5,py-2); cx.lineTo(px+pr*0.2,py-pr*0.4); cx.lineTo(px+pr*0.1,py-2); cx.fill();
+    cx.fillRect(px-pr*0.5,py+pr*0.2,pr,3); }
+  // yarasalar
+  cx.fillStyle="#05020a";
+  for(let i=0;i<5+room%4;i++){ const x=R()*w,y=R()*h*0.5,s=6+R()*8; cx.beginPath(); cx.moveTo(x-s*2,y); cx.quadraticCurveTo(x-s,y-s,x,y); cx.quadraticCurveTo(x+s,y-s,x+s*2,y); cx.quadraticCurveTo(x+s,y+s*0.3,x,y+s*0.5); cx.quadraticCurveTo(x-s,y+s*0.3,x-s*2,y); cx.fill(); }
+  // hayalet
+  if(room%3===2||room===99){ const hx=w*0.15+R()*w*0.7, hy=h*0.5; cx.fillStyle="rgba(240,240,255,.85)"; cx.beginPath(); cx.arc(hx,hy,22,Math.PI,0); cx.lineTo(hx+22,hy+36); for(let j=0;j<4;j++) cx.lineTo(hx+22-(j+1)*11,hy+36-(j%2?0:8)); cx.closePath(); cx.fill(); cx.fillStyle="#12071F"; cx.beginPath(); cx.arc(hx-7,hy-4,3,0,7); cx.arc(hx+7,hy-4,3,0,7); cx.fill(); }
+}
+addEventListener("resize",()=>drawScene(seedRoom));
+
+// ---------- açık sayfalarda durumu koru ----------
+window.claude?.hot?.snapshot?.(()=>S);
+function boot(data){
+  if(data&&data.name&&!data.done&&data.start){ S={...S,...data}; $("name").value=S.name; $("intro").hidden=true; $("quiz").hidden=false; $("timer").hidden=false; $("doors").hidden=false;
+    tick=setInterval(()=>{ $("timer").textContent=fmt(elapsed()); },250); showRoom(); }
+  else drawScene(0);
+}
+$("cBtn").onclick=checkCode;
+$("cBack").onclick=()=>{ $("check").hidden=true; $("intro").hidden=false; history.replaceState(null,"",location.pathname); };
+function maybeCheck(){ if(location.hash==="#kontrol"){ ["intro","quiz","done"].forEach(i=>$(i).hidden=true); $("timer").hidden=true; $("doors").hidden=true; $("check").hidden=false; drawScene(3); return true; } return false; }
+addEventListener("hashchange",maybeCheck);
+window.claude?.hot?.ready ? window.claude.hot.ready(d=>{ boot(d); maybeCheck(); }) : (boot(window.claude?.hot?.data ?? {}), maybeCheck());
+</script>
+
+</body>
+</html>

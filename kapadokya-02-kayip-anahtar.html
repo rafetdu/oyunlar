@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayıp Anahtar – Hal Ekleri Escape Room</title>
+<style>
+  :root{
+    --bg:#121a2b; --panel:#1c2742; --text:#f3f5f9; --muted:#9fb0cc;
+    --blue:#2F6FD8; --green:#2E9E5B; --yellow:#E0A800; --red:#D8432F; --navy:#1F3A5F;
+    --accent:#2F6FD8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .wrap{max-width:720px;margin:0 auto;padding:16px}
+  header{display:flex;justify-content:space-between;align-items:center;padding:8px 0 14px;border-bottom:1px solid #2a3858;margin-bottom:16px}
+  header h1{font-size:18px;margin:0}
+  .pill{background:var(--panel);border-radius:999px;padding:6px 12px;font-size:14px;font-variant-numeric:tabular-nums}
+  .screen{display:none}
+  .screen.active{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card{background:var(--panel);border-radius:16px;padding:20px;margin-bottom:14px;border-top:6px solid var(--accent)}
+  .card h2{margin:0 0 6px;font-size:22px}
+  .card p{margin:6px 0;line-height:1.5}
+  .muted{color:var(--muted);font-size:14px}
+  .en{color:var(--muted);font-style:italic;font-size:14px}
+  input[type=text]{width:100%;padding:12px 14px;border-radius:10px;border:2px solid #2a3858;background:#0f1626;color:var(--text);font-size:16px;margin:10px 0}
+  button{cursor:pointer;border:none;border-radius:12px;padding:14px 18px;font-size:16px;font-weight:600;color:#fff;background:var(--accent);width:100%;margin-top:8px;transition:transform .08s}
+  button:active{transform:scale(.98)}
+  button.secondary{background:#2a3858}
+  .room-tag{display:inline-block;padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;color:#fff;background:var(--accent);margin-bottom:8px}
+  .q{font-size:22px;line-height:1.45;margin:10px 0 14px;font-weight:600}
+  .q .gap{display:inline-block;min-width:54px;border-bottom:3px solid var(--accent);text-align:center;color:var(--accent)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opts button{margin:0;background:#0f1626;border:2px solid #2a3858;font-size:18px;padding:16px 10px}
+  .opts button.wide{grid-column:1/-1;font-size:16px;text-align:left}
+  .opts button.ok{background:var(--green);border-color:var(--green)}
+  .opts button.bad{background:#5a2a2a;border-color:var(--red);animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .hint{margin-top:12px;padding:12px;border-radius:10px;background:#0f1626;border-left:4px solid var(--yellow);display:none;font-size:15px;line-height:1.5}
+  .hint.show{display:block}
+  .progress{display:flex;gap:6px;margin:10px 0 4px}
+  .progress span{flex:1;height:8px;border-radius:4px;background:#2a3858}
+  .progress span.done{background:var(--accent)}
+  .key{font-size:48px;text-align:center;margin:8px 0}
+  .letters{display:flex;gap:8px;justify-content:center;margin:12px 0}
+  .letters div{width:46px;height:54px;border-radius:10px;background:#0f1626;border:2px solid #2a3858;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--muted)}
+  .letters div.got{color:#fff;border-color:var(--yellow);background:#2d2a12}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .stats div{background:#0f1626;border-radius:12px;padding:14px;text-align:center}
+  .stats b{display:block;font-size:26px}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:14px}
+  .legend div{padding:8px 10px;border-radius:8px;color:#fff;font-weight:600}
+  .door{font-size:64px;text-align:center;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🔑 Kayıp Anahtar</h1>
+    <div><span class="pill" id="timer">00:00</span></div>
+  </header>
+
+  <!-- ============ START ============ -->
+  <section class="screen active" id="s-start">
+    <div class="card" style="--accent:#E0A800">
+      <div class="door">🐈‍⬛</div>
+      <h2>Pamuk anahtarı sakladı!</h2>
+      <p>Deniz'in kedisi Pamuk evin anahtarını saklamış. Anahtar <b>beş odanın</b> arkasında. Her odanın kapısında bir <b>ek</b> kilidi var. Doğru eki seç, kapı açılsın.</p>
+      <p class="en">Pamuk the cat hid the house key. Pick the right ending to open each door. Wrong answer = +5 seconds.</p>
+      <div class="legend">
+        <div style="background:var(--blue)">-e / -a &nbsp;→ to</div>
+        <div style="background:var(--green)">-de / -da &nbsp;● in/at</div>
+        <div style="background:var(--yellow)">-i -ı -u -ü &nbsp;▸ the</div>
+        <div style="background:var(--red)">-den / -dan &nbsp;← from</div>
+      </div>
+      <input type="text" id="name" placeholder="Adın" maxlength="40" autocomplete="off">
+      <button onclick="startGame()">Oyuna başla</button>
+    </div>
+  </section>
+
+  <!-- ============ ROOM ============ -->
+  <section class="screen" id="s-room">
+    <div class="card" id="roomCard">
+      <span class="room-tag" id="roomTag"></span>
+      <h2 id="roomTitle"></h2>
+      <p class="muted" id="roomIntro"></p>
+      <div class="progress" id="progress"></div>
+      <div class="q" id="qText"></div>
+      <div class="opts" id="opts"></div>
+      <div class="hint" id="hint"></div>
+    </div>
+  </section>
+
+  <!-- ============ DOOR OPEN ============ -->
+  <section class="screen" id="s-door">
+    <div class="card" id="doorCard">
+      <div class="door">🚪✨</div>
+      <h2>Kapı açıldı!</h2>
+      <p id="doorMsg"></p>
+      <div class="letters" id="letters"></div>
+      <button onclick="nextRoom()">Sonraki odaya geç →</button>
+    </div>
+  </section>
+
+  <!-- ============ END ============ -->
+  <section class="screen" id="s-end">
+    <div class="card" style="--accent:#E0A800">
+      <div class="key">🔑</div>
+      <h2>Anahtarı buldun!</h2>
+      <p>Kod: <b>P-A-M-U-K</b> — anahtar Pamuk'un yatağının altındaymış. Deniz teşekkür ediyor!</p>
+      <div class="stats">
+        <div><b id="endTime">00:00</b><span class="muted">süre</span></div>
+        <div><b id="endScore">0/15</b><span class="muted">ilk denemede doğru</span></div>
+      </div>
+      <p class="muted" id="endNote"></p>
+      <button id="formBtn" onclick="openForm()">Sonucu kaydet (Google Form)</button>
+      <button class="secondary" onclick="location.reload()">Tekrar oyna</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* =====================================================================
+   ÖĞRETMEN AYARI – Google Form ön doldurulmuş link
+   Formda "Ön doldurulmuş link al" → alanları doldur → linki kopyala.
+   Linkteki entry.XXXX numaralarını aşağıya yaz. Boş bırakılan alan gönderilmez.
+   ===================================================================== */
+const FORM = {
+  base:  "https://docs.google.com/forms/d/e/FORM_ID/viewform",
+  name:  "entry.1111111",   // Ad
+  time:  "entry.2222222",   // Süre (mm:ss)
+  score: "entry.3333333"    // Puan (ilk denemede doğru / 15)
+};
+
+/* ---------------- SORULAR ---------------- */
+const ROOMS = [
+  { color:"#2F6FD8", tag:"MAVİ ODA", title:"→ to", letter:"P",
+    intro:"Bu odanın eylemleri: gitmek, binmek, bakmak. Nereye?",
+    qs:[
+      {q:"Her sabah okul___ gidiyorum.", opts:["a","da","dan","u"], a:0, hint:"gitmek = → to. Son ünlü 'u' → -a."},
+      {q:"Otobüs___ biniyorum.", opts:["e","te","ten","ü"], a:0, hint:"binmek = → to. Son ünlü 'ü' → -e."},
+      {q:"Yazın Türkiye'___ gidiyorum.", opts:["e","ye","de","yi"], a:1, hint:"Kelime ünlüyle bitiyor → araya y: -ye."}
+    ]},
+  { color:"#2E9E5B", tag:"YEŞİL ODA", title:"● in / at", letter:"A",
+    intro:"Bu odanın eylemleri: yaşamak, beklemek, çalışmak. Nerede?",
+    qs:[
+      {q:"Londra'___ yaşıyorum.", opts:["ya","da","dan","yı"], a:1, hint:"yaşamak = ● in/at. Son ünlü 'a' → -da."},
+      {q:"Park___ bekliyorum.", opts:["a","ta","da","tan"], a:1, hint:"beklemek = ● in/at. 'k' ile bitiyor → d yerine t: -ta."},
+      {q:"Hangisi doğru?", opts:["Evde oturuyorum.","Eve oturuyorum.","Evden oturuyorum.","Evi oturuyorum."], a:0, wide:true, hint:"oturmak = ● in/at → -de."}
+    ]},
+  { color:"#E0A800", tag:"SARI ODA", title:"▸ the", letter:"M",
+    intro:"Bu odanın eylemleri: sevmek, izlemek, tanımak. Neyi? Kimi?",
+    qs:[
+      {q:"Pamuk'___ çok seviyorum.", opts:["a","ta","tan","u"], a:3, hint:"sevmek = ▸ the. Son ünlü 'u' → -u."},
+      {q:"Bu film___ izliyorum.", opts:["e","de","den","i"], a:3, hint:"izlemek = ▸ the. Son ünlü 'i' → -i."},
+      {q:"Ali'___ tanıyorum.", opts:["ye","de","den","yi"], a:3, hint:"tanımak = ▸ the. Ünlüyle bitiyor → -yi."}
+    ]},
+  { color:"#D8432F", tag:"KIRMIZI ODA", title:"← from", letter:"U",
+    intro:"Bu odanın eylemleri: çıkmak, korkmak, inmek. Nereden? Neyden?",
+    qs:[
+      {q:"Sabah ev___ çıkıyorum.", opts:["e","de","den","i"], a:2, hint:"çıkmak = ← from. Son ünlü 'e' → -den."},
+      {q:"Köpek___ korkuyorum.", opts:["e","te","ten","i"], a:2, hint:"korkmak = ← from. 'k' ile bitiyor → -ten."},
+      {q:"Otobüs___ iniyorum.", opts:["e","te","ten","ü"], a:2, hint:"inmek = ← from. 's' ile bitiyor → -ten."}
+    ]},
+  { color:"#1F3A5F", tag:"SON ODA", title:"Dört ek karışık", letter:"K",
+    intro:"Pamuk burada! Dört ek karışık. Önce eyleme bak, rengini hatırla.",
+    qs:[
+      {q:"Park___ Pamuk'___ bekliyorum.", opts:["a / u","ta / u","tan / a","ta / a"], a:1, hint:"beklemek = ● in/at → parkta. Pamuk belirli → -u."},
+      {q:"Okul___ arkadaşlar___ görüyorum.", opts:["a / ı","da / ı","dan / a","da / a"], a:1, hint:"görmek = ▸ the → arkadaşları. Nerede? → okulda."},
+      {q:"Tuzak! Genel konuşuyorum. Hangisi doğru?", opts:["Müzik dinliyorum.","Müziği dinliyorum.","Müzikten dinliyorum.","Müziğe dinliyorum."], a:0, wide:true, hint:"Genel (herhangi bir müzik) → ek yok. 'Bu şarkıyı' olsaydı -ı gelirdi."}
+    ]}
+];
+
+/* ---------------- OYUN ---------------- */
+let name="", roomIdx=0, qIdx=0, firstTry=true, score=0, penalty=0, startTs=0, timerId=null, letters=[];
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function fmt(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function elapsed(){return Date.now()-startTs+penalty*1000;}
+function tick(){document.getElementById('timer').textContent=fmt(elapsed());}
+
+function startGame(){
+  name=document.getElementById('name').value.trim();
+  if(!name){document.getElementById('name').focus();document.getElementById('name').style.borderColor='#D8432F';return;}
+  startTs=Date.now();timerId=setInterval(tick,250);
+  roomIdx=0;qIdx=0;score=0;penalty=0;letters=[];
+  renderRoom();show('s-room');
+}
+
+function renderRoom(){
+  const r=ROOMS[roomIdx];
+  document.getElementById('roomCard').style.setProperty('--accent',r.color);
+  document.getElementById('roomTag').textContent=r.tag;
+  document.getElementById('roomTitle').textContent=r.title;
+  document.getElementById('roomIntro').textContent=r.intro;
+  renderQ();
+}
+
+function renderQ(){
+  const r=ROOMS[roomIdx], q=r.qs[qIdx];
+  firstTry=true;
+  document.getElementById('progress').innerHTML=r.qs.map((_,i)=>`<span class="${i<qIdx?'done':''}"></span>`).join('');
+  document.getElementById('qText').innerHTML=q.q.replace(/___/g,'<span class="gap">___</span>');
+  const box=document.getElementById('opts');box.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.textContent=o;if(q.wide)b.classList.add('wide');
+    b.onclick=()=>answer(i,b);box.appendChild(b);
+  });
+  const h=document.getElementById('hint');h.classList.remove('show');h.textContent='';
+}
+
+function answer(i,btn){
+  const r=ROOMS[roomIdx], q=r.qs[qIdx];
+  if(i===q.a){
+    btn.classList.add('ok');
+    if(firstTry)score++;
+    document.querySelectorAll('#opts button').forEach(b=>b.onclick=null);
+    setTimeout(()=>{
+      qIdx++;
+      if(qIdx<r.qs.length){renderQ();}
+      else{openDoor();}
+    },600);
+  }else{
+    btn.classList.add('bad');btn.onclick=null;
+    firstTry=false;penalty+=5;
+    const h=document.getElementById('hint');h.innerHTML='💡 '+q.hint+' <span class="muted">(+5 sn)</span>';h.classList.add('show');
+  }
+}
+
+function openDoor(){
+  const r=ROOMS[roomIdx];letters.push(r.letter);
+  document.getElementById('doorCard').style.setProperty('--accent',r.color);
+  document.getElementById('doorMsg').textContent=`${r.tag} açıldı. Bir harf kazandın: ${r.letter}`;
+  document.getElementById('letters').innerHTML=['P','A','M','U','K'].map((L,i)=>`<div class="${i<letters.length?'got':''}">${i<letters.length?L:'?'}</div>`).join('');
+  show('s-door');
+}
+
+function nextRoom(){
+  roomIdx++;qIdx=0;
+  if(roomIdx<ROOMS.length){renderRoom();show('s-room');}
+  else{endGame();}
+}
+
+function endGame(){
+  clearInterval(timerId);
+  const t=fmt(elapsed());
+  document.getElementById('timer').textContent=t;
+  document.getElementById('endTime').textContent=t;
+  document.getElementById('endScore').textContent=score+'/15';
+  document.getElementById('endNote').textContent=score>=13?'Harika! Ekler senin.':score>=9?'İyi! Kırmızı ve sarı odaya bir daha bak.':'Kitapçığın arka sayfasını tekrar oku, sonra tekrar dene.';
+  show('s-end');
+}
+
+function openForm(){
+  const t=document.getElementById('endTime').textContent;
+  const p=new URLSearchParams();
+  if(FORM.name)p.set(FORM.name,name);
+  if(FORM.time)p.set(FORM.time,t);
+  if(FORM.score)p.set(FORM.score,score+'/15');
+  window.open(FORM.base+'?usp=pp_url&'+p.toString(),'_blank');
+}
+</script>
+</body>
+</html>

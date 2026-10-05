@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayıp Karne</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   AYARLAR — Google Form önceden doldurulmuş linkini buraya yapıştırın.
+   Formda alanlara şu değerleri yazarak link alın:
+     Ad -> AD    Süre -> SURE    Yanlış deneme -> HATA
+   ========================================================= */
+</style>
+<script>
+const FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLScpw7SgJrSSmCFUoHMhMxQoOsWxiUtlBxvv0j5dMzaX3osVNg/viewform?usp=pp_url&entry.661655199=Ad&entry.839055174=sure&entry.1494439479=hata";
+</script>
+<style>
+:root{
+  --board:#1f4d3a; --board2:#2a6650; --chalk:#f4f1e8; --paper:#fffdf6;
+  --ink:#24323f; --muted:#6b7a86; --navy:#1f3a5f; --teal:#2a9d8f;
+  --yellow:#ffd166; --red:#e76f51; --green:#3fae6b; --line:#d9e3ea;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Nunito,system-ui,sans-serif;color:var(--ink);
+  background:radial-gradient(circle at 20% 10%,var(--board2),var(--board) 60%);display:flex;justify-content:center;padding:16px}
+.wrap{width:100%;max-width:720px}
+header{display:flex;justify-content:space-between;align-items:center;color:var(--chalk);margin-bottom:12px;gap:8px;flex-wrap:wrap}
+header h1{font-family:"Baloo 2";font-size:28px;margin:0;letter-spacing:.5px}
+.hud{display:flex;gap:8px}
+.pill{background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.4);border-radius:999px;padding:4px 12px;font-weight:800;font-size:14px}
+.keys{display:flex;gap:6px;margin-bottom:12px}
+.key{flex:1;height:44px;border-radius:10px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;color:var(--chalk);font-family:"Baloo 2";font-size:22px;font-weight:800}
+.key.on{background:var(--yellow);color:var(--navy);border:2px solid var(--yellow)}
+.card{background:var(--paper);border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.25);
+  background-image:repeating-linear-gradient(var(--paper) 0 31px,#e8eef3 31px 32px);}
+.card h2{font-family:"Baloo 2";color:var(--navy);margin:0 0 4px;font-size:24px}
+.room{color:var(--teal);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+p{line-height:1.6;margin:8px 0}
+.story{background:#fff;border-left:5px solid var(--yellow);padding:10px 14px;border-radius:8px;margin:10px 0}
+button{font-family:inherit;font-weight:800;font-size:16px;border:none;border-radius:12px;padding:12px 18px;cursor:pointer;transition:transform .08s}
+button:active{transform:scale(.97)}
+.primary{background:var(--navy);color:#fff}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);color:var(--ink);margin:8px 0;font-weight:700}
+.opt:hover{border-color:var(--teal)}
+.opt.ok{background:#e3f6ea;border-color:var(--green)}
+.no{animation:shake .3s}
+.opt.no{background:#fde8e3;border-color:var(--red);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+input[type=text]{width:100%;font:inherit;font-size:18px;padding:12px;border-radius:12px;border:2px solid var(--line);margin:8px 0}
+.hint{background:#fff4c2;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:15px;display:none}
+.hint.show{display:block}
+table.prog{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;background:#fff}
+table.prog th,table.prog td{border:1px solid var(--line);padding:6px;text-align:center}
+table.prog th{background:var(--navy);color:#fff}
+.seq{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer;font-weight:700}
+.seq.done{background:#e3f6ea;border-color:var(--green);cursor:default}
+.seq .n{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:26px;margin-right:8px}
+.clockbox{display:flex;justify-content:center;margin:6px 0}
+.blank{display:inline-block;min-width:110px;border-bottom:3px solid var(--teal);text-align:center;font-weight:800;color:var(--teal);padding:0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{background:#fff;border:2px solid var(--line);padding:8px 12px;border-radius:999px;font-weight:800;cursor:pointer}
+.chip.no{background:#fde8e3;border-color:var(--red)}
+.chip.used{opacity:.35;cursor:default}
+.digit{font-family:"Baloo 2";font-size:44px;color:var(--navy);text-align:center;margin:8px 0}
+.reward{background:#e3f6ea;border:2px dashed var(--green);border-radius:14px;padding:12px;text-align:center;margin-top:12px}
+.lock{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.lock input{width:56px;height:64px;text-align:center;font-family:"Baloo 2";font-size:32px;border-radius:12px;border:3px solid var(--navy)}
+.center{text-align:center}
+.small{font-size:13px;color:var(--muted)}
+@media (max-width:480px){.card{padding:16px}header h1{font-size:22px}.lock input{width:48px;height:56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎒 Kayıp Karne</h1>
+    <div class="hud"><span class="pill" id="timer">⏱ 00:00</span><span class="pill" id="errs">✖ 0</span></div>
+  </header>
+  <div class="keys" id="keys"></div>
+  <div class="card" id="screen"></div>
+</div>
+
+<script>
+const S = { name:"", start:0, errors:0, digits:[], timerId:null };
+const CODE = ["2","7","3","5"];
+const ROOMS = ["Sınıf","Koridor","Bahçe","Kütüphane"];
+const $ = s => document.querySelector(s);
+const screen = $("#screen");
+
+function renderKeys(){
+  $("#keys").innerHTML = CODE.map((_,i)=>`<div class="key ${S.digits[i]?'on':''}">${S.digits[i]||'?'}</div>`).join("");
+}
+function fmt(sec){const m=String(Math.floor(sec/60)).padStart(2,"0"),s=String(sec%60).padStart(2,"0");return `${m}:${s}`}
+function elapsed(){return Math.floor((Date.now()-S.start)/1000)}
+function tick(){ $("#timer").textContent="⏱ "+fmt(elapsed()) }
+function wrong(btn){ S.errors++; $("#errs").textContent="✖ "+S.errors; if(btn){btn.classList.add("no"); setTimeout(()=>btn.classList.remove("no"),400)} }
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1])}
+
+/* ---------- Giriş ---------- */
+function intro(){
+  renderKeys();
+  screen.innerHTML = `
+   <div class="room">Karne Günü</div>
+   <h2>Kerem'in karnesi kayboldu!</h2>
+   <div class="story">Bugün karne günü. Herkes çok heyecanlı. Ama Kerem'in karnesi bir yerde yok!
+   Ayşe Öğretmen karneyi <b>müdür odasındaki kasaya</b> koyduğunu hatırlıyor, ama şifreyi unutmuş.
+   Şifrenin dört rakamı okulun dört farklı yerinde saklı.</div>
+   <p>Her odada <b>zaman sözcükleriyle</b> ilgili bir görev var. Görevi bitirince bir rakam kazanacaksın.</p>
+   <p><b>Adın ne?</b></p>
+   <input type="text" id="nm" placeholder="Adını yaz" maxlength="30">
+   <button class="primary" id="go">Okula gir 🚪</button>
+   <div class="hint" id="h">Önce adını yazmalısın.</div>`;
+  $("#go").onclick = () => {
+    const v = $("#nm").value.trim();
+    if(!v){ $("#h").classList.add("show"); return }
+    S.name=v; S.start=Date.now(); S.timerId=setInterval(tick,1000); room1();
+  };
+}
+
+/* ---------- Oda 1: Ders programı (sıklık) ---------- */
+function room1(){
+  const qs = [
+    {q:"Kerem <b>haftada kaç kez</b> beden eğitimi dersine giriyor?", o:["Bir kez","İki kez","Her gün"], a:1,
+     h:"Tabloda “Beden Eğitimi” yazan kutuları say."},
+    {q:"Türkçe dersi <b>hangi sıklıkla</b> var?", o:["Hiç yok","Bazen","Her gün"], a:2,
+     h:"Pazartesiden cumaya kadar her satıra bak."},
+    {q:"Müzik dersi <b>hangi gün</b> var?", o:["Salı günleri","Perşembe günleri","Cuma günleri"], a:1,
+     h:"“Müzik” yazan kutunun üstündeki güne bak."},
+  ];
+  let i=0;
+  const table = `<table class="prog"><tr><th></th><th>Pzt</th><th>Salı</th><th>Çrş</th><th>Prş</th><th>Cuma</th></tr>
+   <tr><th>1. ders</th><td>Türkçe</td><td>Türkçe</td><td>Türkçe</td><td>Türkçe</td><td>Türkçe</td></tr>
+   <tr><th>2. ders</th><td>Matematik</td><td>Fen</td><td>Matematik</td><td>Müzik</td><td>Matematik</td></tr>
+   <tr><th>3. ders</th><td>Beden Eğt.</td><td>İngilizce</td><td>Resim</td><td>Beden Eğt.</td><td>Sosyal</td></tr></table>`;
+  function show(){
+    const Q=qs[i];
+    screen.innerHTML = `<div class="room">Oda 1 · ${ROOMS[0]}</div><h2>Ders Programı</h2>
+     <p>Tahtada Kerem'in ders programı asılı.</p>${table}
+     <p><b>Soru ${i+1}/3:</b> ${Q.q}</p>
+     ${Q.o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("")}
+     <div class="hint" id="h">💡 ${Q.h}</div>`;
+    screen.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      if(+b.dataset.k===Q.a){ b.classList.add("ok"); setTimeout(()=>{ i++; i<qs.length?show():reward(0,"Programın arkasında bir not var:",room2) },450) }
+      else { wrong(b); $("#h").classList.add("show") }
+    });
+  }
+  show();
+}
+
+/* ---------- Oda 2: Sıralama ---------- */
+function room2(){
+  const steps = [
+    "Sabah erkenden uyanıyorum.",
+    "Kahvaltı ettikten sonra okul formamı giyiyorum.",
+    "Evden çıkmadan önce çantamı kontrol ediyorum.",
+    "Okula varınca bahçedeki bayrak törenine katılıyoruz.",
+    "Ardından sınıfa girip derse başlıyoruz.",
+  ];
+  let next=0;
+  const order = shuffle(steps.map((t,k)=>({t,k})));
+  screen.innerHTML = `<div class="room">Oda 2 · ${ROOMS[1]}</div><h2>Karışık Sabah</h2>
+   <p>Koridorda Kerem'in günlüğünden bir sayfa buldun, ama cümleler karışmış!
+   Cümlelere <b>doğru sırayla</b> tıkla.</p>
+   <p class="small">İpucu sözcükler: önce · -dıktan sonra · -madan önce · -ınca · ardından</p>
+   <div id="list">${order.map(s=>`<div class="seq" data-k="${s.k}">${s.t}</div>`).join("")}</div>
+   <div class="hint" id="h"></div>`;
+  screen.querySelectorAll(".seq").forEach(el=>el.onclick=()=>{
+    if(el.classList.contains("done")) return;
+    if(+el.dataset.k===next){
+      el.classList.add("done"); el.innerHTML=`<span class="n">${next+1}</span>`+el.textContent; next++;
+      $("#h").classList.remove("show");
+      if(next===steps.length) setTimeout(()=>reward(1,"Günlüğün son sayfasında bir rakam var:",room3),500);
+    } else {
+      wrong(); el.classList.add("no"); setTimeout(()=>el.classList.remove("no"),400);
+      const tips = ["Günün en başında ne olur?","“Kahvaltı ettikten sonra” → önce kahvaltı, sonra bu cümle.",
+        "“Evden çıkmadan önce” → evden henüz çıkmadın!","“Okula varınca” → okula ancak evden çıktıktan sonra varırsın.",
+        "“Ardından” → bir önceki işten sonra gelir."];
+      const h=$("#h"); h.textContent="💡 "+tips[next]; h.classList.add("show");
+    }
+  });
+}
+
+/* ---------- Oda 3: Saatler ---------- */
+function clockSVG(h,m){
+  const ma = m*6, ha = (h%12)*30 + m*0.5;
+  const hand=(ang,len,w,c)=>{const r=(ang-90)*Math.PI/180;return `<line x1="60" y1="60" x2="${60+len*Math.cos(r)}" y2="${60+len*Math.sin(r)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`};
+  let ticks="";for(let k=0;k<12;k++){const r=(k*30-90)*Math.PI/180;ticks+=`<text x="${60+46*Math.cos(r)}" y="${64+46*Math.sin(r)}" font-size="11" text-anchor="middle" font-family="Nunito" font-weight="800" fill="#1f3a5f">${k===0?12:k}</text>`}
+  return `<svg width="150" height="150" viewBox="0 0 120 120"><circle cx="60" cy="60" r="56" fill="#fff" stroke="#1f3a5f" stroke-width="4"/>${ticks}${hand(ha,26,5,"#1f3a5f")}${hand(ma,40,3,"#e76f51")}<circle cx="60" cy="60" r="4" fill="#1f3a5f"/></svg>`;
+}
+function room3(){
+  const qs = [
+    {h:3,m:15, q:"Ela'nın okulu saat kaçta bitiyor?", o:["Üçü çeyrek geçiyor.","Üçe çeyrek var.","Üç buçuk."], a:0,
+     tip:"Kırmızı uzun kol (yelkovan) 3'ü gösteriyor: 15 dakika = çeyrek. Saati geçtiyse “geçiyor” deriz."},
+    {h:8,m:40, q:"Kerem'in ilk dersi saat kaçta başlıyor?", o:["Sekizi kırk geçiyor.","Dokuza yirmi var.","Sekize yirmi var."], a:1,
+     tip:"8:40'ta dokuza 20 dakika kaldı. Bir sonraki saate kalan süre için “… var” deriz."},
+    {h:12,m:30, q:"Öğle yemeği saat kaçta?", o:["On iki buçuk.","On ikiye çeyrek var.","Biri otuz geçiyor."], a:0,
+     tip:"30 dakika = yarım saat. Türkçede “buçuk” deriz."},
+  ];
+  let i=0;
+  function show(){
+    const Q=qs[i];
+    screen.innerHTML = `<div class="room">Oda 3 · ${ROOMS[2]}</div><h2>Bahçedeki Saat Kulesi</h2>
+     <p>Saat kulesinin kapısı ancak saatleri doğru okursan açılacak.</p>
+     <div class="clockbox">${clockSVG(Q.h,Q.m)}</div>
+     <p><b>Saat ${i+1}/3:</b> ${Q.q}</p>
+     ${Q.o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("")}
+     <div class="hint" id="h">💡 ${Q.tip}</div>`;
+    screen.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      if(+b.dataset.k===Q.a){ b.classList.add("ok"); setTimeout(()=>{ i++; i<qs.length?show():reward(2,"Kule kapısı açıldı! İçeride bir kâğıt var:",room4) },450) }
+      else { wrong(b); $("#h").classList.add("show") }
+    });
+  }
+  show();
+}
+
+/* ---------- Oda 4: Boşluk doldurma (sıklık) ---------- */
+function room4(){
+  const blanks = [
+    {a:"her sabah", ctx:"Ela okula yürüyerek gidiyor. Pazartesi, salı, çarşamba, perşembe, cuma… hiç değişmiyor!"},
+    {a:"haftada iki kez", ctx:"Bütün okul pazartesi ve perşembe günleri büyük salonda toplanıyor."},
+    {a:"hiç", ctx:"Okulun makarnasını sevmiyor; bu yüzden bir kez bile yemiyor."},
+    {a:"salı günleri", ctx:"Satranç kulübü sadece bir gün var."},
+  ];
+  const sentences = [
+    i=>`Ela okula ${i} yürüyerek gidiyor.`,
+    i=>`Okulda assembly ${i} yapılıyor.`,
+    i=>`Ela okulun makarnasını ${i} yemiyor.`,
+    i=>`Ela ${i} satranç kulübüne kalıyor.`,
+  ];
+  const chips = shuffle(["her sabah","haftada iki kez","hiç","salı günleri","bazen"]);
+  let cur=0;
+  function show(){
+    screen.innerHTML = `<div class="room">Oda 4 · ${ROOMS[3]}</div><h2>Ela'nın Mektubu</h2>
+     <p>Kütüphanede Ela'nın mektubu var, ama bazı sözcükler silinmiş. Doğru <b>zaman sözcüğünü</b> seç.</p>
+     <div class="story">${sentences.map((f,k)=>`<p>${k<cur?f(`<span class="blank">${blanks[k].a}</span>`):k===cur?f('<span class="blank">?</span>'):f('<span class="blank">…</span>')}</p>`).join("")}</div>
+     <p class="small">Bilgi: ${blanks[cur].ctx}</p>
+     <div class="chips">${chips.map(c=>`<span class="chip" data-c="${c}">${c}</span>`).join("")}</div>
+     <div class="hint" id="h">💡 “Bilgi” cümlesini tekrar oku: kaç kez, hangi gün?</div>`;
+    screen.querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{
+      if(ch.dataset.c===blanks[cur].a){ cur++; cur<blanks.length?show():reward(3,"Mektubun altında bir imza ve bir rakam var:",finale) }
+      else { wrong(); ch.classList.add("no"); $("#h").classList.add("show") }
+    });
+  }
+  show();
+}
+
+/* ---------- Ödül ekranı ---------- */
+function reward(idx,msg,next){
+  S.digits[idx]=CODE[idx]; renderKeys();
+  screen.innerHTML = `<div class="room">Görev tamam ✔</div><h2>Harika, ${S.name}!</h2>
+   <div class="reward"><p>${msg}</p><div class="digit">${CODE[idx]}</div>
+   <p class="small">Bu rakam şifrenin ${idx+1}. rakamı.</p></div>
+   <p class="center"><button class="primary" id="nx">${idx<3?"Sonraki odaya geç →":"Müdür odasına git →"}</button></p>`;
+  $("#nx").onclick=next;
+}
+
+/* ---------- Final: Kasa ---------- */
+function finale(){
+  screen.innerHTML = `<div class="room">Müdür Odası</div><h2>Kasayı Aç!</h2>
+   <p>Dört rakamı da topladın. Şifreyi <b>sırayla</b> kasaya gir.</p>
+   <div class="lock">${CODE.map((_,i)=>`<input inputmode="numeric" maxlength="1" id="d${i}">`).join("")}</div>
+   <p class="center"><button class="primary" id="open">Kasayı aç 🔓</button></p>
+   <div class="hint" id="h">💡 Rakamlar ekranın üstünde, sarı kutularda!</div>`;
+  const ins=[...screen.querySelectorAll(".lock input")];
+  ins.forEach((el,i)=>el.addEventListener("input",()=>{ if(el.value && ins[i+1]) ins[i+1].focus() }));
+  ins[0].focus();
+  $("#open").onclick=()=>{
+    if(ins.map(x=>x.value).join("")===CODE.join("")) win();
+    else { wrong(); $("#h").classList.add("show") }
+  };
+}
+
+/* ---------- Kazanma + Form ---------- */
+function sendToForm(sure){
+  if(!FORM_LINK) return Promise.resolve("noform");
+  try{
+    const url = new URL(FORM_LINK);
+    const vals = {AD:S.name, SURE:sure, HATA:String(S.errors)};
+    const body = new URLSearchParams();
+    url.searchParams.forEach((v,k)=>{ if(k.startsWith("entry.")) body.append(k, vals[v.toUpperCase()] ?? v) });
+    const post = FORM_LINK.split("?")[0].replace(/viewform$/,"formResponse");
+    return fetch(post,{method:"POST",mode:"no-cors",body}).then(()=>"ok").catch(()=>"fail");
+  }catch(e){ return Promise.resolve("fail") }
+}
+function prefilled(sure){
+  if(!FORM_LINK) return "";
+  const vals={AD:S.name,SURE:sure,HATA:String(S.errors)};
+  const url=new URL(FORM_LINK);
+  url.searchParams.forEach((v,k)=>{ if(k.startsWith("entry.") && vals[v.toUpperCase()]!==undefined) url.searchParams.set(k,vals[v.toUpperCase()]) });
+  return url.toString();
+}
+function win(){
+  clearInterval(S.timerId);
+  const sure = fmt(elapsed());
+  screen.innerHTML = `<div class="center"><div style="font-size:56px">🎉📄</div>
+   <h2>Karne bulundu!</h2>
+   <p>Tebrikler <b>${S.name}</b>! Kerem karnesine kavuştu. Ayşe Öğretmen sana teşekkür ediyor.</p>
+   <div class="reward"><p><b>Süren:</b> ${sure} &nbsp;·&nbsp; <b>Yanlış deneme:</b> ${S.errors}</p>
+   <p class="small" id="st">${FORM_LINK?"Sonucun öğretmenine gönderiliyor…":""}</p></div></div>`;
+  sendToForm(sure).then(r=>{
+    const st=$("#st"); if(!st) return;
+    if(r==="ok") st.innerHTML=`Sonucun öğretmenine gönderildi ✔<br><a href="${prefilled(sure)}" target="_blank">Gitmediyse buraya tıkla</a>`;
+    else if(r==="fail") st.innerHTML=`<a href="${prefilled(sure)}" target="_blank">Sonucunu göndermek için tıkla</a>`;
+  });
+}
+
+intro();
+</script>
+</body>
+</html>

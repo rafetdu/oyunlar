@@ -298,12 +298,10 @@ function win(){
    <h2>Karne bulundu!</h2>
    <p>Tebrikler <b>${S.name}</b>! Kerem karnesine kavuştu. Ayşe Öğretmen sana teşekkür ediyor.</p>
    <div class="reward"><p><b>Süren:</b> ${sure} &nbsp;·&nbsp; <b>Yanlış deneme:</b> ${S.errors}</p>
-   <p class="small" id="st">${FORM_LINK?"Sonucun öğretmenine gönderiliyor…":""}</p></div></div>`;
-  sendToForm(sure).then(r=>{
-    const st=$("#st"); if(!st) return;
-    if(r==="ok") st.innerHTML=`Sonucun öğretmenine gönderildi ✔<br><a href="${prefilled(sure)}" target="_blank">Gitmediyse buraya tıkla</a>`;
-    else if(r==="fail") st.innerHTML=`<a href="${prefilled(sure)}" target="_blank">Sonucunu göndermek için tıkla</a>`;
-  });
+   </div>
+   ${FORM_LINK?`<p style="margin-top:16px"><b>Son adım:</b> Aşağıdaki butona bas, açılan formda <b>Gönder</b>'e tıkla.</p>
+   <p><a href="${prefilled(sure)}" target="_blank" rel="noopener"><button class="primary" style="font-size:18px;padding:14px 22px">📨 Sonucumu öğretmenime gönder</button></a></p>`:""}
+   </div>`;
 }
 
 intro();

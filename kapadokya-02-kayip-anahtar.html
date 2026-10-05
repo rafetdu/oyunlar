@@ -46,7 +46,7 @@
   .letters{display:flex;gap:8px;justify-content:center;margin:12px 0}
   .letters div{width:46px;height:54px;border-radius:10px;background:#0f1626;border:2px solid #2a3858;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--muted)}
   .letters div.got{color:#fff;border-color:var(--yellow);background:#2d2a12}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
   .stats div{background:#0f1626;border-radius:12px;padding:14px;text-align:center}
   .stats b{display:block;font-size:26px}
   .legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:14px}
@@ -112,6 +112,7 @@
       <div class="stats">
         <div><b id="endTime">00:00</b><span class="muted">süre</span></div>
         <div><b id="endScore">0/15</b><span class="muted">ilk denemede doğru</span></div>
+        <div><b id="endErrors">0</b><span class="muted">hata</span></div>
       </div>
       <p class="muted" id="endNote"></p>
       <button id="formBtn" onclick="openForm()">Sonucu kaydet (Google Form)</button>
@@ -121,16 +122,12 @@
 </div>
 
 <script>
-/* =====================================================================
-   ÖĞRETMEN AYARI – Google Form ön doldurulmuş link
-   Formda "Ön doldurulmuş link al" → alanları doldur → linki kopyala.
-   Linkteki entry.XXXX numaralarını aşağıya yaz. Boş bırakılan alan gönderilmez.
-   ===================================================================== */
+/* Google Form – Kapadokya Kayıp Anahtar Sonuçları */
 const FORM = {
-  base:  "https://docs.google.com/forms/d/e/FORM_ID/viewform",
-  name:  "entry.1111111",   // Ad
-  time:  "entry.2222222",   // Süre (mm:ss)
-  score: "entry.3333333"    // Puan (ilk denemede doğru / 15)
+  base:  "https://docs.google.com/forms/d/e/1FAIpQLSeV-csX1GbSRmvrbw78iYD77smcJRRKfJlKvldaJDmdw6_dmA/viewform",
+  name:  "entry.853090217",   // Ad
+  time:  "entry.170572733",   // Süre
+  score: "entry.636704366"    // Puan (ilk denemede doğru / 15)
 };
 
 /* ---------------- SORULAR ---------------- */
@@ -173,7 +170,7 @@ const ROOMS = [
 ];
 
 /* ---------------- OYUN ---------------- */
-let name="", roomIdx=0, qIdx=0, firstTry=true, score=0, penalty=0, startTs=0, timerId=null, letters=[];
+let name="", roomIdx=0, qIdx=0, firstTry=true, score=0, errors=0, penalty=0, startTs=0, timerId=null, letters=[];
 
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function fmt(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
@@ -184,7 +181,7 @@ function startGame(){
   name=document.getElementById('name').value.trim();
   if(!name){document.getElementById('name').focus();document.getElementById('name').style.borderColor='#D8432F';return;}
   startTs=Date.now();timerId=setInterval(tick,250);
-  roomIdx=0;qIdx=0;score=0;penalty=0;letters=[];
+  roomIdx=0;qIdx=0;score=0;errors=0;penalty=0;letters=[];
   renderRoom();show('s-room');
 }
 
@@ -223,7 +220,7 @@ function answer(i,btn){
     },600);
   }else{
     btn.classList.add('bad');btn.onclick=null;
-    firstTry=false;penalty+=5;
+    firstTry=false;errors++;penalty+=5;
     const h=document.getElementById('hint');h.innerHTML='💡 '+q.hint+' <span class="muted">(+5 sn)</span>';h.classList.add('show');
   }
 }
@@ -248,6 +245,7 @@ function endGame(){
   document.getElementById('timer').textContent=t;
   document.getElementById('endTime').textContent=t;
   document.getElementById('endScore').textContent=score+'/15';
+  document.getElementById('endErrors').textContent=errors;
   document.getElementById('endNote').textContent=score>=13?'Harika! Ekler senin.':score>=9?'İyi! Kırmızı ve sarı odaya bir daha bak.':'Kitapçığın arka sayfasını tekrar oku, sonra tekrar dene.';
   show('s-end');
 }

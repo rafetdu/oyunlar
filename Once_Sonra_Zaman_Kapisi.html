@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zaman Kapısı</title>
+<meta name="description" content="Önce ve Sonra temalı Türkçe okuma-kaçış odası">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    color-scheme: dark;
+    --night:#0e1430; --night2:#151d44; --stone:#1b2450; --stone-lt:#28346b;
+    --gold:#f4c430; --gold-dim:#c99a1f; --ink:#eef2ff; --ink-soft:#aeb9e6;
+    --good:#3ecf8e; --good-deep:#1f9d68; --bad:#e2536b; --bad-deep:#b03650;
+    --cyan:#49c6e5; --line:#33407a;
+    --shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:
+      radial-gradient(1200px 600px at 50% -10%, #1d2a63 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 110%, #122050 0%, transparent 55%),
+      var(--night);
+    color:var(--ink);
+    font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .wrap{max-width:700px; margin:0 auto; padding-inline:18px; padding-block:24px;
+    min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+  .brand{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-weight:600;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .locks{display:flex; gap:6px; font-size:19px; margin-top:8px; justify-content:center; flex-wrap:wrap;}
+  .locks span{filter:grayscale(1) opacity(.35); transition:.4s;}
+  .locks span.open{filter:none; transform:scale(1.14);}
+
+  .stage{background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 40%), var(--stone);
+    border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+    padding:24px 22px 28px; position:relative; overflow:hidden; flex:1;
+    display:flex; flex-direction:column; justify-content:flex-start;}
+  .stage::before{content:""; position:absolute; inset:0; border-radius:24px; pointer-events:none;
+    box-shadow:inset 0 0 90px rgba(0,0,0,.4);}
+  .torch{position:absolute; top:14px; font-size:22px; opacity:.9; animation:flick 1.6s infinite alternate; z-index:0;}
+  .torch.l{left:14px} .torch.r{right:14px}
+  @keyframes flick{from{opacity:.6; transform:translateY(0)} to{opacity:1; transform:translateY(-2px)}}
+  #screen{position:relative; z-index:1;}
+
+  h1{font-family:"Cinzel",serif; font-weight:900; text-align:center; text-wrap:balance;
+    font-size:clamp(28px,7vw,44px); margin:.1em 0; color:var(--gold);
+    text-shadow:0 2px 0 #000, 0 0 26px rgba(244,196,48,.28); letter-spacing:.02em;}
+  .door-emoji{text-align:center; font-size:clamp(40px,11vw,66px); line-height:1; margin:2px 0;
+    filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));}
+  .lead{text-align:center; font-size:clamp(14px,3.4vw,17px); color:var(--ink); line-height:1.5;
+    max-width:42ch; margin:4px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.85em; margin-top:4px;}
+  .step-label{text-align:center; font-family:"Cinzel",serif; letter-spacing:.12em; text-transform:uppercase;
+    font-size:12px; color:var(--gold-dim); margin-bottom:2px;}
+
+  .read{background:linear-gradient(180deg,#141b40,#10163456); border:1px solid var(--line);
+    border-left:4px solid var(--cyan); border-radius:14px; padding:14px 16px; margin:12px auto 4px; max-width:520px;}
+  .read .rh{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--cyan); font-weight:600; margin-bottom:6px;}
+  .read p{margin:0; font-size:clamp(15px,3.5vw,18px); line-height:1.65; color:var(--ink);}
+  .read b{color:var(--gold);}
+
+  .prompt{text-align:center; font-weight:600; font-size:clamp(16px,4vw,20px); margin:14px auto 2px; max-width:44ch;}
+  .prompt .en{display:block; color:var(--ink-soft); font-weight:400; font-size:.78em; margin-top:3px;}
+  .hint{text-align:center; font-size:12.5px; color:var(--gold-dim); margin:2px auto 0;}
+
+  .opts{display:grid; gap:10px; margin:14px auto 4px; max-width:500px;}
+  .opt{appearance:none; border:1px solid var(--line); background:linear-gradient(180deg,var(--stone-lt),#20295a);
+    color:var(--ink); font-family:inherit; font-size:clamp(15px,3.5vw,18px); font-weight:500;
+    padding:13px 15px; border-radius:13px; cursor:pointer; transition:.15s; text-align:left;
+    display:flex; align-items:center; gap:11px;}
+  .opt .bx{flex:none; width:22px; height:22px; border-radius:6px; border:2px solid var(--ink-soft);
+    display:flex; align-items:center; justify-content:center; font-size:14px; color:transparent;}
+  .opt:hover{transform:translateY(-2px); border-color:var(--gold-dim); box-shadow:0 8px 20px rgba(0,0,0,.35);}
+  .opt.sel{border-color:var(--gold);} .opt.sel .bx{background:var(--gold); border-color:var(--gold); color:#1a1300;}
+  .opt.correct{background:linear-gradient(180deg,var(--good),var(--good-deep)); border-color:var(--good); color:#06281a;}
+  .opt.correct .bx{background:#06281a; border-color:#06281a; color:var(--good);}
+  .opt.wrong{background:linear-gradient(180deg,var(--bad),var(--bad-deep)); border-color:var(--bad); color:#2a0810;}
+  .opt.wrong .bx{background:#2a0810; border-color:#2a0810; color:var(--bad);}
+  .opt:disabled{cursor:default}
+  .opt .n{flex:none; font-family:"Cinzel",serif; color:var(--gold-dim); font-weight:700; min-width:16px;}
+
+  .seq{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:14px auto 8px; max-width:520px;}
+  .chip{border:1px solid var(--line); background:linear-gradient(180deg,var(--stone-lt),#20295a); color:var(--ink);
+    font-family:inherit; font-size:clamp(14px,3.3vw,16px); font-weight:500; padding:10px 13px; border-radius:11px; cursor:pointer; transition:.15s;}
+  .chip:hover{transform:translateY(-2px); border-color:var(--gold-dim);}
+  .chip.picked{opacity:.3; pointer-events:none; text-decoration:line-through;}
+  .slots{display:flex; flex-direction:column; gap:7px; margin:4px auto 2px; max-width:520px;}
+  .slot{display:flex; align-items:center; gap:10px; border:1px dashed var(--line); border-radius:11px;
+    padding:8px 12px; min-height:42px; background:rgba(255,255,255,.02);}
+  .slot .num{font-family:"Cinzel",serif; color:var(--gold); font-weight:700; min-width:18px;}
+  .slot .txt{flex:1; color:var(--ink); font-size:clamp(13px,3.2vw,15px);}
+  .slot.filled{border-style:solid; border-color:var(--gold-dim);}
+
+  .feedback{text-align:center; min-height:22px; margin-top:10px; font-size:15px; font-weight:500;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+
+  .btn{display:block; margin:14px auto 0; appearance:none; border:none; cursor:pointer;
+    font-family:"Cinzel",serif; font-weight:700; letter-spacing:.06em; font-size:16px;
+    padding:12px 30px; border-radius:40px; color:#1a1300;
+    background:linear-gradient(180deg,#ffdc5e,var(--gold-dim)); box-shadow:0 8px 22px rgba(244,196,48,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.4; cursor:default; transform:none;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+
+  .shake{animation:shake .4s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+  .pop{animation:pop .4s;}
+  @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+  .field{display:block; width:100%; max-width:360px; margin:12px auto 0; padding:12px 14px;
+    border-radius:12px; border:1px solid var(--line); background:#131a3e; color:var(--ink);
+    font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--gold-dim);}
+  .result-stats{display:flex; gap:22px; justify-content:center; margin:14px 0 4px;}
+  .result-stats div{text-align:center}
+  .result-stats .n{font-family:"Cinzel",serif; font-size:30px; color:var(--gold); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.1em;}
+  .note{text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:12px; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Zaman Kapısı</div>
+    <div class="meta"><span>⏱ <b id="timer">0:00</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="stage" id="stage">
+    <div class="torch l">🔥</div><div class="torch r">🔥</div>
+    <div id="screen"></div>
+    <div class="locks" id="locks"></div>
+  </div>
+</div>
+
+<script>
+// ===== GOOGLE FORM CONFIG =====
+var FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSdUnGNudzQI4ksma-nU7HgR4G7Qrc8ragnPUGnPzvLGkok8Yg/viewform?usp=pp_url";
+var F_NAME = "entry.2121695807";   // Ad soyad
+var F_TIME = "entry.243489704";    // süre
+var F_ERR  = "entry.1824104970";   // hata
+
+var screenEl=document.getElementById('screen'), locksEl=document.getElementById('locks');
+var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs');
+var errors=0, startTime=null, timerInt=null, elapsed=0, current=0, playerName="";
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function startTimer(){startTime=Date.now();timerInt=setInterval(function(){elapsed=Math.floor((Date.now()-startTime)/1000);timerEl.textContent=fmt(elapsed);},1000);}
+function stopTimer(){clearInterval(timerInt);}
+function addErr(){errors++;errsEl.textContent=errors;}
+
+// ===== ROOMS: each has a short text, then a question about THAT text =====
+// types: 'multi' (one or more correct — tick & check), 'single' (one correct), 'order' (sequence)
+var ROOMS = [
+  {
+    emoji:"🌅", label:"1. Kapı — Ahmet Bey", who:"Ahmet Bey",
+    text:"Ahmet Bey sabah kalktı. <b>Önce</b> duş aldı. Duştan çıktı, <b>sonra</b> mutfağa gitti ve kahvaltı yaptı.",
+    type:"multi",
+    q:"Hangileri doğru? (Birden fazla olabilir.)", qen:"Which are correct? (There may be more than one.)",
+    opts:[
+      {t:"Duştan sonra mutfağa gitti.", ok:true},
+      {t:"Duştan sonra kahvaltı yaptı.", ok:true},
+      {t:"Kahvaltıdan sonra duş aldı.", ok:false}
+    ]
+  },
+  {
+    emoji:"☕", label:"2. Kapı — Ayşe", who:"Ayşe",
+    text:"Ayşe her sabah erken kalkar. <b>Önce</b> yüzünü yıkar, <b>sonra</b> kahvaltı eder. Kahvaltıdan <b>sonra</b> dişlerini fırçalar ve okula gider.",
+    type:"multi",
+    q:"Hangileri doğru? (Birden fazla olabilir.)", qen:"Which are correct? (There may be more than one.)",
+    opts:[
+      {t:"Ayşe önce yüzünü yıkar, sonra kahvaltı eder.", ok:true},
+      {t:"Kahvaltıdan sonra dişlerini fırçalar.", ok:true},
+      {t:"Önce okula gider, sonra kahvaltı eder.", ok:false}
+    ]
+  },
+  {
+    emoji:"🏫", label:"3. Kapı — Can", who:"Can",
+    text:"Can sabah otobüse biner. Okula gider. Derslerden <b>sonra</b> öğle yemeği yer. Yemekten <b>sonra</b> biraz futbol oynar.",
+    type:"single",
+    q:"Can yemekten sonra ne yapar?", qen:"What does Can do after lunch?",
+    opts:[
+      {t:"Otobüse biner.", ok:false},
+      {t:"Futbol oynar.", ok:true},
+      {t:"Derse girer.", ok:false}
+    ]
+  },
+  {
+    emoji:"🎒", label:"4. Kapı — Zeynep", who:"Zeynep",
+    text:"Zeynep okuldan eve döner. <b>Önce</b> ödevini yapar, <b>sonra</b> televizyon izler. Akşam yemeğinden <b>sonra</b> kitap okur ve uyur.",
+    type:"multi",
+    q:"Hangileri doğru? (Birden fazla olabilir.)", qen:"Which are correct? (There may be more than one.)",
+    opts:[
+      {t:"Önce ödev yapar, sonra televizyon izler.", ok:true},
+      {t:"Akşam yemeğinden sonra kitap okur.", ok:true},
+      {t:"Önce uyur, sonra ödev yapar.", ok:false},
+      {t:"Televizyondan önce ödev yapar.", ok:true}
+    ]
+  },
+  {
+    emoji:"🌙", label:"5. Kapı — Deniz", who:"Deniz",
+    text:"Deniz akşam eve gelir. Ellerini yıkar, yemek yer, dişlerini fırçalar ve yatar.",
+    type:"order",
+    q:"Deniz'in akşamını sıraya koy. Doğru sırayla tıkla.", qen:"Put Deniz's evening in order — click in the correct order.",
+    items:["Eve gelir","Ellerini yıkar","Yemek yer","Dişlerini fırçalar","Yatar"]
+  },
+  {
+    emoji:"⚽", label:"6. Kapı — Mert", who:"Mert",
+    text:"Mert hafta sonu geç kalkar. <b>Önce</b> kahvaltı yapar, <b>sonra</b> parka gider. Parktan <b>sonra</b> eve döner ve öğle uykusu uyur.",
+    type:"multi",
+    q:"Hangileri doğru? (Birden fazla olabilir.)", qen:"Which are correct? (There may be more than one.)",
+    opts:[
+      {t:"Kahvaltıdan sonra parka gider.", ok:true},
+      {t:"Parktan sonra eve döner.", ok:true},
+      {t:"Önce parka gider, sonra kahvaltı yapar.", ok:false},
+      {t:"Eve döndükten sonra uyur.", ok:true}
+    ]
+  }
+];
+
+function renderLocks(){
+  locksEl.innerHTML="";
+  for(var i=0;i<ROOMS.length;i++){
+    var s=document.createElement('span');
+    s.textContent = i<current ? "🔓" : "🔒";
+    if(i<current) s.className="open";
+    locksEl.appendChild(s);
+  }
+}
+
+function textBlock(r){
+  return '<div class="read"><div class="rh">📖 Oku / Read</div><p>'+r.text+'</p></div>';
+}
+function qBlock(r){
+  return '<div class="prompt">'+r.q+'<span class="en">'+r.qen+'</span></div>';
+}
+
+// ---------- INTRO ----------
+function renderIntro(){
+  screenEl.innerHTML =
+    '<div class="door-emoji">⏳</div>'+
+    '<h1>Zaman Kapısı</h1>'+
+    '<p class="lead">Altı kapı. Her kapıda kısa bir metin var — <b>önce oku</b>, sonra soruyu çöz. '+
+    'Bazı sorularda birden fazla doğru cevap olabilir! '+
+    '<span class="tr">Six doors. Read the short text first, then answer. Some questions have more than one correct answer!</span></p>'+
+    '<input class="field" id="who0" placeholder="Adını yaz / Your name" autocomplete="name" value="'+playerName.replace(/"/g,'&quot;')+'">'+
+    '<button class="btn" id="go">Başla ▶</button>';
+  var inp=document.getElementById('who0');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; errors=0; errsEl.textContent=0; elapsed=0; timerEl.textContent="0:00";
+    startTimer(); renderRoom();
+  };
+  renderLocks();
+}
+
+// ---------- ROOM ROUTER ----------
+function renderRoom(){
+  renderLocks();
+  var r=ROOMS[current];
+  if(r.type==="order") return renderOrderRoom(r);
+  if(r.type==="multi") return renderMultiRoom(r);
+  return renderSingleRoom(r);
+}
+
+// ---------- SINGLE ----------
+function renderSingleRoom(r){
+  screenEl.innerHTML =
+    '<div class="step-label">'+r.label+'</div>'+
+    '<div class="door-emoji">'+r.emoji+'</div>'+
+    textBlock(r)+qBlock(r)+
+    '<div class="opts" id="opts"></div><div class="feedback" id="fb"></div>';
+  var box=document.getElementById('opts');
+  r.opts.forEach(function(o){
+    var b=document.createElement('button'); b.className="opt";
+    b.innerHTML='<span class="bx">✓</span><span>'+o.t+'</span>';
+    b.onclick=function(){
+      if(o.ok){
+        b.classList.add("correct");
+        document.querySelectorAll('.opt').forEach(function(x){x.disabled=true;});
+        win("Doğru! 🎉");
+      }else{
+        b.classList.add("wrong"); b.disabled=true; addErr();
+        bad("Tekrar dene 🙂 Metne bak: önce ne, sonra ne?");
+      }
+    };
+    box.appendChild(b);
+  });
+}
+
+// ---------- MULTI (one or more correct) ----------
+var multiSel;
+function renderMultiRoom(r){
+  multiSel={};
+  screenEl.innerHTML =
+    '<div class="step-label">'+r.label+'</div>'+
+    '<div class="door-emoji">'+r.emoji+'</div>'+
+    textBlock(r)+qBlock(r)+
+    '<div class="hint">Doğru olanların hepsini seç, sonra “Kontrol et”e bas. / Tick all correct ones.</div>'+
+    '<div class="opts" id="opts"></div>'+
+    '<button class="btn" id="check">Kontrol et ✓</button>'+
+    '<div class="feedback" id="fb"></div>';
+  var box=document.getElementById('opts');
+  r.opts.forEach(function(o,i){
+    var b=document.createElement('button'); b.className="opt"; b.dataset.i=i;
+    b.innerHTML='<span class="bx">✓</span><span>'+o.t+'</span>';
+    b.onclick=function(){
+      if(multiSel[i]){delete multiSel[i]; b.classList.remove('sel');}
+      else{multiSel[i]=true; b.classList.add('sel');}
+    };
+    box.appendChild(b);
+  });
+  document.getElementById('check').onclick=function(){ checkMulti(r); };
+}
+function checkMulti(r){
+  var ok=true;
+  for(var i=0;i<r.opts.length;i++){
+    var picked=!!multiSel[i], shouldPick=r.opts[i].ok;
+    if(picked!==shouldPick){ ok=false; break; }
+  }
+  if(ok){
+    document.querySelectorAll('.opt').forEach(function(b){
+      var i=+b.dataset.i; b.disabled=true;
+      if(r.opts[i].ok) b.classList.add('correct');
+    });
+    document.getElementById('check').disabled=true;
+    win("Doğru! Hepsini buldun. 🎉");
+  }else{
+    addErr();
+    // show which picked ones are wrong, briefly
+    document.querySelectorAll('.opt').forEach(function(b){
+      var i=+b.dataset.i;
+      if(multiSel[i] && !r.opts[i].ok){ b.classList.add('wrong'); }
+    });
+    bad("Tam değil. Kırmızıları çıkar, eksikleri ekle. 🔁");
+    setTimeout(function(){
+      document.querySelectorAll('.opt.wrong').forEach(function(b){
+        b.classList.remove('wrong'); var i=+b.dataset.i; delete multiSel[i]; b.classList.remove('sel');
+      });
+    },1100);
+  }
+}
+
+// ---------- ORDER ----------
+var orderState;
+function renderOrderRoom(r){
+  orderState={placed:[],correct:r.items};
+  var shuffled=r.items.slice();
+  for(var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=t;}
+  var slots='';
+  for(var k=0;k<r.items.length;k++) slots+='<div class="slot"><span class="num">'+(k+1)+'</span><span class="txt">—</span></div>';
+  screenEl.innerHTML =
+    '<div class="step-label">'+r.label+'</div>'+
+    '<div class="door-emoji">'+r.emoji+'</div>'+
+    textBlock(r)+qBlock(r)+
+    '<div class="seq" id="chips"></div><div class="slots" id="slots">'+slots+'</div><div class="feedback" id="fb"></div>';
+  var chips=document.getElementById('chips');
+  shuffled.forEach(function(txt){
+    var c=document.createElement('button'); c.className="chip"; c.textContent=txt;
+    c.onclick=function(){ placeChip(c,txt,r); };
+    chips.appendChild(c);
+  });
+}
+function placeChip(chip,txt,r){
+  var idx=orderState.placed.length;
+  if(idx>=r.items.length) return;
+  orderState.placed.push(txt); chip.classList.add('picked');
+  var slot=document.querySelectorAll('#slots .slot')[idx];
+  slot.classList.add('filled'); slot.querySelector('.txt').textContent=txt;
+  if(orderState.placed.length===r.items.length) checkOrder(r);
+}
+function checkOrder(r){
+  var ok=true;
+  for(var i=0;i<r.items.length;i++){ if(orderState.placed[i]!==orderState.correct[i]){ ok=false; break; } }
+  if(ok){
+    document.querySelectorAll('#slots .slot').forEach(function(s){s.style.borderColor="var(--good)";});
+    win("Mükemmel! Sırayı buldun. 🎉");
+  }else{
+    addErr(); bad("Sıra karıştı. Tekrar dene — önce ne olur? 🔁");
+    setTimeout(function(){ renderOrderRoom(r); },1000);
+  }
+}
+
+// ---------- SHARED WIN/BAD ----------
+function win(msg){
+  var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.textContent=msg;}
+  screenEl.classList.add('pop');
+  setTimeout(function(){ screenEl.classList.remove('pop'); advance(); }, 1150);
+}
+function bad(msg){
+  var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.textContent=msg;}
+  screenEl.classList.add('shake'); setTimeout(function(){screenEl.classList.remove('shake');},400);
+}
+function advance(){ current++; if(current>=ROOMS.length) renderWin(); else renderRoom(); }
+
+// ---------- WIN SCREEN ----------
+function renderWin(){
+  stopTimer(); renderLocks();
+  screenEl.innerHTML =
+    '<div class="door-emoji pop">🏆</div><h1>Kaçtın!</h1>'+
+    '<p class="lead">Bütün kapıları açtın! 👏 <span class="tr">You opened every door!</span></p>'+
+    '<p class="lead" style="margin-top:2px"><b style="color:var(--gold)">'+playerName.replace(/</g,'&lt;')+'</b></p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name" value="'+playerName.replace(/"/g,'&quot;')+'">'+
+    '<button class="btn" id="send">Sonucu gönder 📨</button>'+
+    '<button class="btn ghost" id="again">Baştan oyna 🔄</button>'+
+    '<p class="note">“Sonucu gönder”e basınca sonucun (ad, süre, hata) öğretmenine ulaşır. '+
+    'Yeni sekmede bir form açılır — sadece <b>Gönder</b>’e bas.</p>';
+  document.getElementById('send').onclick=function(){
+    var name=(document.getElementById('who').value||"").trim();
+    if(!name){var w=document.getElementById('who'); w.focus(); w.style.borderColor="var(--bad)"; return;}
+    playerName=name;
+    var url=FORM_BASE+"&"+F_NAME+"="+encodeURIComponent(name)+"&"+F_TIME+"="+encodeURIComponent(fmt(elapsed))+"&"+F_ERR+"="+encodeURIComponent(errors);
+    window.open(url,"_blank");
+  };
+  document.getElementById('again').onclick=function(){
+    errors=0;errsEl.textContent=0;elapsed=0;timerEl.textContent="0:00";current=0;renderIntro();
+  };
+}
+
+renderIntro();
+</script>
+</body>
+</html>

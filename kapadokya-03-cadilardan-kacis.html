@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cadılardan Kaçış</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@500;700;900&display=swap">
+<style>
+:root{
+  --night:#12071F; --night2:#2A0F4A; --card:#1B0E2Eee; --ink:#F6EEDC; --muted:#C9B8E0;
+  --pumpkin:#F28C28; --pumpkin2:#FFB347; --slime:#5BB534; --blood:#E23B3B; --line:#5A3B85;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--night);color:var(--ink);font-family:"Nunito",system-ui,sans-serif;font-size:17px;overflow:hidden}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding-inline:16px;padding-block:12px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:"Creepster",cursive;font-size:1.7rem;letter-spacing:.04em;color:var(--pumpkin);text-shadow:0 0 18px #f28c2888}
+.timer{font-variant-numeric:tabular-nums;font-weight:900;font-size:1.35rem;background:#0008;border:1px solid var(--line);border-radius:999px;padding:4px 16px}
+.seals{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.seal{width:17px;height:17px;border-radius:50%;background:#3a2358;border:1px solid var(--line);transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:10px}
+.seal.open{background:var(--slime);box-shadow:0 0 10px #5bb534aa}
+.seal.now{background:var(--pumpkin);box-shadow:0 0 12px #f28c28;transform:scale(1.15)}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.card{width:min(620px,100%);background:var(--card);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:0 20px 60px #000a;max-height:100%;overflow:auto}
+h1{font-family:"Creepster",cursive;font-weight:400;font-size:clamp(2.2rem,8vw,3.4rem);margin:0 0 6px;color:var(--pumpkin);text-shadow:0 0 24px #f28c2877;text-wrap:balance;line-height:1}
+h2{font-family:"Creepster",cursive;font-weight:400;font-size:1.6rem;margin:0 0 10px;color:var(--pumpkin2)}
+p{margin:0 0 12px;line-height:1.5}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.tag{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#f28c2822;color:var(--pumpkin2);border:1px solid var(--pumpkin);border-radius:999px;padding:2px 10px;margin-bottom:10px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input[type=text]{width:100%;font:inherit;font-size:1.1rem;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0b0416;color:var(--ink)}
+input[type=text]:focus{outline:2px solid var(--pumpkin);outline-offset:2px}
+.btn{font:inherit;font-weight:900;font-size:1.05rem;padding:12px 22px;border-radius:12px;border:0;background:var(--pumpkin);color:#1a0800;cursor:pointer;box-shadow:0 6px 0 #a34a08;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #a34a08}
+.btn:focus-visible{outline:3px solid var(--slime);outline-offset:3px}
+.btn.ghost{background:#0008;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.sentence{font-size:1.3rem;font-weight:700;line-height:1.5;margin:6px 0 16px}
+.blank{display:inline-block;min-width:4.5ch;border-bottom:3px dashed var(--pumpkin2);color:var(--pumpkin2);text-align:center;padding:0 6px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;font-weight:700;font-size:1.08rem;padding:14px 14px;border-radius:12px;border:2px solid var(--line);background:#0b0416cc;color:var(--ink);cursor:pointer;text-align:left;transition:transform .1s,border-color .2s}
+.opt:hover{border-color:var(--pumpkin2)}
+.opt:focus-visible{outline:3px solid var(--slime);outline-offset:2px}
+.opt.right{border-color:var(--slime);background:#1f4d15}
+.opt.wrong{border-color:var(--blood);background:#4d1515;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.hint{min-height:1.4em;font-weight:700;margin-top:12px;line-height:1.4}
+.hint.bad{color:#ff8a8a}.hint.good{color:#8ff07a}
+.big{font-size:clamp(2.4rem,11vw,4rem);font-weight:900;font-variant-numeric:tabular-nums;color:var(--slime);text-shadow:0 0 30px #5bb53466;line-height:1;margin:6px 0}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0 6px}
+.stat b{display:block;font-size:1.5rem}
+.stat span{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.95rem;margin:12px 0 16px}
+.legend b{color:var(--pumpkin2)}
+.foot{font-size:.78rem;color:var(--muted);text-align:center;margin-top:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div id="app">
+  <div class="top">
+    <div class="brand">🧹 Cadılardan Kaçış</div>
+    <div class="timer" id="timer" hidden>00:00</div>
+  </div>
+  <div class="seals" id="seals" hidden></div>
+
+  <div class="stage">
+    <!-- GİRİŞ -->
+    <section class="card" id="intro">
+      <div class="eyebrow">Kapadokya Sınıfı • Geniş Zaman</div>
+      <h1>Cadılardan Kaçış!</h1>
+      <p>Cadılar seni büyülü ormanda hapsetti! 🌙 Kaçmak için <b>15 büyü mührünü</b> kırmalısın. Her mühürde doğru <b>geniş zaman</b> cümlesini seç; mühür kırılsın ve bir adım ilerle. Yanlış seçersen cadı yaklaşır: <b>+10 saniye</b> ceza! Süre "Başla" ile başlar.</p>
+      <div class="legend">
+        <b>olumlu</b><span>Her yıl kostüm giye<b>rim</b>. <span style="color:#C9B8E0">(I wear…)</span></span>
+        <b>olumsuz</b><span>Korku filmi izle<b>mem</b>. <span style="color:#C9B8E0">(I don't watch…)</span></span>
+        <b>soru</b><span>Şeker topla<b>r mısın</b>? <span style="color:#C9B8E0">(Do you…?)</span></span>
+      </div>
+      <label for="adInput">Adın ne, cesur kâşif?</label>
+      <input type="text" id="adInput" placeholder="Adını yaz" autocomplete="off" maxlength="40">
+      <div class="hint bad" id="nameHint"></div>
+      <div class="row"><button class="btn" id="startBtn">🔦 Başla</button></div>
+    </section>
+
+    <!-- SORU -->
+    <section class="card" id="quiz" hidden>
+      <div class="eyebrow" id="sealLabel">1. Mühür / 15</div>
+      <span class="tag" id="qtag"></span>
+      <div class="sentence" id="sentence"></div>
+      <div class="opts" id="opts"></div>
+      <div class="hint" id="hint"></div>
+    </section>
+
+    <!-- SONUÇ -->
+    <section class="card" id="done" hidden>
+      <div class="eyebrow">Kaçtın!</div>
+      <h1>Ormandan Kurtuldun! 🎃</h1>
+      <p id="doneName"></p>
+      <div class="big" id="doneTime">00:00</div>
+      <div class="stats">
+        <div class="stat"><b id="sSeals">0/15</b><span>ilk denemede</span></div>
+        <div class="stat"><b id="sWrong">0</b><span>yanlış</span></div>
+        <div class="stat"><b id="sPen">0 sn</b><span>ceza</span></div>
+      </div>
+      <div id="ovtSend"></div>
+      <div class="row">
+        <button class="btn ghost" id="againBtn">↺ Tekrar oyna</button>
+      </div>
+    </section>
+  </div>
+  <div class="foot">Özel Orhan Veli Türkçe Okulu — Türkçe Adresiniz</div>
+</div>
+
+<script>
+const OYUN_ADI="Cadılardan Kaçış";
+const PENALTY=10;
+const Q=[
+  {t:"Olumlu", s:"Her yıl Cadılar Bayramı'nda kostüm ___. (ben)", o:["giyerim","giyiyorum","giydim"], a:0},
+  {t:"Olumlu", s:"Ekimin sonunda Cadılar Bayramı ___.", o:["geliyor","geldi","gelir"], a:2},
+  {t:"Olumlu", s:"Babam her yıl balkabağını ___.", o:["oyuyor","oyar","oydu"], a:1},
+  {t:"Olumsuz", s:"Ben korku filminden ___.", o:["korkuyorum","korktum","korkmam"], a:2},
+  {t:"Olumsuz", s:"Bazı komşular kapıyı ___.", o:["açmaz","açıyor","açtı"], a:0},
+  {t:"Soru", s:"Sen korku filmi ___?", o:["izliyor musun","izler misin","izledin mi"], a:1},
+  {t:"Olumlu", s:"Biz her yıl evimizi ___.", o:["süslüyoruz","süsledik","süsleriz"], a:2},
+  {t:"Olumlu", s:"Ela her zaman cadı ___.", o:["olur","oluyor","oldu"], a:0},
+  {t:"Soru", s:"Kardeşin Cadılar Bayramı'nı ___?", o:["kutluyor mu","kutlar mı","kutladı mı"], a:1},
+  {t:"Olumlu", s:"Biz Cadılar Bayramı'nı ___ ve çok eğleniriz.", o:["kutluyoruz","kutladık","kutlarız"], a:2},
+  {t:"Teklif", s:"Arkadaşına sor: “Biraz şeker ___?”", o:["ister misin","istiyor musun","istedin mi"], a:0},
+  {t:"Olumlu", s:"Cadı siyah bir şapka ___.", o:["takıyor","takar","taktı"], a:1},
+  {t:"Olumlu", s:"Komşu bize şeker ___.", o:["veriyor","verdi","verir"], a:2},
+  {t:"Tanı", s:"Hangi cümlede fiil GENİŞ ZAMAN?", o:["Her yıl kostüm giyerim.","Şimdi kostüm giyiyorum.","Dün kostüm giydim."], a:0},
+  {t:"Olumsuz", s:"Ela çikolatayı çok sever ama ben ___.", o:["sevmiyorum","sevmem","sevmedim"], a:1},
+];
+const OK=["🔓 Mühür kırıldı!","✨ Büyü bozuldu!","🎃 Harika, ilerle!","🌙 Bir adım daha!","👻 Kaçış yakın!"];
+const BAD="🔒 Cadı yaklaştı! +10 saniye. Tekrar dene.";
+
+const $=id=>document.getElementById(id);
+let S={name:"",i:0,start:0,wrong:0,firstTry:0,missedHere:false,locked:false,done:false,finalSec:0};
+let tick=null;
+
+function fmt(sec){sec=Math.max(0,Math.round(sec));return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");}
+function elapsed(){return (Date.now()-S.start)/1000 + S.wrong*PENALTY;}
+
+function renderSeals(){
+  const d=$("seals");d.innerHTML="";
+  Q.forEach((_,k)=>{const e=document.createElement("div");e.className="seal"+(k<S.i?" open":k===S.i?" now":"");if(k<S.i)e.textContent="✓";d.appendChild(e);});
+}
+function showQ(){
+  const r=Q[S.i];S.missedHere=false;S.locked=false;
+  $("sealLabel").textContent=`${S.i+1}. Mühür / ${Q.length}`;
+  $("qtag").textContent=r.t;
+  $("sentence").innerHTML=r.s.replace("___",'<span class="blank">___</span>');
+  const o=$("opts");o.innerHTML="";
+  r.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>pick(b,j);o.appendChild(b);});
+  $("hint").textContent="";$("hint").className="hint";
+  renderSeals();drawScene(S.i+1);
+}
+function pick(btn,j){
+  if(S.locked)return;
+  const r=Q[S.i];
+  if(j===r.a){
+    S.locked=true;btn.classList.add("right");
+    if(!S.missedHere)S.firstTry++;
+    $("hint").textContent=OK[S.i%OK.length];$("hint").className="hint good";
+    setTimeout(()=>{S.i++;S.i>=Q.length?finish():showQ();},750);
+  }else{
+    S.wrong++;S.missedHere=true;btn.classList.add("wrong");btn.disabled=true;
+    $("hint").textContent=BAD;$("hint").className="hint bad";
+  }
+}
+function start(){
+  const name=$("adInput").value.trim();
+  if(!name){$("nameHint").textContent="Önce adını yaz.";$("adInput").focus();return;}
+  S={name,i:0,start:Date.now(),wrong:0,firstTry:0,missedHere:false,locked:false,done:false,finalSec:0};
+  $("intro").hidden=true;$("done").hidden=true;$("quiz").hidden=false;$("timer").hidden=false;$("seals").hidden=false;
+  clearInterval(tick);tick=setInterval(()=>{$("timer").textContent=fmt(elapsed());},250);
+  showQ();
+}
+function finish(){
+  clearInterval(tick);S.done=true;S.finalSec=Math.round(elapsed());
+  $("timer").textContent=fmt(S.finalSec);
+  S.i=Q.length;renderSeals();
+  $("quiz").hidden=true;$("done").hidden=false;
+  $("doneName").textContent=`Tebrikler ${S.name}! Bütün mühürleri kırdın ve cadılardan kaçtın.`;
+  $("doneTime").textContent=fmt(S.finalSec);
+  $("sSeals").textContent=`${S.firstTry}/${Q.length}`;
+  $("sWrong").textContent=S.wrong;
+  $("sPen").textContent=`${S.wrong*PENALTY} sn`;
+  drawScene(99);
+  OVT.renderSend("ovtSend",{oyun:OYUN_ADI,sure:fmt(S.finalSec),puan:`${S.firstTry}/${Q.length} ilk denemede · ${S.wrong} hata`});
+}
+$("startBtn").onclick=start;
+$("adInput").addEventListener("keydown",e=>{if(e.key==="Enter")start();});
+$("againBtn").onclick=()=>{$("done").hidden=true;$("intro").hidden=false;$("timer").hidden=true;$("seals").hidden=true;$("ovtSend").innerHTML="";drawScene(0);};
+
+// ---------- Cadılar Bayramı sahnesi (Canvas) ----------
+const cv=$("scene"),cx=cv.getContext("2d");
+let seedRoom=0;
+function rnd(seed){let x=seed*9301+49297;return()=>{x=(x*9301+49297)%233280;return x/233280;};}
+function drawScene(room){
+  seedRoom=room;
+  const W=cv.width=innerWidth*devicePixelRatio,Ht=cv.height=innerHeight*devicePixelRatio;
+  cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  const w=innerWidth,h=innerHeight,R=rnd(room+11);
+  const hues=[[268,20],[280,24],[256,22],[292,20],[20,26],[300,18]];const[hu,li]=hues[room%hues.length];
+  const g=cx.createLinearGradient(0,0,0,h);g.addColorStop(0,`hsl(${hu} 55% ${Math.max(6,li-12)}%)`);g.addColorStop(1,`hsl(${hu} 45% ${li}%)`);
+  cx.fillStyle=g;cx.fillRect(0,0,w,h);
+  for(let i=0;i<110;i++){cx.fillStyle=`rgba(255,255,255,${0.3+R()*0.7})`;cx.fillRect(R()*w,R()*h*0.6,1.5,1.5);}
+  const mx=w*(0.12+R()*0.7),my=h*0.17,mr=Math.min(w,h)*0.085;
+  const mg=cx.createRadialGradient(mx,my,mr*0.5,mx,my,mr*3);mg.addColorStop(0,"rgba(255,200,90,.4)");mg.addColorStop(1,"rgba(255,200,90,0)");
+  cx.fillStyle=mg;cx.fillRect(0,0,w,h);
+  cx.fillStyle=room===99?"#FFD36B":"#F8E7B0";cx.beginPath();cx.arc(mx,my,mr,0,7);cx.fill();
+  cx.fillStyle="rgba(0,0,0,.08)";for(let i=0;i<4;i++){cx.beginPath();cx.arc(mx+(R()-.5)*mr*1.2,my+(R()-.5)*mr*1.2,mr*(0.08+R()*0.14),0,7);cx.fill();}
+  // cadı süpürgede ayın önünden geçer
+  if(room!==99){const wx=mx+Math.sin(room)*mr*1.5,wy=my-mr*0.2;cx.save();cx.translate(wx,wy);cx.rotate(-0.25);
+    cx.strokeStyle="#2a1a10";cx.lineWidth=2;cx.beginPath();cx.moveTo(-14,0);cx.lineTo(14,0);cx.stroke();
+    cx.fillStyle="#d9a441";for(let b=0;b<6;b++){cx.beginPath();cx.moveTo(14,0);cx.lineTo(22,(b-2.5)*2);cx.stroke();}
+    cx.fillStyle="#1a0a22";cx.beginPath();cx.arc(-2,-4,4,0,7);cx.fill();cx.beginPath();cx.moveTo(-8,-6);cx.lineTo(4,-6);cx.lineTo(-2,-16);cx.fill();cx.restore();}
+  // tepeler
+  cx.fillStyle="#0A0412";cx.beginPath();cx.moveTo(0,h);
+  for(let x=0;x<=w;x+=20){cx.lineTo(x,h*0.74+Math.sin(x/130+room)*16+Math.sin(x/43)*6);}cx.lineTo(w,h);cx.fill();
+  // ağaçlar (çıplak)
+  cx.strokeStyle="#07030D";cx.lineWidth=3;
+  for(let i=0;i<4;i++){const tx=R()*w,ty=h*0.78;cx.beginPath();cx.moveTo(tx,ty);cx.lineTo(tx,ty-40-R()*30);
+    for(let b=0;b<3;b++){const by=ty-20-b*12;cx.moveTo(tx,by);cx.lineTo(tx+(R()-.5)*26,by-14);}cx.stroke();}
+  // mezar taşları
+  for(let i=0;i<4;i++){const gx=R()*w,gh=16+R()*16;cx.fillStyle="#1c1330";cx.beginPath();cx.roundRect(gx,h*0.80-gh,13,gh,[7,7,0,0]);cx.fill();}
+  // balkabakları
+  for(let i=0;i<3+room%3;i++){const px=R()*w,py=h*0.80+R()*(h*0.18),pr=9+R()*9;
+    cx.fillStyle="#F28C28";cx.beginPath();cx.ellipse(px,py,pr*1.2,pr,0,0,7);cx.fill();
+    cx.fillStyle="#3b8f2a";cx.fillRect(px-2,py-pr-6,4,7);
+    cx.fillStyle="#FFE28A";cx.beginPath();cx.moveTo(px-pr*0.5,py-2);cx.lineTo(px-pr*0.2,py-pr*0.4);cx.lineTo(px-pr*0.1,py-2);cx.fill();
+    cx.beginPath();cx.moveTo(px+pr*0.5,py-2);cx.lineTo(px+pr*0.2,py-pr*0.4);cx.lineTo(px+pr*0.1,py-2);cx.fill();
+    cx.fillRect(px-pr*0.5,py+pr*0.2,pr,3);}
+  // yarasalar
+  cx.fillStyle="#05020a";
+  for(let i=0;i<5+room%4;i++){const x=R()*w,y=R()*h*0.5,s=6+R()*7;cx.beginPath();cx.moveTo(x-s*2,y);cx.quadraticCurveTo(x-s,y-s,x,y);cx.quadraticCurveTo(x+s,y-s,x+s*2,y);cx.quadraticCurveTo(x+s,y+s*0.3,x,y+s*0.5);cx.quadraticCurveTo(x-s,y+s*0.3,x-s*2,y);cx.fill();}
+  // hayalet (kurtuluşta)
+  if(room%4===3||room===99){const hx=w*0.15+R()*w*0.7,hy=h*0.5;cx.fillStyle="rgba(240,240,255,.85)";cx.beginPath();cx.arc(hx,hy,20,Math.PI,0);cx.lineTo(hx+20,hy+32);for(let j=0;j<4;j++)cx.lineTo(hx+20-(j+1)*10,hy+32-(j%2?0:7));cx.closePath();cx.fill();cx.fillStyle="#12071F";cx.beginPath();cx.arc(hx-6,hy-3,2.6,0,7);cx.arc(hx+6,hy-3,2.6,0,7);cx.fill();}
+}
+addEventListener("resize",()=>drawScene(seedRoom));
+
+// başlangıç
+OVT.fill("adInput");
+drawScene(0);
+</script>
+</body>
+</html>

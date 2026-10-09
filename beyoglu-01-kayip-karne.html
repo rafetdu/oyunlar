@@ -237,12 +237,12 @@ function clockSVG(h,m){
 }
 function room3(){
   const qs = [
-    {h:3,m:15, q:"Ela'nın okulu saat kaçta bitiyor?", o:["Üçü çeyrek geçiyor.","Üçe çeyrek var.","Üç buçuk."], a:0,
-     tip:"Kırmızı uzun kol (yelkovan) 3'ü gösteriyor: 15 dakika = çeyrek. Saati geçtiyse “geçiyor” deriz."},
-    {h:8,m:40, q:"Kerem'in ilk dersi saat kaçta başlıyor?", o:["Sekizi kırk geçiyor.","Dokuza yirmi var.","Sekize yirmi var."], a:1,
-     tip:"8:40'ta dokuza 20 dakika kaldı. Bir sonraki saate kalan süre için “… var” deriz."},
-    {h:12,m:30, q:"Öğle yemeği saat kaçta?", o:["On iki buçuk.","On ikiye çeyrek var.","Biri otuz geçiyor."], a:0,
-     tip:"30 dakika = yarım saat. Türkçede “buçuk” deriz."},
+    {h:3,m:15, q:"Ela'nın okulu saat kaçta bitiyor?", o:["Üçü çeyrek geçe.","Üçe çeyrek kala.","Üç buçukta."], a:0,
+     tip:"Kırmızı uzun kol (yelkovan) 3'ü gösteriyor: 15 dakika = çeyrek. “Kaçta?” sorusunda saati geçtiyse “geçe” deriz."},
+    {h:8,m:40, q:"Kerem'in ilk dersi saat kaçta başlıyor?", o:["Sekizi kırk geçe.","Dokuza yirmi kala.","Sekize yirmi kala."], a:1,
+     tip:"8:40'ta dokuza 20 dakika kaldı. “Kaçta?” sorusunda bir sonraki saate kalan süre için “… kala” deriz."},
+    {h:12,m:30, q:"Öğle yemeği saat kaçta?", o:["On iki buçukta.","On ikiye çeyrek kala.","Bir buçukta."], a:0,
+     tip:"30 dakika = yarım saat. “Kaçta?” sorusuna “buçukta” diye cevap veririz."},
   ];
   let i=0;
   function show(){

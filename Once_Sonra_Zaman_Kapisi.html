@@ -123,6 +123,51 @@
   .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.1em;}
   .note{text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:12px; line-height:1.5;}
 </style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
 </head>
 <body>
 <div class="wrap">
@@ -146,7 +191,7 @@ var F_ERR  = "entry.1824104970";   // hata
 
 var screenEl=document.getElementById('screen'), locksEl=document.getElementById('locks');
 var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs');
-var errors=0, startTime=null, timerInt=null, elapsed=0, current=0, playerName="";
+var errors=0, startTime=null, timerInt=null, elapsed=0, current=0, playerName=OVT.ad||"";
 
 function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
 function startTimer(){startTime=Date.now();timerInt=setInterval(function(){elapsed=Math.floor((Date.now()-startTime)/1000);timerEl.textContent=fmt(elapsed);},1000);}
@@ -410,18 +455,10 @@ function renderWin(){
       '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
       '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
     '</div>'+
-    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name" value="'+playerName.replace(/"/g,'&quot;')+'">'+
-    '<button class="btn" id="send">Sonucu gönder 📨</button>'+
+    '<div id="ovtSend" style="max-width:360px;margin:0 auto"></div>'+
     '<button class="btn ghost" id="again">Baştan oyna 🔄</button>'+
-    '<p class="note">“Sonucu gönder”e basınca sonucun (ad, süre, hata) öğretmenine ulaşır. '+
-    'Yeni sekmede bir form açılır — sadece <b>Gönder</b>’e bas.</p>';
-  document.getElementById('send').onclick=function(){
-    var name=(document.getElementById('who').value||"").trim();
-    if(!name){var w=document.getElementById('who'); w.focus(); w.style.borderColor="var(--bad)"; return;}
-    playerName=name;
-    var url=FORM_BASE+"&"+F_NAME+"="+encodeURIComponent(name)+"&"+F_TIME+"="+encodeURIComponent(fmt(elapsed))+"&"+F_ERR+"="+encodeURIComponent(errors);
-    window.open(url,"_blank");
-  };
+    '<p class="note">“Sonucu Gönder”e basınca sonucun (süre, hata) öğretmenine ulaşır.</p>';
+  OVT.renderSend('ovtSend',{oyun:'Zaman Kapısı',sure:fmt(elapsed),puan:errors+' hata'});
   document.getElementById('again').onclick=function(){
     errors=0;errsEl.textContent=0;elapsed=0;timerEl.textContent="0:00";current=0;renderIntro();
   };

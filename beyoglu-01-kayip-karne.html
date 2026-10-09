@@ -71,6 +71,51 @@ table.prog th{background:var(--navy);color:#fff}
 .small{font-size:13px;color:var(--muted)}
 @media (max-width:480px){.card{padding:16px}header h1{font-size:22px}.lock input{width:48px;height:56px}}
 </style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
 </head>
 <body>
 <div class="wrap">
@@ -112,6 +157,7 @@ function intro(){
    <input type="text" id="nm" placeholder="Adını yaz" maxlength="30">
    <button class="primary" id="go">Okula gir 🚪</button>
    <div class="hint" id="h">Önce adını yazmalısın.</div>`;
+  OVT.fill("nm");
   $("#go").onclick = () => {
     const v = $("#nm").value.trim();
     if(!v){ $("#h").classList.add("show"); return }
@@ -299,9 +345,10 @@ function win(){
    <p>Tebrikler <b>${S.name}</b>! Kerem karnesine kavuştu. Ayşe Öğretmen sana teşekkür ediyor.</p>
    <div class="reward"><p><b>Süren:</b> ${sure} &nbsp;·&nbsp; <b>Yanlış deneme:</b> ${S.errors}</p>
    </div>
-   ${FORM_LINK?`<p style="margin-top:16px"><b>Son adım:</b> Aşağıdaki butona bas, açılan formda <b>Gönder</b>'e tıkla.</p>
-   <p><a href="${prefilled(sure)}" target="_blank" rel="noopener"><button class="primary" style="font-size:18px;padding:14px 22px">📨 Sonucumu öğretmenime gönder</button></a></p>`:""}
+   <p style="margin-top:16px"><b>Son adım:</b> Sonucunu öğretmenine gönder.</p>
+   <div id="ovtSend"></div>
    </div>`;
+  OVT.renderSend("ovtSend",{oyun:"Kayıp Karne",sure:sure,puan:S.errors+" hata"});
 }
 
 intro();

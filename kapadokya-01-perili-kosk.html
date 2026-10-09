@@ -4,6 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>[hidden]{display:none!important}img{max-width:100%}</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
 </head>
 <body>
 <title>Perili Köşk</title>
@@ -113,6 +158,7 @@ a.btn{text-decoration:none;display:inline-block}
         <p><b>Son adım:</b> aşağıdaki düğmeye bas. Açılan formda adın ve süren hazır yazılı, sadece <b>Gönder</b>'e tıkla.</p>
         <div class="row" style="margin-bottom:14px"><a class="btn" id="formLink" href="#" target="_blank" rel="noopener">📨 Sonucu forma gönder</a></div>
       </div>
+      <div id="ovtSend"></div>
       <p>Yedek: aşağıdaki satırı kopyalayıp Classroom'a <i>özel yorum</i> olarak da yapıştırabilirsin.</p>
       <div class="result" id="resultLine"></div>
       <div class="row">
@@ -142,7 +188,7 @@ a.btn{text-decoration:none;display:inline-block}
 <script>
 // ---- İsteğe bağlı: Google Form'a otomatik kayıt. Form linki verilirse doldurulur. ----
 const FORM = {
-  action: "https://docs.google.com/forms/d/e/1FAIpQLSfHi-HXukxYH-ePHpWdqoPQPyw8szNpgdTpaKwtLPAYZK835A/formResponse",
+  action: "", // eski Google Form kapatıldı — sonuçlar artık okul sistemine gidiyor
   name: "entry.318248145",
   time: "entry.1239265814",
   wrong: ""
@@ -234,6 +280,7 @@ function finish(){
   $("resultLine").textContent=`PERİLİ KÖŞK • ${S.name} • ${fmt(S.finalSec)} (${S.finalSec} sn) • ${S.wrong} yanlış • kod:${code(S.name,S.finalSec,S.wrong)}`;
   $("copyHint").textContent="";
   drawScene(99);
+  OVT.renderSend("ovtSend",{oyun:"Perili Köşk",sure:fmt(S.finalSec),puan:S.wrong+" hata · "+(S.wrong*PENALTY)+" sn ceza"});
   if(FORM.action){
     const timeVal=`${fmt(S.finalSec)} (${S.finalSec} sn) • ${S.wrong} yanlış • kod:${code(S.name,S.finalSec,S.wrong)}`;
     try{ const fd=new FormData(); fd.append(FORM.name,S.name); fd.append(FORM.time,timeVal); if(FORM.wrong) fd.append(FORM.wrong,String(S.wrong));
@@ -243,6 +290,7 @@ function finish(){
   }
 }
 $("startBtn").onclick=start;
+OVT.fill("name");
 $("name").addEventListener("keydown",e=>{ if(e.key==="Enter") start(); });
 $("againBtn").onclick=()=>{ $("done").hidden=true; $("intro").hidden=false; $("timer").hidden=true; $("doors").hidden=true; drawScene(0); };
 $("copyBtn").onclick=()=>{

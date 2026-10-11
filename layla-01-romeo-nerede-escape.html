@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Romeo Nerede? — Kaçış Odası</title>
+<meta name="description" content="Yer bildiren edatlar escape room — Romeo'yu bul!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    color-scheme: dark;
+    --night:#160b26; --stone:#241433; --stone-lt:#34204a;
+    --gold:#f4c430; --gold-dim:#c99a1f; --ink:#f3ecff; --ink-soft:#c3b3e0;
+    --good:#3ecf8e; --good-deep:#1f9d68; --bad:#e2536b; --bad-deep:#b03650;
+    --rose:#e268a6; --line:#4a2f73; --shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:
+      radial-gradient(1200px 600px at 50% -10%, #3a1a63 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 110%, #2a1250 0%, transparent 55%),
+      var(--night);
+    color:var(--ink); font-family:"Fredoka",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:680px; margin:0 auto; padding:22px 16px 34px; min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+  .brand{font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--gold); font-weight:600;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .locks{display:flex; gap:5px; font-size:18px; margin-top:8px; justify-content:center; flex-wrap:wrap;}
+  .locks span{filter:grayscale(1) opacity(.35); transition:.4s;}
+  .locks span.open{filter:none; transform:scale(1.14);}
+
+  .stage{background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 40%), var(--stone);
+    border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+    padding:24px 20px 28px; position:relative; overflow:hidden; flex:1;}
+  .stage::before{content:""; position:absolute; inset:0; border-radius:24px; pointer-events:none; box-shadow:inset 0 0 90px rgba(0,0,0,.4);}
+  .torch{position:absolute; top:14px; font-size:22px; opacity:.9; animation:flick 1.6s infinite alternate; z-index:0;}
+  .torch.l{left:14px} .torch.r{right:14px}
+  @keyframes flick{from{opacity:.6; transform:translateY(0)} to{opacity:1; transform:translateY(-2px)}}
+  #screen{position:relative; z-index:1;}
+
+  h1{font-family:"Cinzel",serif; font-weight:900; text-align:center; text-wrap:balance;
+    font-size:clamp(26px,6.6vw,40px); margin:.1em 0; color:var(--gold);
+    text-shadow:0 2px 0 #000, 0 0 26px rgba(244,196,48,.28);}
+  .cat{text-align:center; font-size:clamp(46px,13vw,76px); line-height:1; margin:4px 0;
+    filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));}
+  .lead{text-align:center; font-size:clamp(15px,3.6vw,18px); color:var(--ink); line-height:1.55; max-width:42ch; margin:6px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.84em; margin-top:4px;}
+  .step-label{text-align:center; font-family:"Cinzel",serif; letter-spacing:.1em; text-transform:uppercase; font-size:12px; color:var(--gold-dim); margin-bottom:2px;}
+  .read{background:linear-gradient(180deg,#1d1030,#160b2680); border:1px solid var(--line); border-left:4px solid var(--rose);
+    border-radius:14px; padding:13px 15px; margin:10px auto 4px; max-width:520px; font-size:clamp(15px,3.6vw,17px); line-height:1.6;}
+  .read b{color:var(--gold);}
+  .prompt{text-align:center; font-weight:600; font-size:clamp(17px,4.2vw,22px); margin:12px auto 2px; max-width:42ch;}
+  .prompt .en{display:block; color:var(--ink-soft); font-weight:400; font-size:.78em; margin-top:3px;}
+  .hint-line{text-align:center; font-size:13px; color:var(--gold-dim); margin:4px auto 0;}
+
+  .opts{display:grid; gap:10px; margin:16px auto 4px; max-width:480px;}
+  .opt{appearance:none; border:1px solid var(--line); background:linear-gradient(180deg,var(--stone-lt),#201433);
+    color:var(--ink); font-family:inherit; font-size:clamp(16px,3.8vw,19px); font-weight:500; padding:14px 16px; border-radius:14px; cursor:pointer; transition:.15s; text-align:center;}
+  .opt:hover{transform:translateY(-2px); border-color:var(--gold-dim);}
+  .opt.correct{background:linear-gradient(180deg,var(--good),var(--good-deep)); border-color:var(--good); color:#06281a; font-weight:600;}
+  .opt.wrong{background:linear-gradient(180deg,var(--bad),var(--bad-deep)); border-color:var(--bad); color:#2a0810;}
+  .opt:disabled{cursor:default;}
+
+  /* build type: chips to assemble */
+  .build-target{text-align:center; font-size:clamp(16px,4vw,20px); color:var(--ink-soft); margin:10px 0 4px;}
+  .slotline{display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin:10px auto; min-height:52px;}
+  .slot{min-width:80px; min-height:46px; border:2px dashed var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center;
+    padding:6px 12px; font-family:"Cinzel",serif; font-weight:700; font-size:clamp(16px,4vw,20px); color:var(--gold); background:rgba(255,255,255,.03);}
+  .slot.filled{border-style:solid; border-color:var(--gold-dim);}
+  .chips{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:12px auto;}
+  .chip{border:1px solid var(--line); background:linear-gradient(180deg,var(--stone-lt),#201433); color:var(--ink);
+    font-family:inherit; font-weight:600; font-size:clamp(15px,3.6vw,18px); padding:11px 15px; border-radius:12px; cursor:pointer; transition:.12s;}
+  .chip:hover{transform:translateY(-2px); border-color:var(--gold-dim);}
+  .chip.used{opacity:.3; pointer-events:none;}
+
+  .feedback{text-align:center; min-height:22px; margin-top:12px; font-size:15px; font-weight:500;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+
+  .btn{display:block; margin:16px auto 0; appearance:none; border:none; cursor:pointer; font-family:"Cinzel",serif; font-weight:700; letter-spacing:.05em;
+    font-size:16px; padding:13px 30px; border-radius:40px; color:#1a1300; background:linear-gradient(180deg,#ffdc5e,var(--gold-dim));
+    box-shadow:0 8px 22px rgba(244,196,48,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.4; cursor:default; transform:none;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+  .field{display:block; width:100%; max-width:340px; margin:14px auto 0; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#1a0f2c; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--gold-dim);}
+  .shake{animation:shake .4s;} @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+  .pop{animation:pop .4s;} @keyframes pop{0%{transform:scale(.95)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .result-stats{display:flex; gap:22px; justify-content:center; margin:14px 0 4px;}
+  .result-stats div{text-align:center}
+  .result-stats .n{font-family:"Cinzel",serif; font-size:30px; color:var(--gold); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+  .note{text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:12px; line-height:1.5;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Romeo Nerede?</div>
+    <div class="meta"><span>⏱ <b id="timer">0:00</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="stage" id="stage">
+    <div class="torch l">🔥</div><div class="torch r">🔥</div>
+    <div id="screen"></div>
+    <div class="locks" id="locks"></div>
+  </div>
+</div>
+
+<script>
+var screenEl=document.getElementById('screen'), locksEl=document.getElementById('locks');
+var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs');
+var errors=0, startTime=null, timerInt=null, elapsed=0, penalty=0, current=0, playerName="";
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function tick(){ elapsed=Math.floor((Date.now()-startTime)/1000)+penalty; timerEl.textContent=fmt(elapsed); }
+function startTimer(){ startTime=Date.now(); timerInt=setInterval(tick,1000); tick(); }
+function stopTimer(){ clearInterval(timerInt); }
+function addErr(sec){ errors++; errsEl.textContent=errors; penalty+=sec||10; tick(); }
+
+// ─── 8 ROOMS ───
+var ROOMS=[
+  { emoji:"📦", label:"1. Kapı — Kutu",
+    read:"Romeo kahvaltıdan sonra kayboldu! Mutfakta bir karton kutu var. İçinden küçük bir ses geliyor: miyav! 🐈",
+    type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
+    opts:[{t:"kutunun içinde", ok:true},{t:"kutuda iç", ok:false},{t:"kutunun içine", ok:false}],
+    win:"Doğru! Romeo kutunun içinde. 📦" },
+
+  { emoji:"🪑", label:"2. Kapı — Masa",
+    read:"Romeo kutudan çıktı ve mutfak masasının gölgesine saklandı. Yere eğil, bak bakalım!",
+    type:"build", target:["masanın","altında"],
+    pool:["altında","masanın","masada","altı"],
+    q:"Yapıyı kur: 'under the table'", en:"Build: under the table",
+    win:"Süper! masanın altında. 🪑" },
+
+  { emoji:"📺", label:"3. Kapı — Televizyon",
+    read:"Romeo sıcak bir yer buldu: televizyonun üzeri! Orada kıvrılıp uyuyor. 😴",
+    type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
+    opts:[{t:"televizyonun üstünde", ok:true},{t:"televizyonda üst", ok:false},{t:"televizyonun üstüne", ok:false}],
+    win:"Evet! Televizyonun üstünde. 📺" },
+
+  { emoji:"🛋️", label:"4. Kapı — Koltuk",
+    read:"Bir gürültü! Romeo korktu ve koltuğun arka tarafına kaçtı. Sadece kuyruğu görünüyor.",
+    type:"mc", q:"Doğru ifadeyi seç.", en:"Choose the correct phrase.",
+    opts:[{t:"koltuğun arkasında", ok:true},{t:"koltukta arka", ok:false},{t:"koltuğun arkasına", ok:false}],
+    win:"Doğru! koltuğun arkasında. 🛋️" },
+
+  { emoji:"🚪", label:"5. Kapı — Kapı",
+    read:"Romeo acıktı. Mama kabı mutfak kapısının hemen ilerisinde, kapının tam karşı tarafında bekliyor.",
+    type:"build", target:["kapının","önünde"],
+    pool:["önünde","kapının","kapıda","önü"],
+    q:"Yapıyı kur: 'in front of the door'", en:"Build: in front of the door",
+    win:"Harika! kapının önünde. 🚪" },
+
+  { emoji:"🪟", label:"6. Kapı — Pencere",
+    read:"Romeo pencereye çıktı. Hemen bitişiğinde bir saksı çiçeği var. Romeo çiçeğin dibine oturdu.",
+    type:"mc", q:"Romeo nerede oturuyor?", en:"Where is Romeo sitting?",
+    opts:[{t:"çiçeğin yanında", ok:true},{t:"çiçekte yan", ok:false},{t:"çiçeğin yanına", ok:false}],
+    win:"Evet! çiçeğin yanında. 🪟" },
+
+  { emoji:"📚", label:"7. Kapı — Kitaplar",
+    read:"Rafta iki kalın kitap var. Romeo tam ortalarındaki boşluğa sıkıştı — biri solda, biri sağda!",
+    type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
+    opts:[{t:"iki kitabın arasında", ok:true},{t:"iki kitapta ara", ok:false},{t:"iki kitabın arasına", ok:false}],
+    win:"Doğru! iki kitabın arasında. 📚" },
+
+  { emoji:"🪞", label:"8. Kapı — Son oda",
+    read:"Son oda! Duvarda büyük bir ayna var. Romeo aynanın tam karşısında oturmuş, kendine bakıyor. 😺 Onu buldun!",
+    type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
+    opts:[{t:"aynanın karşısında", ok:true},{t:"aynada karşı", ok:false},{t:"aynanın karşısına", ok:false}],
+    win:"Buldun! Romeo aynanın karşısında. 🎉" }
+];
+
+function renderLocks(){
+  locksEl.innerHTML="";
+  for(var i=0;i<ROOMS.length;i++){
+    var s=document.createElement('span'); s.textContent=i<current?"🔓":"🔒"; if(i<current)s.className="open"; locksEl.appendChild(s);
+  }
+}
+
+function renderIntro(){
+  screenEl.innerHTML=
+    '<div class="cat">🐈‍⬛</div>'+
+    '<h1>Romeo Nerede?</h1>'+
+    '<p class="lead">Kedi Romeo evde saklandı! 8 odayı gez, her odada doğru <b>yer ifadesini</b> bul ve Romeo\'yu yakala. '+
+    '<span class="tr">Find Romeo! Pick the correct place phrase in each room.</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go">Başla ▶</button>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; errors=0; errsEl.textContent=0; penalty=0; elapsed=0; timerEl.textContent="0:00";
+    startTimer(); renderRoom();
+  };
+  renderLocks();
+}
+
+function renderRoom(){
+  renderLocks();
+  var r=ROOMS[current];
+  if(r.type==="build") return renderBuild(r);
+  return renderMC(r);
+}
+
+function head(r){
+  return '<div class="step-label">'+r.label+'</div>'+
+    '<div class="cat">'+r.emoji+'</div>'+
+    '<div class="read">📖 '+r.read+'</div>'+
+    '<div class="prompt">'+r.q+'<span class="en">'+r.en+'</span></div>';
+}
+
+function renderMC(r){
+  screenEl.innerHTML=head(r)+'<div class="opts" id="opts"></div><div class="feedback" id="fb"></div>';
+  var box=document.getElementById('opts');
+  r.opts.forEach(function(o){
+    var b=document.createElement('button'); b.className="opt"; b.textContent=o.t;
+    b.onclick=function(){
+      if(o.ok){
+        b.classList.add("correct"); document.querySelectorAll('.opt').forEach(function(x){x.disabled=true;});
+        good(r.win); pop(); setTimeout(advance,1100);
+      }else{
+        b.classList.add("wrong"); b.disabled=true; addErr(10);
+        bad("Tekrar dene 🙂 (-de/-da nerede? sorusuna cevap verir)"); shake();
+      }
+    };
+    box.appendChild(b);
+  });
+}
+
+function renderBuild(r){
+  var picked=[];
+  var pool=r.pool.slice();
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  screenEl.innerHTML=head(r)+
+    '<div class="slotline" id="slots"></div>'+
+    '<div class="chips" id="chips"></div>'+
+    '<button class="btn ghost" id="clear">↺ Temizle</button>'+
+    '<div class="feedback" id="fb"></div>';
+  var slotsEl=document.getElementById('slots'), chipsEl=document.getElementById('chips');
+  function drawSlots(){
+    slotsEl.innerHTML="";
+    for(var k=0;k<r.target.length;k++){
+      var d=document.createElement('div'); d.className="slot"+(picked[k]?" filled":"");
+      d.textContent=picked[k]||"____"; slotsEl.appendChild(d);
+    }
+  }
+  function drawChips(){
+    chipsEl.innerHTML="";
+    var consumed={};
+    pool.forEach(function(w){
+      var c=document.createElement('button'); c.className="chip"; c.textContent=w;
+      var used=(consumed[w]||0), inPicked=picked.filter(function(x){return x===w;}).length;
+      if(inPicked>used){ c.classList.add('used'); consumed[w]=used+1; }
+      c.onclick=function(){ if(c.classList.contains('used'))return; if(picked.length<r.target.length){ picked.push(w); refresh(); } };
+      chipsEl.appendChild(c);
+    });
+  }
+  function refresh(){ drawSlots(); drawChips(); if(picked.length===r.target.length) check(); }
+  function check(){
+    var ok=picked.every(function(w,i){return w===r.target[i];});
+    if(ok){ good(r.win); pop(); document.getElementById('clear').disabled=true; setTimeout(advance,1200); }
+    else { addErr(10); bad("Sıra ya da sözcük farklı. Temizle ve tekrar dene 🔁"); shake(); }
+  }
+  document.getElementById('clear').onclick=function(){ picked=[]; refresh(); document.getElementById('fb').textContent=""; };
+  refresh();
+}
+
+function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.textContent=m;}}
+function bad(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.textContent=m;}}
+function pop(){screenEl.classList.add('pop'); setTimeout(function(){screenEl.classList.remove('pop');},400);}
+function shake(){screenEl.classList.add('shake'); setTimeout(function(){screenEl.classList.remove('shake');},400);}
+function advance(){ current++; if(current>=ROOMS.length) renderWin(); else renderRoom(); }
+
+function renderWin(){
+  stopTimer(); renderLocks();
+  screenEl.innerHTML=
+    '<div class="cat pop">🏆</div><h1>Romeo\'yu buldun!</h1>'+
+    '<p class="lead">Bütün odaları açtın, '+playerName.replace(/</g,'&lt;')+'! 👏 <span class="tr">You found Romeo in every room!</span></p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn ghost" id="again">↺ Baştan oyna</button>';
+  OVT.renderSend("ovtSend", { oyun:"Romeo Nerede? (Yer Edatları)", sure:fmt(elapsed), puan:errors+" hata" });
+  document.getElementById('again').onclick=function(){ renderIntro(); };
+}
+
+renderIntro();
+</script>
+</body>
+</html>

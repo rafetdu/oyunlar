@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>de / da Avı — Kimlik ve Kültür</title>
+<style>
+:root{
+  --mor:#9b30d9; --mor-koyu:#6d1fa0; --mor-acik:#f3e6fb;
+  --yesil:#16a34a; --yesil-acik:#dcfce7; --kirmizi:#dc2626; --kirmizi-acik:#fee2e2;
+  --metin:#1f1630; --gri:#6b6478; --kart:#ffffff; --zemin:#faf6fd;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--zemin);color:var(--metin);min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header.ust{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.logo{font-weight:800;color:var(--mor);font-size:15px;letter-spacing:.3px}
+.stats{display:flex;gap:8px;font-size:14px;font-weight:700}
+.stat{background:#fff;border:2px solid var(--mor-acik);border-radius:999px;padding:5px 12px;white-space:nowrap}
+.card{background:var(--kart);border-radius:18px;box-shadow:0 8px 28px rgba(109,31,160,.12);padding:22px}
+h1{font-size:26px;margin:0 0 6px;color:var(--mor-koyu)}
+h2{font-size:20px;margin:0 0 10px;color:var(--mor-koyu)}
+p{line-height:1.5;margin:8px 0}
+.en{color:var(--gri);font-size:13.5px;font-style:italic}
+.kural{background:var(--mor-acik);border-left:5px solid var(--mor);border-radius:10px;padding:12px 14px;margin:14px 0;font-size:15px;line-height:1.55}
+.kural b{color:var(--mor-koyu)}
+label{font-weight:700;display:block;margin:14px 0 6px}
+input[type=text]{width:100%;font:inherit;font-size:17px;padding:12px 14px;border:2px solid #d9c3ea;border-radius:12px;outline:none}
+input[type=text]:focus{border-color:var(--mor)}
+.btn{display:inline-block;font:inherit;font-weight:800;font-size:17px;padding:13px 22px;border:none;border-radius:12px;cursor:pointer;background:var(--mor);color:#fff;box-shadow:0 6px 16px rgba(155,48,217,.3);transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.tam{display:block;width:100%;margin-top:16px}
+.btn.ikincil{background:#fff;color:var(--mor);border:2px solid var(--mor);box-shadow:none}
+.hidden{display:none!important}
+.ilerleme{height:10px;background:var(--mor-acik);border-radius:999px;overflow:hidden;margin:0 0 16px}
+.ilerleme > div{height:100%;background:linear-gradient(90deg,var(--mor),#c27cf0);width:0;transition:width .4s}
+.bolum-etiket{display:inline-block;background:var(--mor);color:#fff;font-size:12.5px;font-weight:800;padding:4px 10px;border-radius:999px;margin-bottom:10px;letter-spacing:.3px}
+.soru-no{color:var(--gri);font-weight:700;font-size:14px;margin-bottom:6px}
+
+/* Bölüm 1 */
+.secenek{display:block;width:100%;text-align:left;font:inherit;font-size:18px;line-height:1.45;padding:15px 16px;margin:10px 0;background:#fff;border:2.5px solid #e2d3ee;border-radius:14px;cursor:pointer;color:var(--metin);transition:border-color .15s,background .15s}
+.secenek:hover{border-color:var(--mor)}
+.secenek .harf{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:var(--mor-acik);color:var(--mor-koyu);font-weight:800;margin-right:10px;font-size:15px}
+.secenek.dogru{border-color:var(--yesil);background:var(--yesil-acik)}
+.secenek.yanlis{border-color:var(--kirmizi);background:var(--kirmizi-acik)}
+.secenek:disabled{cursor:default}
+.vurgu{background:#fff3c4;border-radius:4px;padding:0 2px;font-weight:700}
+
+.geri{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:15.5px;line-height:1.5}
+.geri.ok{background:var(--yesil-acik);border:2px solid var(--yesil)}
+.geri.no{background:var(--kirmizi-acik);border:2px solid var(--kirmizi)}
+.geri .baslik{font-weight:800;margin-bottom:4px}
+
+/* Bölüm 2 */
+.cumle{font-size:21px;line-height:2.4;margin:18px 0 6px;word-spacing:2px}
+.kelime{font-weight:800;color:var(--mor-koyu);background:var(--mor-acik);border-radius:6px;padding:2px 4px}
+.slot{display:inline-block;vertical-align:middle;min-width:54px;height:42px;line-height:38px;text-align:center;border-radius:10px;font-weight:800;font-size:20px;transition:background .15s,border-color .15s}
+.slot.bitisik{border:2.5px solid var(--mor);background:#fbf7fe;margin-left:0}
+.slot.ayri{border:2.5px dashed #8b8398;background:#fff;margin-left:14px}
+.slot.hedef{background:#efe0fa;border-color:var(--mor-koyu);transform:scale(1.06)}
+.slot.dolu-ok{background:var(--yesil-acik);border:2.5px solid var(--yesil);color:var(--yesil)}
+.slot.titre{animation:titre .4s}
+.slot-acik{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--gri);margin:2px 0 10px}
+.slot-acik span::before{content:"";display:inline-block;width:14px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.slot-acik .a::before{border:2px solid var(--mor);background:#fbf7fe}
+.slot-acik .b::before{border:2px dashed #8b8398}
+.havuz{display:flex;justify-content:center;gap:22px;margin:20px 0 4px;padding:16px;border:2px dashed #e2d3ee;border-radius:16px;background:#fdfbff}
+.tas{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;font-weight:900;font-size:24px;min-width:78px;padding:12px 18px;text-align:center;border-radius:14px;background:linear-gradient(180deg,#b14ee8,var(--mor));color:#fff;box-shadow:0 6px 0 var(--mor-koyu),0 10px 18px rgba(109,31,160,.25)}
+.tas.secili{outline:4px solid #f59e0b;outline-offset:3px}
+.tas.titre{animation:titre .4s;background:linear-gradient(180deg,#ef6a6a,var(--kirmizi));box-shadow:0 6px 0 #991b1b}
+.surukle{position:fixed;z-index:1000;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) scale(1.08)}
+.ipucu{text-align:center;font-size:13.5px;color:var(--gri);margin-top:6px}
+@keyframes titre{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* Bitiş */
+.sonuc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.sonuc-kutu{background:var(--mor-acik);border-radius:14px;padding:14px 8px;text-align:center}
+.sonuc-kutu .s{font-size:26px;font-weight:900;color:var(--mor-koyu)}
+.sonuc-kutu .e{font-size:13px;color:var(--gri);font-weight:700;margin-top:2px}
+.kupa{font-size:56px;text-align:center;margin:4px 0}
+footer{text-align:center;color:var(--gri);font-size:12px;margin:18px 0 8px}
+
+@media (max-width:520px){
+  .card{padding:16px}
+  h1{font-size:22px}
+  .cumle{font-size:18px;line-height:2.5}
+  .secenek{font-size:16.5px;padding:13px}
+  .slot{min-width:46px;height:38px;line-height:34px;font-size:18px}
+  .slot.ayri{margin-left:10px}
+  .tas{font-size:22px;min-width:68px}
+  .stats{font-size:12.5px}
+  .stat{padding:4px 9px}
+  .sonuc-kutu .s{font-size:21px}
+}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <header class="ust">
+    <div class="logo">Özel Orhan Veli Türkçe Okulu</div>
+    <div class="stats hidden" id="stats">
+      <div class="stat">⏱ <span id="sure">00:00</span></div>
+      <div class="stat">❌ <span id="hata">0</span></div>
+    </div>
+  </header>
+
+  <!-- GİRİŞ -->
+  <section class="card" id="giris">
+    <div class="bolum-etiket">GCSE • TEMA 1 — KİMLİK VE KÜLTÜR</div>
+    <h1>🔎 de / da Avı</h1>
+    <p>Ailemiz, arkadaşlarımız, bayramlar ve sosyal medya… Bu oyunda hepsi var! Ama asıl konumuz küçük bir ek: <b>de / da</b>. Bitişik mi yazılır, ayrı mı?</p>
+    <p class="en">Is "de / da" written attached or separate? Let's find out!</p>
+
+    <div class="kural">
+      <b>1) Hal eki -de / -da (-te / -ta)</b> → <b>bitişik</b> yazılır. "Nerede?" sorusunun cevabıdır.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<i>evde, okulda, düğünde, sokakta</i><br>
+      <b>2) Bağlaç de / da</b> → <b>ayrı</b> yazılır. "da/de = also, too" anlamı verir.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<i>ben de, annem de, hem … hem de</i><br><br>
+      🧪 <b>Çıkarma testi:</b> de/da'yı cümleden çıkar. Cümle hâlâ anlamlıysa <b>bağlaçtır → ayrı</b> yaz. Cümle bozuluyorsa <b>hal ekidir → bitişik</b> yaz.<br>
+      🎵 <b>Ünlü uyumu:</b> son ünlü <b>e, i, ö, ü</b> → <b>de</b> &nbsp;|&nbsp; <b>a, ı, o, u</b> → <b>da</b>
+    </div>
+
+    <p><b>1. Bölüm (10 soru):</b> İki cümleden yazımı doğru olanı seç.<br>
+    <b>2. Bölüm (10 soru):</b> <b>de</b> veya <b>da</b> kartını sürükle, doğru kutuya bırak.</p>
+
+    <label for="adKutusu">Adın:</label>
+    <input type="text" id="adKutusu" placeholder="Adını yaz" autocomplete="off">
+    <button class="btn tam" id="basla">Başla ▶</button>
+  </section>
+
+  <!-- OYUN -->
+  <section class="card hidden" id="oyun">
+    <div class="ilerleme"><div id="bar"></div></div>
+    <div class="bolum-etiket" id="bolumEtiket">1. BÖLÜM</div>
+    <div class="soru-no" id="soruNo"></div>
+    <div id="soruAlani"></div>
+    <div id="geriAlani"></div>
+    <button class="btn tam hidden" id="devam">Devam ▶</button>
+  </section>
+
+  <!-- ARA EKRAN -->
+  <section class="card hidden" id="ara">
+    <div class="kupa">🎉</div>
+    <h2 style="text-align:center">1. Bölüm bitti!</h2>
+    <p style="text-align:center">Şimdi sıra sende: <b>de</b> veya <b>da</b> kartını tut ve doğru kutuya sürükle.</p>
+    <div class="kural">
+      <b>İki kutu var:</b><br>
+      ▪ <b>Düz çizgili kutu</b> sözcüğe yapışık → bitişik yazım (<i>evde</i>)<br>
+      ▪ <b>Kesik çizgili kutu</b> boşluktan sonra → ayrı yazım (<i>ben de</i>)<br><br>
+      Hem doğru kartı (de mi, da mı?) hem de doğru kutuyu seçmelisin!
+    </div>
+    <p class="en">Drag "de" or "da" to the attached box or the separate box. On a phone you can also tap the card, then tap the box.</p>
+    <button class="btn tam" id="bolum2">2. Bölüme Geç ▶</button>
+  </section>
+
+  <!-- BİTİŞ -->
+  <section class="card hidden" id="bitis">
+    <div class="kupa">🏆</div>
+    <h2 style="text-align:center" id="bitisBaslik">Tebrikler!</h2>
+    <p style="text-align:center" id="bitisMesaj"></p>
+    <div class="sonuc-grid">
+      <div class="sonuc-kutu"><div class="s" id="sSure">00:00</div><div class="e">Süre</div></div>
+      <div class="sonuc-kutu"><div class="s" id="sIlk">0/20</div><div class="e">İlk denemede</div></div>
+      <div class="sonuc-kutu"><div class="s" id="sHata">0</div><div class="e">Hata</div></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn tam ikincil" id="tekrar">↺ Tekrar Oyna</button>
+  </section>
+
+  <footer>© 2026 Özel Orhan Veli Türkçe Okulu — Türkçe Adresiniz</footer>
+</div>
+
+<script>
+(function(){
+  /* ---------- 1. BÖLÜM: Hangisinin yazımı doğru? ---------- */
+  var B1 = [
+    {d:"İki kültürlü aile<u>lerde</u> hoşgörü daha fazla olur.",
+     y:"İki kültürlü aile<u>ler de</u> hoşgörü daha fazla olur.",
+     k:"<b>ailelerde</b> → Nerede? Ailelerde. Bu bir <b>hal ekidir</b>, bitişik yazılır."},
+    {d:"Ben <u>de</u> iki dil konuşuyorum.",
+     y:"Ben<u>de</u> iki dil konuşuyorum.",
+     k:"<b>ben de</b> = I too / me too. Çıkar: \"Ben iki dil konuşuyorum.\" Cümle bozulmadı → <b>bağlaç</b>, ayrı yazılır."},
+    {d:"Bayram sabahı evimiz<u>de</u> herkes erkenden kalkar.",
+     y:"Bayram sabahı evimiz <u>de</u> herkes erkenden kalkar.",
+     k:"<b>evimizde</b> → Nerede? Evimizde. <b>Hal eki</b>, bitişik yazılır."},
+    {d:"Kuzenlerim <u>de</u> yazın Londra'ya gelecek.",
+     y:"Kuzenlerim<u>de</u> yazın Londra'ya gelecek.",
+     k:"<b>kuzenlerim de</b> = my cousins too. Çıkar: \"Kuzenlerim yazın Londra'ya gelecek.\" → <b>bağlaç</b>, ayrı."},
+    {d:"Sosyal medya<u>da</u> çok vakit geçiriyorum.",
+     y:"Sosyal medya <u>da</u> çok vakit geçiriyorum.",
+     k:"<b>sosyal medyada</b> → Nerede vakit geçiriyorum? Sosyal medyada. <b>Hal eki</b>, bitişik."},
+    {d:"Hem Türk yemeklerini hem <u>de</u> İngiliz yemeklerini severim.",
+     y:"Hem Türk yemeklerini hem<u>de</u> İngiliz yemeklerini severim.",
+     k:"<b>hem … hem de</b> kalıbındaki de bir <b>bağlaçtır</b>; her zaman ayrı yazılır."},
+    {d:"Arkadaşlarım <u>da</u> bu diziyi çok seviyor.",
+     y:"Arkadaşlarım<u>da</u> bu diziyi çok seviyor.",
+     k:"<b>arkadaşlarım da</b> = my friends too. Çıkar: \"Arkadaşlarım bu diziyi çok seviyor.\" → <b>bağlaç</b>, ayrı."},
+    {d:"Düğün<u>lerde</u> bütün akrabalar bir araya gelir.",
+     y:"Düğün<u>ler de</u> bütün akrabalar bir araya gelir.",
+     k:"<b>düğünlerde</b> → Nerede bir araya gelir? Düğünlerde. <b>Hal eki</b>, bitişik."},
+    {d:"Büyükannem Türkçe şarkılar <u>da</u> biliyor, İngilizce şarkılar <u>da</u>.",
+     y:"Büyükannem Türkçe şarkılar<u>da</u> biliyor, İngilizce şarkılar<u>da</u>.",
+     k:"Burada <b>da</b> \"hem bunu hem şunu\" anlamı veriyor → <b>bağlaç</b>, ayrı yazılır."},
+    {d:"Çocuklar bayramda sokak<u>ta</u> oyun oynar.",
+     y:"Çocuklar bayramda sokak <u>ta</u> oyun oynar.",
+     k:"<b>sokakta</b> → Nerede? Sokakta. Hal eki <b>-ta</b> olabilir (k'den sonra). Unutma: <b>bağlaç de/da hiçbir zaman \"ta/te\" olmaz!</b>"}
+  ];
+
+  /* ---------- 2. BÖLÜM: Sürükle-bırak ---------- */
+  // w: sözcük, once/sonra: cümlenin öncesi/sonrası, ek: "de"|"da", yer: "bitisik"|"ayri"
+  var B2 = [
+    {once:"",            w:"Babam",        sonra:"Londra'da doğdu.",                       ek:"da", yer:"ayri",
+     k:"<b>Babam da</b> = my dad too → bağlaç, ayrı. Son ünlü <b>a</b> → <b>da</b>."},
+    {once:"",            w:"Ev",           sonra:"genellikle Türkçe konuşuruz.",           ek:"de", yer:"bitisik",
+     k:"<b>Evde</b> → Nerede? Hal eki, bitişik. Son ünlü <b>e</b> → <b>de</b>."},
+    {once:"",            w:"Okul",         sonra:"farklı kültürlerden arkadaşlarım var.",  ek:"da", yer:"bitisik",
+     k:"<b>Okulda</b> → Nerede? Hal eki, bitişik. Son ünlü <b>u</b> → <b>da</b>."},
+    {once:"Kız",         w:"kardeşim",     sonra:"Türk müziğini çok sever.",               ek:"de", yer:"ayri",
+     k:"<b>Kız kardeşim de</b> = my sister too → bağlaç, ayrı. Son ünlü <b>i</b> → <b>de</b>."},
+    {once:"Geçen yaz bir", w:"düğün",      sonra:"halay çektik.",                          ek:"de", yer:"bitisik",
+     k:"<b>düğünde</b> → Nerede halay çektik? Hal eki, bitişik. Son ünlü <b>ü</b> → <b>de</b>."},
+    {once:"",            w:"Ben",          sonra:"seninle bayram kahvaltısına gelmek istiyorum.", ek:"de", yer:"ayri",
+     k:"<b>Ben de</b> = me too → bağlaç, ayrı. \"Bende\" yazmak çok sık yapılan bir hatadır!"},
+    {once:"Misafirler için", w:"bahçe",    sonra:"büyük bir masa kurduk.",                 ek:"de", yer:"bitisik",
+     k:"<b>bahçede</b> → Nerede masa kurduk? Hal eki, bitişik. Son ünlü <b>e</b> → <b>de</b>."},
+    {once:"Hem Türkçe",  w:"hem",          sonra:"İngilizce konuşuyorum.",                 ek:"de", yer:"ayri",
+     k:"<b>hem … hem de</b> → bağlaç, her zaman ayrı yazılır."},
+    {once:"",            w:"Arkadaşlarım", sonra:"bu yaz Türkiye'ye gidiyor.",             ek:"da", yer:"ayri",
+     k:"<b>Arkadaşlarım da</b> = my friends too → bağlaç, ayrı. Son ünlü <b>a</b> → <b>da</b>."},
+    {once:"Sabah",       w:"kahvaltı",     sonra:"peynir, zeytin ve simit yeriz.",         ek:"da", yer:"bitisik",
+     k:"<b>kahvaltıda</b> → Ne zaman/nerede yeriz? Hal eki, bitişik. Son ünlü <b>ı</b> → <b>da</b>."}
+  ];
+
+  var TOPLAM = B1.length + B2.length;
+  var $ = function(id){return document.getElementById(id);};
+  var basT=0, timer=null, hata=0, ilk=0, idx=0, bolum=1, cevaplandi=false, buSoruHata=false;
+  var siraB1=[], siraB2=[];
+
+  function karistir(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+  function gecen(){return Math.floor((Date.now()-basT)/1000);}
+  function tik(){$("sure").textContent=fmt(gecen());}
+  function goster(id){["giris","oyun","ara","bitis"].forEach(function(s){$(s).classList.toggle("hidden",s!==id);});window.scrollTo(0,0);}
+  function bar(){var n=(bolum===1?idx:B1.length+idx);$("bar").style.width=(n/TOPLAM*100)+"%";}
+  function hataEkle(){hata++;$("hata").textContent=hata;buSoruHata=true;}
+
+  OVT.fill("adKutusu");
+
+  $("basla").onclick=function(){
+    var ad=$("adKutusu").value.trim();
+    if(!ad){$("adKutusu").focus();$("adKutusu").style.borderColor="#dc2626";return;}
+    baslat();
+  };
+  $("adKutusu").addEventListener("keydown",function(e){if(e.key==="Enter")$("basla").click();});
+
+  function baslat(){
+    hata=0;ilk=0;idx=0;bolum=1;
+    $("hata").textContent="0";
+    $("ovtSend").innerHTML="";$("ovtSend").className="";
+    siraB1=karistir(B1);siraB2=karistir(B2);
+    basT=Date.now();clearInterval(timer);timer=setInterval(tik,1000);tik();
+    $("stats").classList.remove("hidden");
+    goster("oyun");
+    soruB1();
+  }
+
+  /* ----- Bölüm 1 ----- */
+  function soruB1(){
+    cevaplandi=false;buSoruHata=false;
+    var s=siraB1[idx];
+    $("bolumEtiket").textContent="1. BÖLÜM — Hangisinin yazımı doğru?";
+    $("soruNo").textContent="Soru "+(idx+1)+" / "+TOPLAM;
+    $("geriAlani").innerHTML="";$("devam").classList.add("hidden");
+    bar();
+    var secs=karistir([{t:s.d,ok:true},{t:s.y,ok:false}]);
+    var html='<p style="font-size:17px;font-weight:700;margin-top:0">Yazımı doğru olan cümleyi seç:</p>';
+    secs.forEach(function(o,i){
+      html+='<button class="secenek" data-ok="'+(o.ok?1:0)+'"><span class="harf">'+(i?"B":"A")+'</span>'+o.t.replace(/<u>/g,'<span class="vurgu">').replace(/<\/u>/g,'</span>')+'</button>';
+    });
+    $("soruAlani").innerHTML=html;
+    Array.prototype.forEach.call(document.querySelectorAll(".secenek"),function(b){
+      b.onclick=function(){secB1(b,s);};
+    });
+  }
+  function secB1(b,s){
+    if(cevaplandi)return;cevaplandi=true;
+    var hepsi=document.querySelectorAll(".secenek");
+    Array.prototype.forEach.call(hepsi,function(x){x.disabled=true;if(x.dataset.ok==="1")x.classList.add("dogru");});
+    if(b.dataset.ok==="1"){
+      ilk++;
+      $("geriAlani").innerHTML='<div class="geri ok"><div class="baslik">✅ Doğru!</div>'+s.k+'</div>';
+    }else{
+      b.classList.add("yanlis");hataEkle();
+      $("geriAlani").innerHTML='<div class="geri no"><div class="baslik">❌ Olmadı. Doğrusu yeşil olan.</div>'+s.k+'</div>';
+    }
+    $("devam").classList.remove("hidden");
+  }
+
+  /* ----- Bölüm 2 ----- */
+  function soruB2(){
+    cevaplandi=false;buSoruHata=false;secili=null;
+    var s=siraB2[idx];
+    $("bolumEtiket").textContent="2. BÖLÜM — de / da nereye gelmeli?";
+    $("soruNo").textContent="Soru "+(B1.length+idx+1)+" / "+TOPLAM;
+    $("geriAlani").innerHTML="";$("devam").classList.add("hidden");
+    bar();
+    var html='<p style="font-size:17px;font-weight:700;margin-top:0">Kartı sürükle ve doğru kutuya bırak:</p>';
+    html+='<div class="cumle">'+(s.once?s.once+' ':'')+'<span class="kelime">'+s.w+'</span>'+
+      '<span class="slot bitisik" data-yer="bitisik"></span>'+
+      '<span class="slot ayri" data-yer="ayri"></span> '+s.sonra+'</div>';
+    html+='<div class="slot-acik"><span class="a">sözcüğe bitişik</span><span class="b">boşluktan sonra (ayrı)</span></div>';
+    html+='<div class="havuz"><div class="tas" data-ek="de">de</div><div class="tas" data-ek="da">da</div></div>';
+    html+='<div class="ipucu">💡 Telefonda: önce karta dokun, sonra kutuya dokun.</div>';
+    $("soruAlani").innerHTML=html;
+    Array.prototype.forEach.call(document.querySelectorAll(".tas"),function(t){baglaTas(t,s);});
+    Array.prototype.forEach.call(document.querySelectorAll(".slot"),function(sl){
+      sl.addEventListener("click",function(){ if(secili&&!cevaplandi) birak(secili,sl,s); });
+    });
+  }
+
+  var secili=null, surukleEl=null, aktif=null, basX=0, basY=0, hareket=false, sonHedef=null;
+  function baglaTas(t,s){
+    t.addEventListener("pointerdown",function(e){
+      if(cevaplandi)return;
+      e.preventDefault();
+      aktif=t;basX=e.clientX;basY=e.clientY;hareket=false;
+      try{t.setPointerCapture(e.pointerId);}catch(_){}
+    });
+    t.addEventListener("pointermove",function(e){
+      if(aktif!==t)return;
+      var dx=e.clientX-basX,dy=e.clientY-basY;
+      if(!hareket&&Math.sqrt(dx*dx+dy*dy)>6){
+        hareket=true;
+        surukleEl=t.cloneNode(true);surukleEl.classList.add("surukle");surukleEl.classList.remove("secili");
+        document.body.appendChild(surukleEl);
+        t.style.opacity=".35";
+      }
+      if(hareket){
+        surukleEl.style.left=e.clientX+"px";surukleEl.style.top=e.clientY+"px";
+        var h=slotAt(e.clientX,e.clientY);
+        if(sonHedef&&sonHedef!==h)sonHedef.classList.remove("hedef");
+        if(h)h.classList.add("hedef");
+        sonHedef=h;
+      }
+    });
+    function bitir(e){
+      if(aktif!==t)return;
+      aktif=null;
+      if(hareket){
+        var h=slotAt(e.clientX,e.clientY);
+        if(surukleEl){surukleEl.remove();surukleEl=null;}
+        t.style.opacity="";
+        if(sonHedef){sonHedef.classList.remove("hedef");sonHedef=null;}
+        if(h)birak(t,h,s);
+      }else{
+        // dokunma: seç
+        Array.prototype.forEach.call(document.querySelectorAll(".tas"),function(x){x.classList.remove("secili");});
+        if(secili===t){secili=null;}else{secili=t;t.classList.add("secili");}
+      }
+    }
+    t.addEventListener("pointerup",bitir);
+    t.addEventListener("pointercancel",function(e){
+      if(aktif!==t)return;aktif=null;
+      if(surukleEl){surukleEl.remove();surukleEl=null;}
+      t.style.opacity="";if(sonHedef){sonHedef.classList.remove("hedef");sonHedef=null;}
+    });
+  }
+  function slotAt(x,y){
+    var el=document.elementFromPoint(x,y);
+    return el&&el.closest?el.closest(".slot"):null;
+  }
+  function birak(tas,slot,s){
+    if(cevaplandi)return;
+    var ek=tas.dataset.ek, yer=slot.dataset.yer;
+    Array.prototype.forEach.call(document.querySelectorAll(".tas"),function(x){x.classList.remove("secili");});
+    secili=null;
+    if(ek===s.ek&&yer===s.yer){
+      cevaplandi=true;
+      if(!buSoruHata)ilk++;
+      slot.textContent=ek;slot.classList.add("dolu-ok");
+      var diger=document.querySelector('.slot[data-yer="'+(yer==="bitisik"?"ayri":"bitisik")+'"]');
+      if(diger)diger.style.display="none";
+      if(yer==="bitisik"){slot.style.border="none";slot.style.minWidth="0";slot.style.padding="0 2px";}
+      var tam=(s.once?s.once+' ':'')+s.w+(yer==="bitisik"?ek:" "+ek)+" "+s.sonra;
+      $("geriAlani").innerHTML='<div class="geri ok"><div class="baslik">✅ Doğru! &nbsp;'+tam+'</div>'+s.k+'</div>';
+      Array.prototype.forEach.call(document.querySelectorAll(".tas"),function(x){x.style.visibility="hidden";});
+      $("devam").classList.remove("hidden");
+    }else{
+      hataEkle();
+      tas.classList.remove("titre");void tas.offsetWidth;tas.classList.add("titre");
+      slot.classList.remove("titre");void slot.offsetWidth;slot.classList.add("titre");
+      setTimeout(function(){tas.classList.remove("titre");slot.classList.remove("titre");},450);
+      var msj;
+      if(yer===s.yer)msj="Kutu doğru! Ama <b>ünlü uyumuna</b> dikkat: sözcüğün son ünlüsüne bak (e, i, ö, ü → de / a, ı, o, u → da).";
+      else msj="Kutu yanlış. <b>Çıkarma testini</b> dene: de/da'yı çıkarınca cümle anlamlı kalıyor mu? Kalıyorsa ayrı, bozuluyorsa bitişik!";
+      $("geriAlani").innerHTML='<div class="geri no"><div class="baslik">❌ Tekrar dene!</div>'+msj+'</div>';
+    }
+  }
+
+  /* ----- Akış ----- */
+  $("devam").onclick=function(){
+    idx++;
+    if(bolum===1){
+      if(idx<siraB1.length){soruB1();}
+      else{bolum=2;idx=0;bar();goster("ara");}
+    }else{
+      if(idx<siraB2.length){soruB2();}
+      else{bitis();}
+    }
+  };
+  $("bolum2").onclick=function(){goster("oyun");soruB2();};
+
+  function bitis(){
+    clearInterval(timer);
+    var sn=gecen(), sure=fmt(sn);
+    $("bar").style.width="100%";
+    $("sSure").textContent=sure;$("sIlk").textContent=ilk+"/"+TOPLAM;$("sHata").textContent=hata;
+    var ad=$("adKutusu").value.trim();
+    $("bitisBaslik").textContent="Tebrikler"+(ad?", "+ad:"")+"!";
+    $("bitisMesaj").textContent = ilk>=18 ? "de/da ustası oldun! 🌟" : ilk>=14 ? "Çok iyi! Birkaç küçük hata kaldı." : "Güzel bir başlangıç! Kuralları bir kez daha gözden geçirip tekrar oyna.";
+    goster("bitis");
+    OVT.renderSend("ovtSend",{oyun:"de / da Avı — Kimlik ve Kültür",sure:sure,puan:ilk+"/"+TOPLAM+" ilk denemede · "+hata+" hata"});
+  }
+  $("tekrar").onclick=function(){$("ovtSend").innerHTML="";$("ovtSend").className="";baslat();};
+})();
+</script>
+</body>
+</html>

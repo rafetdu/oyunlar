@@ -168,7 +168,7 @@ var ROOMS=[
   { emoji:"📦", label:"1. Kapı — Kutu",
     read:"Romeo kahvaltıdan sonra kayboldu! Mutfakta bir karton kutu var. İçinden küçük bir ses geliyor: miyav! 🐈",
     type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
-    opts:[{t:"kutunun içinde", ok:true},{t:"kutuda iç", ok:false},{t:"kutunun içine", ok:false}],
+    opts:[{t:"kutunun içinde", ok:true},{t:"kutunun içinden", ok:false},{t:"kutunun içine", ok:false}],
     win:"Doğru! Romeo kutunun içinde. 📦" },
 
   { emoji:"🪑", label:"2. Kapı — Masa",
@@ -181,13 +181,13 @@ var ROOMS=[
   { emoji:"📺", label:"3. Kapı — Televizyon",
     read:"Romeo sıcak bir yer buldu: televizyonun üzeri! Orada kıvrılıp uyuyor. 😴",
     type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
-    opts:[{t:"televizyonun üstünde", ok:true},{t:"televizyonda üst", ok:false},{t:"televizyonun üstüne", ok:false}],
+    opts:[{t:"televizyonun üstünde", ok:true},{t:"televizyonun üstünden", ok:false},{t:"televizyonun üstüne", ok:false}],
     win:"Evet! Televizyonun üstünde. 📺" },
 
   { emoji:"🛋️", label:"4. Kapı — Koltuk",
     read:"Bir gürültü! Romeo korktu ve koltuğun arka tarafına kaçtı. Sadece kuyruğu görünüyor.",
     type:"mc", q:"Doğru ifadeyi seç.", en:"Choose the correct phrase.",
-    opts:[{t:"koltuğun arkasında", ok:true},{t:"koltukta arka", ok:false},{t:"koltuğun arkasına", ok:false}],
+    opts:[{t:"koltuğun arkasında", ok:true},{t:"koltuğun arkasından", ok:false},{t:"koltuğun arkasına", ok:false}],
     win:"Doğru! koltuğun arkasında. 🛋️" },
 
   { emoji:"🚪", label:"5. Kapı — Kapı",
@@ -200,19 +200,19 @@ var ROOMS=[
   { emoji:"🪟", label:"6. Kapı — Pencere",
     read:"Romeo pencereye çıktı. Hemen bitişiğinde bir saksı çiçeği var. Romeo çiçeğin dibine oturdu.",
     type:"mc", q:"Romeo nerede oturuyor?", en:"Where is Romeo sitting?",
-    opts:[{t:"çiçeğin yanında", ok:true},{t:"çiçekte yan", ok:false},{t:"çiçeğin yanına", ok:false}],
+    opts:[{t:"çiçeğin yanında", ok:true},{t:"çiçeğin yanından", ok:false},{t:"çiçeğin yanına", ok:false}],
     win:"Evet! çiçeğin yanında. 🪟" },
 
   { emoji:"📚", label:"7. Kapı — Kitaplar",
     read:"Rafta iki kalın kitap var. Romeo tam ortalarındaki boşluğa sıkıştı — biri solda, biri sağda!",
     type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
-    opts:[{t:"iki kitabın arasında", ok:true},{t:"iki kitapta ara", ok:false},{t:"iki kitabın arasına", ok:false}],
+    opts:[{t:"iki kitabın arasında", ok:true},{t:"iki kitabın arasından", ok:false},{t:"iki kitabın arasına", ok:false}],
     win:"Doğru! iki kitabın arasında. 📚" },
 
   { emoji:"🪞", label:"8. Kapı — Son oda",
     read:"Son oda! Duvarda büyük bir ayna var. Romeo aynanın tam karşısında oturmuş, kendine bakıyor. 😺 Onu buldun!",
     type:"mc", q:"Romeo nerede?", en:"Where is Romeo?",
-    opts:[{t:"aynanın karşısında", ok:true},{t:"aynada karşı", ok:false},{t:"aynanın karşısına", ok:false}],
+    opts:[{t:"aynanın karşısında", ok:true},{t:"aynanın karşısından", ok:false},{t:"aynanın karşısına", ok:false}],
     win:"Buldun! Romeo aynanın karşısında. 🎉" }
 ];
 
@@ -268,7 +268,7 @@ function renderMC(r){
         good(r.win); pop(); setTimeout(advance,1100);
       }else{
         b.classList.add("wrong"); b.disabled=true; addErr(10);
-        bad("Tekrar dene 🙂 (-de/-da nerede? sorusuna cevap verir)"); shake();
+        bad("Tekrar dene 🙂 Nerede? → -de/-da · Nereye? → -e/-a · Nereden? → -den/-dan"); shake();
       }
     };
     box.appendChild(b);

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okulum Kelimeleri</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1f4d3a; --bg2:#2a6650; --paper:#fffdf6; --ink:#24323f; --muted:#6b7a86;
+  --navy:#1f3a5f; --teal:#2a9d8f; --yellow:#ffd166; --red:#e76f51; --green:#3fae6b; --line:#d9e3ea;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;font-family:Nunito,system-ui,sans-serif;color:var(--ink);
+  background:radial-gradient(circle at 20% 10%,var(--bg2),var(--bg) 60%);display:flex;justify-content:center;padding:16px}
+.wrap{width:100%;max-width:640px}
+header{display:flex;justify-content:space-between;align-items:center;color:#f4f1e8;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+header h1{font-family:"Baloo 2";font-size:26px;margin:0}
+.hud{display:flex;gap:8px}
+.pill{background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.4);border-radius:999px;padding:4px 12px;font-weight:800;font-size:14px;color:#f4f1e8}
+.panel{background:var(--paper);border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.panel h2{font-family:"Baloo 2";color:var(--navy);margin:0 0 6px;font-size:24px}
+.tag{color:var(--teal);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+p{line-height:1.55;margin:8px 0}
+.small{font-size:13px;color:var(--muted)}
+button{font-family:inherit;font-weight:800;font-size:16px;border:none;border-radius:12px;padding:12px 16px;cursor:pointer;touch-action:manipulation}
+button:active{transform:scale(.97)}
+.primary{background:var(--navy);color:#fff}
+.ghost{background:#eef3f6;color:var(--navy)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>button{flex:1}
+input[type=text]{width:100%;font:inherit;font-size:18px;padding:12px;border-radius:12px;border:2px solid var(--line);margin:8px 0}
+.err{color:var(--red);font-weight:700;display:none}
+.err.show{display:block}
+/* progress */
+.bar{height:10px;background:#e6edf1;border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.bar>div{height:100%;background:var(--teal);width:0;transition:width .3s}
+/* flashcard */
+.scene{perspective:1000px;margin:6px 0 14px}
+.card{position:relative;width:100%;height:270px;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;border:3px solid var(--line);background:#fff}
+.front .emo{font-size:58px;line-height:1}
+.front .word{font-family:"Baloo 2";font-size:36px;color:var(--navy);margin-top:8px}
+.back{transform:rotateY(180deg);background:#f3faf8;border-color:var(--teal)}
+.back .en{font-family:"Baloo 2";font-size:28px;color:var(--teal)}
+.back .ex{font-size:18px;margin-top:10px}
+.hintline{position:absolute;bottom:10px;left:0;right:0;font-size:12px;color:var(--muted)}
+.speak{position:absolute;top:10px;right:10px;background:#eef3f6;border-radius:50%;width:44px;height:44px;padding:0;font-size:20px}
+.know{background:var(--green);color:#fff}
+.again{background:var(--yellow);color:var(--navy)}
+/* sentences */
+.sent{background:#fff;border:3px solid var(--line);border-radius:16px;padding:18px;font-size:20px;line-height:1.6;margin:8px 0 14px;min-height:96px;transition:background .2s,border-color .2s}
+.sent.ok{background:#e3f6ea;border-color:var(--green)}
+.blank{display:inline-block;min-width:120px;border-bottom:3px solid var(--teal);text-align:center;font-weight:800;color:var(--teal);padding:0 4px}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#fff;border:2px solid var(--line);padding:10px 14px;border-radius:999px;font-weight:800;font-size:16px;color:var(--ink)}
+.chip:disabled{opacity:.3;cursor:default}
+.chip.no{background:#fde8e3;border-color:var(--red);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:#f3faf8;border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-family:"Baloo 2";font-size:26px;color:var(--navy)}
+.center{text-align:center}
+@media (max-width:480px){.panel{padding:16px}.card{height:250px}.front .word{font-size:30px}.sent{font-size:18px}}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🏫 Okulum Kelimeleri</h1>
+    <div class="hud"><span class="pill" id="timer">⏱ 00:00</span><span class="pill" id="errs">✖ 0</span></div>
+  </header>
+  <div class="panel" id="screen"></div>
+</div>
+
+<script>
+/* ---------- İÇERİK ---------- */
+const CARDS = [
+  {tr:"okul forması",       emo:"👕", en:"uniform",            ex:"Her sabah okul formamı giyiyorum."},
+  {tr:"tören / toplantı",   emo:"🎤", en:"assembly",           ex:"Bugün bütün okul salonda toplantı yapıyor."},
+  {tr:"teneffüs",           emo:"⚽", en:"playtime / break",   ex:"Teneffüste arkadaşlarımla oynuyorum."},
+  {tr:"beslenme çantası",   emo:"🍎", en:"packed lunch",       ex:"Beslenme çantama bir elma koydum."},
+  {tr:"yoklama",            emo:"📋", en:"register",           ex:"Öğretmen sabah yoklama alıyor."},
+  {tr:"karne",              emo:"📄", en:"school report",      ex:"Yıl sonunda karnemi aldım."},
+  {tr:"müdür",              emo:"🧑‍💼", en:"headteacher",       ex:"Müdür bugün sınıfımıza geldi."},
+  {tr:"okul sonrası kulüp", emo:"♟️", en:"after-school club",  ex:"Okulumuzda bir satranç kulübü var."},
+];
+// Cümleler: kartlardaki örneklerden farklı. Havuzda çekimli biçimler yer alır.
+const SENTS = [
+  {s:"Bu yıl yeni bir ___ aldık; lacivert kazağı çok güzel.", a:"okul forması"},
+  {s:"Pazartesi sabahları bütün okul bahçede bayrak ___ katılıyor.", a:"törenine"},
+  {s:"İki ders arasında on dakikalık bir ___ var.", a:"teneffüs"},
+  {s:"Annem sandviçimi ___ koydu.", a:"beslenme çantama"},
+  {s:"Öğretmen ___ alırken herkes “Buradayım!” diyor.", a:"yoklama"},
+  {s:"Yıl sonunda aldığım ___ bütün notlarım yazıyor.", a:"karnede"},
+  {s:"Okulumuzun ___ her sabah kapıda öğrencileri karşılıyor.", a:"müdürü"},
+  {s:"Salı günleri ___ satranç oynuyorum.", a:"okul sonrası kulüpte"},
+];
+const OYUN_ADI = "Okulum Kelimeleri";
+
+/* ---------- DURUM ---------- */
+const $ = s => document.querySelector(s);
+const screen = $("#screen");
+let S;
+function reset(){ S={name:"",start:0,timer:null,errors:0,views:0,repeats:0,firstTry:0,deck:[],known:0,si:0,missedThis:false,order:[]} }
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function fmt(t){return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
+function elapsed(){return Math.floor((Date.now()-S.start)/1000)}
+function tick(){$("#timer").textContent="⏱ "+fmt(elapsed())}
+function setErr(){$("#errs").textContent="✖ "+S.errors}
+document.addEventListener("keydown",e=>{ if(window.onKey) window.onKey(e) });
+
+/* ---------- SES ---------- */
+let trVoice=null;
+function findVoice(){ if(!("speechSynthesis" in window)) return; trVoice=speechSynthesis.getVoices().find(v=>/^tr/i.test(v.lang))||null; const b=$("#spk"); if(b) b.style.display=trVoice?"":"none"; }
+if("speechSynthesis" in window){ findVoice(); speechSynthesis.onvoiceschanged=findVoice; }
+function say(t){ if(!trVoice) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang="tr-TR"; u.voice=trVoice; u.rate=.9; speechSynthesis.speak(u); }
+
+/* ---------- GİRİŞ ---------- */
+function intro(){
+  reset(); window.onKey=null; $("#timer").textContent="⏱ 00:00"; setErr();
+  screen.innerHTML=`
+    <div class="tag">Beyoğlu Sınıfı</div>
+    <h2>Okulum Kelimeleri</h2>
+    <p><b>1. bölüm:</b> ${CARDS.length} kelime kartı. Karta dokun, arkasını gör.</p>
+    <p><b>2. bölüm:</b> ${SENTS.length} cümlede boşluğu doğru kelimeyle doldur.</p>
+    <p class="small">Part 1: flashcards · Part 2: fill in the gaps</p>
+    <p><b>Adın ne?</b></p>
+    <input type="text" id="adInput" placeholder="Adını yaz" maxlength="40">
+    <div class="err" id="e">Önce adını yazmalısın.</div>
+    <div class="row" style="margin-top:6px">
+      <button class="primary" id="go">Başla ▶</button>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="ghost" id="skip">Kartları geç, oyuna başla ⏭</button>
+    </div>`;
+  OVT.fill("adInput");
+  const start=(skip)=>{ const v=$("#adInput").value.trim(); if(!v){$("#e").classList.add("show");return}
+    S.name=v; S.start=Date.now(); S.timer=setInterval(tick,1000); skip?sentences():cards(); };
+  $("#go").onclick=()=>start(false);
+  $("#skip").onclick=()=>start(true);
+}
+
+/* ---------- BÖLÜM 1: KARTLAR ---------- */
+function cards(){
+  S.deck=shuffle(CARDS.map((_,i)=>i)); S.known=0;
+  showCard();
+}
+function showCard(){
+  if(!S.deck.length){ return cardsDone() }
+  const c=CARDS[S.deck[0]]; S.views++;
+  const pct=Math.round(S.known/CARDS.length*100);
+  screen.innerHTML=`
+    <div class="tag">1. Bölüm · Kelime Kartları</div>
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <b>${S.known}/${CARDS.length} biliyorum</b>
+      <span class="small">Tekrar: ${S.repeats}</span>
+    </div>
+    <div class="bar"><div style="width:${pct}%"></div></div>
+    <div class="scene"><div class="card" id="card">
+      <div class="face front"><div class="emo">${c.emo}</div><div class="word">${c.tr}</div><div class="hintline">Çevirmek için dokun</div></div>
+      <div class="face back"><div class="en">${c.en}</div><div class="ex">${c.ex}</div></div>
+    </div><button class="speak" id="spk" title="Dinle" aria-label="Dinle">🔊</button></div>
+    <div class="row">
+      <button class="again" id="ag">Tekrar et ↺</button>
+      <button class="know" id="kn">Biliyorum ✓</button>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="ghost" id="mix">Karıştır 🔀</button>
+      <button class="ghost" id="toS">Cümlelere geç ⏭</button>
+    </div>
+    <p class="small center">Boşluk: çevir · → biliyorum · ← tekrar et</p>`;
+  findVoice();
+  const card=$("#card");
+  const flip=()=>card.classList.toggle("flip");
+  card.onclick=flip;
+  $("#spk").onclick=e=>{e.stopPropagation(); say(card.classList.contains("flip")?c.ex:c.tr)};
+  const know=()=>{S.deck.shift(); S.known++; showCard()};
+  const again=()=>{S.deck.push(S.deck.shift()); S.repeats++; showCard()};
+  $("#kn").onclick=know; $("#ag").onclick=again;
+  $("#mix").onclick=()=>{S.deck=shuffle(S.deck); S.views--; showCard()};
+  $("#toS").onclick=sentences;
+  window.onKey=e=>{ if(e.code==="Space"){e.preventDefault();flip()} else if(e.key==="ArrowRight") know(); else if(e.key==="ArrowLeft") again(); };
+}
+function cardsDone(){
+  window.onKey=null;
+  screen.innerHTML=`<div class="center"><div style="font-size:52px">🎉</div>
+    <h2>Bütün kartları bitirdin!</h2>
+    <p>Şimdi bu kelimeleri cümlelerde kullanalım.</p>
+    <button class="primary" id="n">2. bölüme geç →</button></div>`;
+  $("#n").onclick=sentences;
+}
+
+/* ---------- BÖLÜM 2: CÜMLELER ---------- */
+function sentences(){
+  window.onKey=null;
+  S.order=shuffle(SENTS.map((_,i)=>i)); S.si=0; S.used=new Set(); S.firstTry=0;
+  S.pool=shuffle(SENTS.map(x=>x.a));
+  showSent();
+}
+function showSent(){
+  if(S.si>=S.order.length) return finish();
+  const q=SENTS[S.order[S.si]]; S.missedThis=false;
+  screen.innerHTML=`
+    <div class="tag">2. Bölüm · Cümle Tamamlama</div>
+    <div class="row" style="justify-content:space-between"><b>Cümle ${S.si+1}/${SENTS.length}</b><span class="small">İlk denemede: ${S.firstTry}</span></div>
+    <div class="bar"><div style="width:${Math.round(S.si/SENTS.length*100)}%"></div></div>
+    <div class="sent" id="sent">${q.s.replace("___",'<span class="blank">?</span>')}</div>
+    <p class="small">Boşluğa hangi kelime gelir? Dokun. <i>Which word fits the gap?</i></p>
+    <div class="pool">${S.pool.map(w=>`<button class="chip" data-w="${w}" ${S.used.has(w)?"disabled":""}>${w}</button>`).join("")}</div>`;
+  screen.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+    if(b.disabled) return;
+    if(b.dataset.w===q.a){
+      if(!S.missedThis) S.firstTry++;
+      S.used.add(q.a);
+      $("#sent").innerHTML=q.s.replace("___",`<span class="blank">${q.a}</span>`);
+      $("#sent").classList.add("ok");
+      screen.querySelectorAll(".chip").forEach(x=>x.disabled=true);
+      setTimeout(()=>{S.si++; showSent()},900);
+    } else {
+      S.errors++; setErr(); S.missedThis=true;
+      b.classList.remove("no"); void b.offsetWidth; b.classList.add("no");
+      setTimeout(()=>b.classList.remove("no"),600);
+    }
+  });
+}
+
+/* ---------- BİTİŞ ---------- */
+function finish(){
+  clearInterval(S.timer);
+  const sure=fmt(elapsed());
+  const puan=`${S.firstTry}/${SENTS.length} ilk denemede · ${S.errors} hata · ${S.views} kart`;
+  screen.innerHTML=`<div class="center"><div style="font-size:52px">🏆</div>
+    <h2>Aferin, ${S.name}!</h2>
+    <p>Okul kelimelerini çok iyi öğrendin.</p></div>
+    <div class="stats">
+      <div class="stat"><b>${sure}</b>süre</div>
+      <div class="stat"><b>${S.firstTry}/${SENTS.length}</b>ilk denemede</div>
+      <div class="stat"><b>${S.errors}</b>hata</div>
+    </div>
+    <p class="small center">Kart görüntüleme: ${S.views} · Tekrar edilen: ${S.repeats}</p>
+    <div id="ovtSend"></div>
+    <button class="ghost" id="again" style="width:100%;margin-top:8px">Tekrar oyna ↺</button>`;
+  OVT.renderSend("ovtSend",{oyun:OYUN_ADI,sure:sure,puan:puan});
+  $("#again").onclick=()=>{ $("#ovtSend").innerHTML=""; intro(); };
+}
+
+intro();
+</script>
+</body>
+</html>

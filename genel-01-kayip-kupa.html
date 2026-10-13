@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayıp Kupa – Kartal Gibi Düşün</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.45;color:#1f1f1f;background:#a50f25;background:linear-gradient(160deg,#c8102e 0%,#8a0b1e 100%);background-attachment:fixed;min-height:100vh}
+[hidden]{display:none!important}
+.wrap{max-width:640px;margin:0 auto;padding:14px 14px 48px}
+.card{background:#fff;border-radius:18px;padding:20px 18px;box-shadow:0 10px 30px rgba(0,0,0,.28);margin-bottom:14px}
+.stripe{height:10px;border-radius:6px;border:1px solid #c8102e;background:repeating-linear-gradient(90deg,#c8102e 0 18px,#fff 18px 36px);margin-bottom:14px}
+h1{font-size:30px;line-height:1.15;margin:0 0 6px;color:#c8102e}
+h2{font-size:22px;margin:0 0 8px;color:#8a0b1e}
+.sub{color:#555;margin:0 0 14px;font-size:16px}
+.story{background:#fff4f5;border-left:6px solid #c8102e;border-radius:10px;padding:12px 14px;margin:12px 0 16px}
+label{display:block;font-weight:800;margin:12px 0 6px}
+input[type=text]{width:100%;font:inherit;padding:12px 14px;border:2px solid #d0d0d0;border-radius:12px}
+input[type=text]:focus{outline:none;border-color:#c8102e}
+.btn{display:block;width:100%;font:inherit;font-weight:800;font-size:19px;padding:14px;border:none;border-radius:12px;background:#c8102e;color:#fff;cursor:pointer;box-shadow:0 5px 0 #8a0b1e;margin-top:14px}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8a0b1e}
+.btn.alt{background:#fff;color:#c8102e;border:2px solid #c8102e;box-shadow:0 5px 0 #e3a3ad}
+.hdr{display:flex;justify-content:space-between;align-items:center;color:#fff;font-weight:800;margin:6px 2px 12px;gap:8px;flex-wrap:wrap}
+.dots span{font-size:24px;margin-right:4px}
+.chips{display:flex;gap:8px}
+.chip{background:rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;font-weight:800;font-size:16px;color:#fff}
+.badge{display:inline-block;background:#c8102e;color:#fff;font-weight:900;letter-spacing:.5px;border-radius:10px;padding:6px 14px;font-size:20px}
+.badge small{display:block;font-size:12px;font-weight:700;opacity:.85;letter-spacing:1px}
+.mini{background:#f5f5f5;border-radius:10px;padding:10px 12px;margin-top:10px;font-style:italic}
+.fikir{font-size:15px;color:#8a0b1e;font-weight:800;text-transform:none;margin-bottom:6px}
+.cumle{background:#fff4f5;border:2px dashed #c8102e;border-radius:12px;padding:12px 14px;font-size:20px;font-weight:700;margin:6px 0 12px}
+.soru{font-weight:800;margin:6px 0 12px}
+.opt{display:block;width:100%;text-align:left;font:inherit;padding:13px 14px;margin:0 0 10px;border:2px solid #c8102e;border-radius:12px;background:#fff;color:#1f1f1f;cursor:pointer}
+.opt:active{background:#fff0f1}
+.opt.bad{background:#fee2e2;border-color:#c8102e;color:#8a0b1e;animation:shake .35s}
+.opt.good{background:#dcfce7;border-color:#16a34a;color:#14532d;font-weight:800}
+.opt:disabled{cursor:default}
+.hint{background:#fff7d6;border:2px solid #f5c542;border-radius:12px;padding:10px 12px;margin:4px 0 10px;font-size:16px}
+.why{background:#dcfce7;border:2px solid #16a34a;border-radius:12px;padding:10px 12px;margin:4px 0 4px;font-size:16px}
+.pen{display:inline-block;color:#c8102e;font-weight:900;margin-left:6px}
+.big{font-size:64px;text-align:center;margin:6px 0}
+.stats{display:flex;gap:8px;margin:14px 0}
+.stat{flex:1;text-align:center;background:#fff4f5;border-radius:12px;padding:10px 4px}
+.stat b{display:block;font-size:24px;color:#c8102e}
+.stat span{font-size:13px;color:#555}
+.para{background:#fff4f5;border:2px dashed #c8102e;border-radius:12px;padding:12px 14px;min-height:72px;margin:8px 0 12px}
+.para p{margin:0 0 6px}
+.tag{display:inline-block;font-size:11px;font-weight:900;background:#c8102e;color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.tag.t2{background:#8a0b1e}.tag.t3{background:#555}.tag.t4{background:#16a34a}
+.pop{animation:pop .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:.3}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@media (max-width:420px){h1{font-size:26px}.opt{font-size:17px}}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr" id="hdr" hidden>
+    <div class="dots" id="dots"></div>
+    <div class="chips"><span class="chip">⏱ <span id="stTime">00:00</span></span><span class="chip">✗ <span id="stErr">0</span></span></div>
+  </div>
+
+  <!-- GİRİŞ -->
+  <div id="sIntro">
+    <div class="stripe"></div>
+    <div class="card">
+      <h1>🏆 Kayıp Kupa</h1>
+      <p class="sub">Kartal Gibi Düşün · Üç parkur, bir kupa</p>
+      <div class="story">
+        <b>Büyük haber!</b> Tuttuğun takımın kupası kaybolmuş! Stadyum görevlisi kırmızı-beyaz bir not bulmuş:
+        <i>“Kupayı bulmak için üç parkuru geç. Her parkur bir düşünme tekniği ister: ÖRNEK, SAYI ve KARŞILAŞTIRMA. Doğru cevap kilidi açar. Yanlış cevap seni 5 saniye yavaşlatır!”</i>
+      </div>
+      <label for="ad">Adın</label>
+      <input type="text" id="ad" autocomplete="off" placeholder="Adını yaz">
+      <label for="takim">Tuttuğun takım</label>
+      <input type="text" id="takim" autocomplete="off" placeholder="Örn: Beşiktaş">
+      <button class="btn" id="btnStart" type="button">⚽ Parkura Başla</button>
+    </div>
+  </div>
+
+  <!-- PARKUR GİRİŞ / İPUCU KARTI -->
+  <div id="sTip" hidden>
+    <div class="stripe"></div>
+    <div class="card">
+      <h2 id="tipTitle"></h2>
+      <p class="sub" id="tipStory"></p>
+      <div class="badge" id="tipBadge"></div>
+      <p id="tipText" style="margin:12px 0 0"></p>
+      <div class="mini" id="tipMini"></div>
+      <button class="btn" id="btnTip" type="button">Hazırım! →</button>
+    </div>
+  </div>
+
+  <!-- SORU -->
+  <div id="sQ" hidden>
+    <div class="card">
+      <div class="fikir" id="qFikir"></div>
+      <div class="cumle" id="qCumle" hidden></div>
+      <div class="soru" id="qSoru"></div>
+      <div id="qOpts"></div>
+      <div class="hint" id="qHint" hidden></div>
+      <div class="why" id="qWhy" hidden></div>
+      <button class="btn" id="btnNext" type="button" hidden>Devam →</button>
+    </div>
+  </div>
+
+  <!-- KİLİT AÇILDI -->
+  <div id="sLock" hidden>
+    <div class="card" style="text-align:center">
+      <div class="big pop" id="lockIcon">🔓</div>
+      <h2 id="lockTitle"></h2>
+      <p id="lockText"></p>
+      <button class="btn" id="btnLock" type="button">Devam →</button>
+    </div>
+  </div>
+
+  <!-- SON KAPI -->
+  <div id="sFinal" hidden>
+    <div class="stripe"></div>
+    <div class="card">
+      <h2>🚪 Son Kapı: Şifre bir paragraf!</h2>
+      <p class="sub">Kartlara sırayla dokun ve paragrafı kur. Üç tekniği birlikte kullan. İlk cümle ana düşünce, son cümle bitiş olmalı.</p>
+      <div class="para" id="fPara"></div>
+      <div class="hint" id="fHint" hidden></div>
+      <div id="fCards"></div>
+    </div>
+  </div>
+
+  <!-- BİTİŞ -->
+  <div id="sEnd" hidden>
+    <div class="stripe"></div>
+    <div class="card" style="text-align:center">
+      <div class="big pop">🏆</div>
+      <h1 id="endTitle">Kupa bulundu!</h1>
+      <p id="endText"></p>
+      <div class="stats">
+        <div class="stat"><b id="eTime">00:00</b><span>süre</span></div>
+        <div class="stat"><b id="eErr">0</b><span>hata</span></div>
+        <div class="stat"><b id="eFirst">0/13</b><span>ilk denemede</span></div>
+      </div>
+      <div class="para" id="endPara" style="text-align:left"></div>
+      <div id="ovtSend"></div>
+      <button class="btn alt" id="btnAgain" type="button">↺ Tekrar oyna</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var TOPLAM=13;       // 12 soru + son kapı
+  var CEZA=5;          // yanlışta +5 sn
+
+  var PARKUR=[
+    {ad:"Parkur 1: Mesela Koridoru", hikaye:"Soyunma odasının koridorunda kırmızı-beyaz ayak izleri var. İzleri takip et!",
+     rozet:"ÖRNEK", en:"EXAMPLE",
+     metin:"Örnek, fikri gerçek bir kişi ya da olayla gösterir. “Mesela …” ya da “Örneğin …” diye başlar.",
+     mini:"Futbolcular pes etmez. Mesela dün bir oyuncu 90. dakikada gol attı."},
+    {ad:"Parkur 2: Sayılar Tüneli", hikaye:"Koridorun sonunda karanlık bir tünel var. Duvarlarda sayılar parlıyor!",
+     rozet:"SAYI", en:"NUMBERS",
+     metin:"Sayı, “çok” ya da “az” gibi belirsiz kelimelerin yerine kesin bilgi verir: kaç dakika, kaç gol, kaç kişi.",
+     mini:"Maç uzun sürer. → Maç 90 dakika sürer."},
+    {ad:"Parkur 3: Karşılaştırma Köprüsü", hikaye:"Tünelin ucunda bir köprü var. Karşıya geçmek için iki şeyi yan yana koymalısın!",
+     rozet:"KARŞILAŞTIRMA", en:"COMPARISON",
+     metin:"Karşılaştırma iki şeyi yan yana koyar. Farkı “ise”, “ama”, “oysa” ile; benzerliği “hem … hem de” ile gösteririz.",
+     mini:"Futbolda top ayakla, basketbolda ise elle oynanır."}
+  ];
+
+  var LOCKS=[
+    {baslik:"1. kilit açıldı!", metin:"🔑 Kupanın tabanı bulundu. Koridorun sonunda tünelin kapısı açılıyor…"},
+    {baslik:"2. kilit açıldı!", metin:"🔑 Kupanın gövdesi bulundu. Tünelin ucunda köprü göründü…"},
+    {baslik:"3. kilit açıldı!", metin:"🔑 Kupanın kulpları bulundu. Kupanın saklandığı oda karşında. Kapının şifresi bir paragraf!"}
+  ];
+
+  var Q=[
+    // PARKUR 1 — ÖRNEK
+    {p:0, fikir:"Fikir: Takım arkadaşlığı önemlidir.", soru:"Hangi cümle bu fikre ÖRNEK veriyor?",
+     sec:["Takım arkadaşlığı çok güzel bir şeydir.","Mesela yedek oyuncu, sakatlanan arkadaşının yanına gidip ona sarıldı.","Herkes takım arkadaşlığını sever."], dogru:1,
+     ipucu:"Hangi cümlede gerçek bir kişi ve gerçek bir olay var?",
+     neden:"Örnek, ne olduğunu gösterir: kim, ne yaptı? Diğer cümleler sadece fikri tekrar ediyor."},
+    {p:0, fikir:"Fikir: Kaleci çok önemlidir.", cumle:"Kaleci çok önemlidir. ______ dün maçta kaleci son dakikada iki gol kurtardı.", soru:"Boşluğa hangi kelime gelir?",
+     sec:["Mesela","Bu yüzden","Ama"], dogru:0,
+     ipucu:"Örnek vermek için hangi kelimeyle başlarız?",
+     neden:"“Mesela” (ya da “örneğin”) bir örneği başlatır."},
+    {p:0, fikir:"Fikir: Futbolcular zor durumda bile pes etmez.", soru:"Hangisi bu fikir için en güçlü örnektir?",
+     sec:["Futbolcular çok güçlüdür.","Bir oyuncu 2-0 gerideyken bile son dakikaya kadar koştu ve beraberlik golünü attı.","Pes etmek kötü bir şeydir."], dogru:1,
+     ipucu:"Hangi cümle bize bir olay anlatıyor?",
+     neden:"En güçlü örnek, fikri bir olayla gösterir: 2-0 geride, son dakika, gol."},
+    {p:0, fikir:"Fikir: Antrenman başarıyı getirir.", cumle:"Mesela ______", soru:"Cümleyi hangisi tamamlar?",
+     sec:["Ali her gün yarım saat penaltı çalıştı ve sezonda attığı bütün penaltıları gole çevirdi.","antrenman çok güzel bir şeydir.","herkes antrenmanı sever."], dogru:0,
+     ipucu:"“Mesela”dan sonra bir kişi ve ne yaptığı gelmeli.",
+     neden:"Ali’nin hikâyesi, antrenmanın başarıyı nasıl getirdiğini gösteriyor."},
+
+    // PARKUR 2 — SAYI
+    {p:1, fikir:"Fikir: Futbol maçı uzun sürer.", soru:"Hangi cümle SAYI kullanarak ispat ediyor?",
+     sec:["Futbol maçı çok uzun sürer.","Maç iki yarıdır; her yarı 45 dakika sürer, yani toplam 90 dakika.","Maçlar bitmek bilmez."], dogru:1,
+     ipucu:"Rakam içeren cümleyi bul.",
+     neden:"Sayı, “çok” gibi belirsiz kelimelerin yerine kesin bilgi verir: 45 ve 90."},
+    {p:1, fikir:"Fikir: Penaltıda kaleci çok kısa sürede karar vermek zorundadır.", cumle:"Çünkü penaltı noktası kaleye ______ metre uzaklıktadır.", soru:"Boşluğa hangi sayı gelir?",
+     sec:["5","11","20"], dogru:1,
+     ipucu:"Penaltı atılırken top kaleden çok uzakta durmaz, ama yakın da değildir. Bir futbol sahasının çizgilerini düşün.",
+     neden:"Penaltı noktası kaleye 11 metre uzaklıktadır. Bu kısa mesafe, kalecinin neden hızlı karar vermesi gerektiğini gösterir."},
+    {p:1, fikir:"Fikir: Takımımız bu sezon çok iyi oynuyor.", soru:"Hangi sayı bu fikre YARDIM ETMEZ?",
+     sec:["10 maçın 8’ini kazandık.","Son 5 maçta 12 gol attık.","Dün 7 kişi pizza yedi."], dogru:2,
+     ipucu:"Hangi sayı takımın oyunuyla ilgisiz?",
+     neden:"Sayı, fikirle ilgili olmalı. Pizza sayısı takımın başarısını göstermez."},
+    {p:1, fikir:"Fikir: Maça çok kişi geldi.", soru:"Hangi cümle daha inandırıcı?",
+     sec:["Bence bir sürü seyirci vardı.","Stadın kapasitesi 40 bin; maça yaklaşık 38 bin kişi geldi.","Sanırım herkes geldi."], dogru:1,
+     ipucu:"Tahmin değil, bilgi veren cümleyi seç.",
+     neden:"Net sayılar ve “yaklaşık” kelimesi cümleyi güçlendirir."},
+
+    // PARKUR 3 — KARŞILAŞTIRMA
+    {p:2, fikir:"Fikir: Evde maç izlemek ile statta izlemek farklıdır.", cumle:"Evde koltukta oturursun, statta ______ ayakta tezahürat edersin.", soru:"Boşluğa hangi kelime gelir?",
+     sec:["ise","bu yüzden","sonra"], dogru:0,
+     ipucu:"İki durumu karşı karşıya koyan kelimeyi seç.",
+     neden:"“…, ise …” iki şeyi yan yana koyup farkı gösterir."},
+    {p:2, fikir:"Fikir: Kaleci ile forvet farklı işler yapar.", soru:"Hangi cümle KARŞILAŞTIRMA yapıyor?",
+     sec:["Kaleci golü önler, forvet ise gol atmaya çalışır.","Kaleci eldiven giyer.","Forvet çok koşar."], dogru:0,
+     ipucu:"İki oyuncuyu aynı cümlede gören cümleyi bul.",
+     neden:"Karşılaştırmada iki şey aynı cümlede yan yana durur: kaleci ↔ forvet."},
+    {p:2, fikir:"Fikir: Futbol ile basketbol farklıdır.", cumle:"Futbolda top çoğunlukla ayakla oynanır; basketbolda ise top ______.", soru:"Cümleyi hangisi tamamlar?",
+     sec:["elle oynanır","ayakla oynanır","hiç oynanmaz"], dogru:0,
+     ipucu:"“Ise” karşıt bir şey bekler: ayak ↔ ?",
+     neden:"Karşılaştırmada iki şeyi karşı karşıya koyarız: ayak ↔ el."},
+    {p:2, fikir:"Fikir: Futbol ile basketbolu karşılaştıralım.", soru:"Hangi cümle bir BENZERLİK söylüyor?",
+     sec:["Hem futbolda hem basketbolda iki takım karşı karşıya gelir.","Futbolda top ayakla, basketbolda elle oynanır.","Basketbolda skorlar yüksektir, futbolda ise düşüktür."], dogru:0,
+     ipucu:"Benzerlik için “hem … hem de” kullanılır.",
+     neden:"“Hem … hem de …” benzerlik gösterir; “ise” ve “ama” farkı gösterir."}
+  ];
+
+  var state={};
+  var timer=null;
+  var NEXT_FINAL=null;
+
+  function $(id){return document.getElementById(id);}
+  function show(id){["sIntro","sTip","sQ","sLock","sFinal","sEnd"].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
+  function fmt(s){s=Math.floor(s);var m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+  function elapsed(){return (Date.now()-state.t0)/1000+state.pen;}
+  function tick(){$("stTime").textContent=fmt(elapsed());}
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function dots(){
+    var d=$("dots");d.innerHTML="";
+    for(var i=0;i<3;i++){var s=document.createElement("span");s.textContent=(i<state.opened?"🔓":"🔒");d.appendChild(s);}
+    var f=document.createElement("span");f.textContent=(state.done?"🏆":"🚪");d.appendChild(f);
+  }
+  function wrong(){
+    state.hata++; state.pen+=CEZA; state.qw++;
+    $("stErr").textContent=state.hata; tick();
+  }
+
+  function startGame(){
+    var ad=($("ad").value||"").trim()||"Şampiyon";
+    var takim=($("takim").value||"").trim()||"Takımım";
+    state={ad:ad,takim:takim,i:0,p:0,hata:0,ilk:0,pen:0,t0:Date.now(),qw:0,opened:0,done:false};
+    $("stErr").textContent="0";$("stTime").textContent="00:00";
+    $("hdr").hidden=false; dots();
+    clearInterval(timer); timer=setInterval(tick,500);
+    showTip(0);
+  }
+
+  function showTip(p){
+    state.p=p; var P=PARKUR[p];
+    $("tipTitle").textContent=P.ad;
+    $("tipStory").textContent=P.hikaye;
+    var b=$("tipBadge"); b.innerHTML=""; b.appendChild(document.createTextNode(P.rozet));
+    var sm=document.createElement("small"); sm.textContent=P.en; b.appendChild(sm);
+    $("tipText").textContent=P.metin;
+    $("tipMini").textContent=P.mini;
+    show("sTip");
+  }
+
+  function firstIndex(p){for(var i=0;i<Q.length;i++){if(Q[i].p===p)return i;}return 0;}
+
+  function renderQ(){
+    var q=Q[state.i]; state.qw=0;
+    $("qFikir").textContent=q.fikir||"";
+    var c=$("qCumle"); if(q.cumle){c.hidden=false;c.textContent=q.cumle;}else{c.hidden=true;c.textContent="";}
+    $("qSoru").textContent=q.soru;
+    $("qHint").hidden=true; $("qWhy").hidden=true; $("btnNext").hidden=true;
+    var box=$("qOpts"); box.innerHTML="";
+    var opts=shuffle(q.sec.map(function(t,k){return {t:t,ok:k===q.dogru};}));
+    opts.forEach(function(o){
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=o.t;
+      b.onclick=function(){pick(b,o,q);};
+      box.appendChild(b);
+    });
+    show("sQ");
+  }
+
+  function pick(btn,o,q){
+    if(o.ok){
+      btn.className="opt good";
+      Array.prototype.forEach.call($("qOpts").children,function(x){x.disabled=true;});
+      if(state.qw===0) state.ilk++;
+      $("qHint").hidden=true;
+      var w=$("qWhy"); w.hidden=false; w.textContent="✅ "+q.neden;
+      $("btnNext").hidden=false;
+    }else{
+      btn.className="opt bad"; btn.disabled=true;
+      wrong();
+      var h=$("qHint"); h.hidden=false; h.innerHTML="";
+      h.appendChild(document.createTextNode("💡 İpucu: "+q.ipucu));
+      var s=document.createElement("span"); s.className="pen"; s.textContent="+"+CEZA+" sn"; h.appendChild(s);
+    }
+  }
+
+  function nextQ(){
+    var cur=Q[state.i];
+    var nx=Q[state.i+1];
+    if(nx && nx.p===cur.p){state.i++; renderQ(); return;}
+    // parkur bitti
+    state.opened=cur.p+1; dots();
+    var L=LOCKS[cur.p];
+    $("lockIcon").textContent="🔓"; $("lockTitle").textContent=L.baslik; $("lockText").textContent=L.metin;
+    show("sLock");
+  }
+
+  function afterLock(){
+    if(state.opened<3){ showTip(state.opened); }
+    else { startFinal(); }
+  }
+
+  /* SON KAPI */
+  var FINAL=null;
+  function startFinal(){
+    var t=state.takim;
+    FINAL=[
+      {id:"fikir", t:t+" taraftarı olmak çok güzeldir.", tag:"ANA DÜŞÜNCE", cls:"t4"},
+      {id:"ornek", t:"Mesela her maçta formamı giyer, tezahüratlara katılırım.", tag:"ÖRNEK", cls:""},
+      {id:"sayi", t:"Bu sezon 10 maçın hepsini başından sonuna kadar izledim.", tag:"SAYI", cls:"t2"},
+      {id:"karsi", t:"Bazıları sadece sonucu öğrenir, ben ise maçı sonuna kadar izlerim.", tag:"KARŞILAŞTIRMA", cls:"t3"},
+      {id:"bitis", t:"Takımım kazansa da kaybetse de benim takımımdır.", tag:"BİTİŞ", cls:"t4"}
+    ];
+    state.picked=[]; state.qw=0;
+    $("fHint").hidden=true; renderFinal(); show("sFinal");
+  }
+  function renderFinal(){
+    var para=$("fPara"); para.innerHTML="";
+    if(!state.picked.length){var e=document.createElement("i");e.textContent="Paragrafın burada görünecek…";e.style.color="#999";para.appendChild(e);}
+    state.picked.forEach(function(c){var p=document.createElement("p");p.textContent=c.t;para.appendChild(p);});
+    var box=$("fCards"); box.innerHTML="";
+    if(!state.order) state.order=shuffle(FINAL);
+    state.order.forEach(function(c){
+      if(state.picked.indexOf(c)>=0) return;
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=c.t;
+      b.onclick=function(){pickFinal(c,b);};
+      box.appendChild(b);
+    });
+  }
+  function pickFinal(c,btn){
+    var pos=state.picked.length, msg=null;
+    if(pos===0 && c.id!=="fikir") msg="Paragraf ana düşünceyle başlar. Fikri söyleyen cümleyi bul.";
+    else if(c.id==="bitis" && pos<4) msg="Bitiş cümlesi en sona gelir. Önce üç tekniği kullan.";
+    if(msg){
+      btn.className="opt bad"; setTimeout(function(){btn.className="opt";},400);
+      wrong();
+      var h=$("fHint"); h.hidden=false; h.innerHTML="";
+      h.appendChild(document.createTextNode("💡 "+msg));
+      var s=document.createElement("span"); s.className="pen"; s.textContent="+"+CEZA+" sn"; h.appendChild(s);
+      return;
+    }
+    state.picked.push(c); $("fHint").hidden=true;
+    if(state.picked.length===FINAL.length){
+      if(state.qw===0) state.ilk++;
+      finish();
+    } else renderFinal();
+  }
+
+  function finish(){
+    clearInterval(timer);
+    state.done=true; state.opened=3; dots();
+    var total=elapsed(); var ts=fmt(total);
+    $("stTime").textContent=ts;
+    $("endText").textContent=state.takim+" kupasını geri getirdin, "+state.ad+"! Üç tekniği birlikte kullandın.";
+    $("eTime").textContent=ts; $("eErr").textContent=state.hata; $("eFirst").textContent=state.ilk+"/"+TOPLAM;
+    var ep=$("endPara"); ep.innerHTML="";
+    state.picked.forEach(function(c){
+      var p=document.createElement("p"); p.appendChild(document.createTextNode(c.t));
+      var tg=document.createElement("span"); tg.className="tag "+c.cls; tg.textContent=c.tag; p.appendChild(tg);
+      ep.appendChild(p);
+    });
+    show("sEnd");
+    OVT.renderSend("ovtSend",{oyun:"Kayıp Kupa – Kartal Gibi Düşün", sure:ts, puan:state.hata+" hata · "+state.ilk+"/"+TOPLAM+" ilk denemede"});
+  }
+
+  function again(){
+    clearInterval(timer);
+    $("ovtSend").innerHTML=""; $("ovtSend").className="";
+    state.order=null; $("hdr").hidden=true;
+    show("sIntro");
+  }
+
+  $("btnStart").onclick=startGame;
+  $("btnTip").onclick=function(){state.i=firstIndex(state.p);renderQ();};
+  $("btnNext").onclick=nextQ;
+  $("btnLock").onclick=afterLock;
+  $("btnAgain").onclick=again;
+
+  OVT.fill("ad");
+  window.KK={Q:Q,get state(){return state;},get FINAL(){return FINAL;}};
+})();
+</script>
+</body>
+</html>

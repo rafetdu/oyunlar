@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Şimdiki Zaman — Olumsuz & Soru</title>
+<meta name="description" content="Present tense negative and question — explain + build-a-sentence game">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+  :root{
+    --bg1:#fff4fb; --bg2:#f3ecff; --card:#ffffff; --ink:#2a2140; --ink-soft:#6b6385;
+    --purple:#9b30d9; --purple-d:#6a1b9a; --purple-l:#f2e6fb; --mid:#e4ccf7;
+    --teal:#0e7c86; --teal-l:#e1f2f3; --gold:#e0a21a; --gold-l:#fcf3df;
+    --good:#1e8a4c; --good-l:#e4f5ec; --rose:#b5397a; --rose-l:#fbe9f2; --bad:#c23b5a;
+    --line:#e7def3; --shadow:0 12px 34px rgba(120,60,160,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:radial-gradient(900px 500px at 50% -8%, #ffe3f4 0%, transparent 60%), linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--ink); font-family:"Nunito",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px; margin:0 auto; padding:20px 16px 40px;}
+  header{text-align:center; margin-bottom:10px;}
+  .brand{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--purple); font-weight:800;}
+  h1{font-family:"Baloo 2"; font-weight:700; font-size:clamp(24px,6vw,34px); margin:4px 0 2px; color:var(--purple-d);}
+  .sub{color:var(--ink-soft); font-size:15px;}
+
+  .tabs{display:flex; gap:8px; justify-content:center; margin:16px 0 14px; flex-wrap:wrap;}
+  .tab{appearance:none; border:2px solid var(--line); background:#fff; color:var(--purple-d);
+    font-family:"Baloo 2"; font-weight:600; font-size:clamp(15px,3.6vw,18px); padding:9px 18px; border-radius:40px; cursor:pointer; transition:.15s;}
+  .tab:hover{border-color:var(--purple);} .tab.on{background:linear-gradient(180deg,#b24ae0,var(--purple)); color:#fff; border-color:var(--purple); box-shadow:0 6px 16px rgba(155,48,217,.3);}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); padding:20px 18px 24px;}
+
+  /* teaching */
+  .rulebox{border-radius:14px; padding:14px 16px; margin:12px 0;}
+  .rulebox.neg{background:var(--rose-l); border-left:4px solid var(--rose);}
+  .rulebox.q{background:var(--teal-l); border-left:4px solid var(--teal);}
+  .rulebox h3{font-family:"Baloo 2"; margin:0 0 6px; font-size:clamp(17px,4vw,20px); color:var(--purple-d);}
+  .rulebox p{margin:4px 0; font-size:clamp(14px,3.6vw,16px); line-height:1.55;}
+  .rulebox .en{color:var(--ink-soft);}
+  .ex{display:flex; flex-wrap:wrap; align-items:center; gap:4px; margin:10px 0 4px; font-family:"Baloo 2"; font-weight:700; font-size:clamp(16px,4.2vw,21px); color:var(--ink);}
+  .ex .neg-part{color:var(--rose);} .ex .q-part{color:var(--teal);}
+  .ex .arrow{color:var(--gold); margin:0 4px;}
+  .ex .tr{display:block; width:100%; font-family:"Nunito"; font-weight:700; font-size:.72em; color:var(--ink-soft); margin-top:2px;}
+  .play-cta{display:block; margin:18px auto 0; appearance:none; border:none; cursor:pointer; font-family:"Baloo 2"; font-weight:700;
+    font-size:18px; padding:13px 30px; border-radius:40px; color:#fff; background:linear-gradient(180deg,#b24ae0,var(--purple)); box-shadow:0 8px 20px rgba(155,48,217,.3);}
+
+  /* game header */
+  .ghead{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:14px; color:var(--ink-soft);}
+  .ghead b{color:var(--purple-d); font-variant-numeric:tabular-nums;}
+  .prog{height:10px; background:var(--purple-l); border-radius:20px; overflow:hidden; margin-bottom:14px;}
+  .prog i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--purple),#c861ec); transition:.4s;}
+
+  .task{text-align:center; margin:4px 0 6px;}
+  .task .badge{display:inline-block; font-family:"Baloo 2"; font-weight:700; font-size:14px; padding:5px 14px; border-radius:30px; color:#fff;}
+  .badge.neg{background:var(--rose);} .badge.q{background:var(--teal);}
+  .cue{text-align:center; font-size:clamp(16px,4.2vw,20px); color:var(--ink); margin:10px 0 2px;}
+  .cue b{color:var(--purple-d);}
+  .cue .en{display:block; font-size:.75em; color:var(--ink-soft); font-weight:700; margin-top:2px;}
+  .minihint{text-align:center; font-size:12.5px; color:var(--gold); background:var(--gold-l); border-radius:10px; padding:7px 10px; margin:8px auto 2px; max-width:420px;}
+
+  .answer{min-height:56px; border:2px dashed var(--line); border-radius:14px; padding:10px 12px; margin:12px 0 6px;
+    display:flex; flex-wrap:wrap; gap:7px; align-items:center; justify-content:center; background:#fdfbff;}
+  .answer.empty::before{content:"Kelimelere dokun…"; color:var(--ink-soft); font-weight:700; font-size:14px;}
+  .pool{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:10px 0 4px;}
+  .word{border:2px solid var(--line); background:linear-gradient(180deg,#fbf8ff,#f3ecff); color:var(--purple-d);
+    font-family:"Baloo 2"; font-weight:700; font-size:clamp(16px,4.2vw,20px); padding:11px 15px; border-radius:13px; cursor:pointer; transition:.12s; user-select:none;}
+  .word:hover{border-color:var(--purple); transform:translateY(-2px);}
+  .word.used{opacity:.3; pointer-events:none;}
+  .answer .word{background:var(--purple-l); border-color:var(--purple);}
+  .wordgap{flex:0 0 22px; height:30px; border-left:3px dotted var(--teal); margin:0 4px;}
+  .answer .word.quchip{background:var(--teal-l); border-color:var(--teal); color:var(--teal);}
+
+  .fb{text-align:center; min-height:24px; margin-top:10px; font-weight:700; font-size:15px;}
+  .fb.good{color:var(--good);} .fb.bad{color:var(--bad);}
+  .btn{display:block; margin:14px auto 0; appearance:none; border:none; cursor:pointer; font-family:"Baloo 2"; font-weight:700;
+    font-size:16px; padding:11px 26px; border-radius:40px; color:#fff; background:linear-gradient(180deg,#b24ae0,var(--purple)); box-shadow:0 8px 20px rgba(155,48,217,.3);}
+  .btn.sec{background:#fff; color:var(--purple-d); border:2px solid var(--purple-l); box-shadow:none; font-size:14px; padding:8px 20px;}
+  .field{display:block; width:100%; max-width:340px; margin:12px auto 0; padding:12px 14px; border-radius:12px; border:2px solid var(--line); background:#fff; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--purple);}
+  .shake{animation:shake .4s;} @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+  .pop{animation:pop .4s;} @keyframes pop{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+  .end{text-align:center;}
+  .end .big{font-size:58px;margin:6px 0;}
+  .result-stats{display:flex; gap:22px; justify-content:center; margin:12px 0;}
+  .result-stats .n{font-family:"Baloo 2"; font-size:28px; color:var(--purple-d);}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+  footer{text-align:center; margin-top:16px; font-size:12.5px; color:var(--ink-soft);}
+  .hidden{display:none !important;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Orhan Veli Türkçe Okulu</div>
+    <h1>Şimdiki Zaman: Olumsuz &amp; Soru</h1>
+    <div class="sub">Present tense — negative &amp; question · öğren + oyna</div>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-v="learn">📘 Öğren</button>
+    <button class="tab" data-v="play">🎮 Oyna</button>
+  </div>
+
+  <div class="card" id="card"></div>
+  <footer>Özel Orhan Veli Türkçe Okulu – Türkçe Adresiniz</footer>
+</div>
+
+<script>
+var card=document.getElementById('card');
+var view="learn";
+
+// ---------- TEACHING ----------
+function renderLearn(){
+  card.innerHTML =
+    '<div class="rulebox neg">'+
+      '<h3>➊ Olumsuz — Negative (not …-ing)</h3>'+
+      '<p><b>Rule:</b> add <b style="color:var(--rose)">-mı / -mi / -mu / -mü</b> before <b>-yor</b>. '+
+      '<span class="en">(The small vowel follows the verb: oku→okumuyor, gel→gelmiyor, uyu→uyumuyor, gül→gülmüyor.)</span></p>'+
+      '<div class="ex">oku<span class="arrow">→</span>oku<span class="neg-part">mu</span>yor'+
+        '<span class="tr">okuyor (is reading) → okumuyor (is NOT reading)</span></div>'+
+      '<div class="ex">Ben koşuyorum <span class="arrow">→</span> Ben koş<span class="neg-part">mu</span>yorum'+
+        '<span class="tr">I am running → I am NOT running</span></div>'+
+      '<div class="ex">O geliyor <span class="arrow">→</span> O gel<span class="neg-part">mi</span>yor'+
+        '<span class="tr">He is coming → He is NOT coming</span></div>'+
+    '</div>'+
+    '<div class="rulebox q">'+
+      '<h3>➋ Soru — Question (…-ing?)</h3>'+
+      '<p><b>Rule:</b> add the little word <b style="color:var(--teal)">mu</b> after the verb, then the ending. '+
+      '<span class="en">(It is a separate word: Geliyor musun?)</span></p>'+
+      '<div class="ex">Okuyorsun <span class="arrow">→</span> Okuyor <span class="q-part">musun</span>?'+
+        '<span class="tr">You are reading → Are you reading?</span></div>'+
+      '<div class="ex">O oynuyor <span class="arrow">→</span> O oynuyor <span class="q-part">mu</span>?'+
+        '<span class="tr">He is playing → Is he playing?</span></div>'+
+      '<div class="ex">Siz geliyorsunuz <span class="arrow">→</span> Geliyor <span class="q-part">musunuz</span>?'+
+        '<span class="tr">You (all) are coming → Are you coming?</span></div>'+
+    '</div>'+
+    '<div class="rulebox" style="background:var(--gold-l);border-left:4px solid var(--gold)">'+
+      '<p style="margin:0"><b style="color:#9a6e10">💡 Tip:</b> Olumsuz ek fiile YAPIŞIR (koşmuyor). Soru eki AYRI yazılır (koşuyor mu?).'+
+      ' <span class="en">Negative sticks to the verb; the question word is separate.</span></p>'+
+    '</div>'+
+    '<button class="play-cta" id="toplay">Hazırım, oyna! 🎮</button>';
+  document.getElementById('toplay').onclick=function(){ setView("play"); };
+}
+
+// ---------- GAME ----------
+// Each puzzle: English prompt, type, target = ordered morpheme chips (root + suffixes),
+// distractor = ONE extra chip that must NOT be used, join = how to render the correct sentence.
+// The -(i)yor chip is given pre-formed (we don't make the student decide the i-before-yor).
+var PUZZLES=[
+  // ===== OLUMSUZ (negative) : morphemes glue into one word =====
+  {type:"neg", prompt:"He is NOT coming.", target:["gel","mi","yor"], distractor:"mu", join:"glue"},
+  {type:"neg", prompt:"I am NOT reading.", target:["oku","mu","yor","um"], distractor:"mi", join:"glue"},
+  {type:"neg", prompt:"She is NOT going.", target:["git","mi","yor"], distractor:"mı", join:"glue"},
+  {type:"neg", prompt:"We are NOT running.", target:["koş","mu","yor","uz"], distractor:"mü", join:"glue"},
+  {type:"neg", prompt:"They are NOT laughing.", target:["gül","mü","yor"], distractor:"mu", join:"glue"},
+  // ===== SORU (question) : 'mu' + person ending are SEPARATE words =====
+  {type:"q", prompt:"Are you coming?", target:["gel","iyor","mu","sun"], distractor:"mi", join:"q"},
+  {type:"q", prompt:"Is he reading?", target:["oku","yor","mu"], distractor:"sun", join:"q"},
+  {type:"q", prompt:"Are you (plural) coming?", target:["gel","iyor","mu","sunuz"], distractor:"sun", join:"q"},
+  {type:"q", prompt:"Are we running?", target:["koş","uyor","mu","yuz"], distractor:"sun", join:"q"},
+  {type:"q", prompt:"Is she playing?", target:["oyna","yor","mu"], distractor:"musun", join:"q"},
+];
+var TOTAL=PUZZLES.length;
+var idx=0, errors=0, correctFirst=0, elapsed=0, startTime=null, timerInt=null, playerName="", puzzleHadError=false;
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function startTimer(){ startTime=Date.now(); timerInt=setInterval(function(){ elapsed=Math.floor((Date.now()-startTime)/1000); var t=document.getElementById('gtime'); if(t)t.textContent=fmt(elapsed); },1000); }
+function stopTimer(){ clearInterval(timerInt); }
+
+function renderPlayIntro(){
+  card.innerHTML=
+    '<div style="text-align:center">'+
+    '<div style="font-size:52px">🧩</div>'+
+    '<h1 style="color:var(--purple-d);font-family:Baloo 2;margin:6px 0">Cümle Kur!</h1>'+
+    '<p style="color:var(--ink-soft);max-width:40ch;margin:6px auto 0">Parçalarla <b style="color:var(--rose)">olumsuz</b> ya da <b style="color:var(--teal)">soru</b> cümlesini kur. '+
+    'Ekleri (mı/mi/mu/mü ve soru eki) doğru koy. <b>Her parçayı kullanmayacaksın</b> — bir fazla parça var! '+
+    '<span style="display:block;font-size:.85em;margin-top:4px">Build the sentence from pieces. One piece is extra — don’t use it!</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go" style="margin-top:14px">Başla ▶</button>'+
+    '</div>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    idx=0; errors=0; correctFirst=0; elapsed=0; startTimer(); renderPuzzle();
+  };
+}
+
+// Render the correct joined sentence from the target chips, for the WIN preview.
+function joinTarget(p){
+  if(p.join==="glue"){ return p.target.join(""); }   // gel+mi+yor -> gelmiyor
+  // question: all chips before "mu" form the verb word; "mu"+rest form the question word
+  var mi=p.target.indexOf("mu");
+  var verb=p.target.slice(0,mi).join("");
+  var ques=p.target.slice(mi).join("");
+  return verb+" "+ques;                               // geliyor musun
+}
+
+function renderPuzzle(){
+  var p=PUZZLES[idx];
+  puzzleHadError=false;
+  var picked=[];
+  // pool = target chips + 1 distractor, shuffled
+  var pool=p.target.concat([p.distractor]);
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  card.innerHTML=
+    '<div class="ghead"><span>⏱ <b id="gtime">'+fmt(elapsed)+'</b></span><span>Soru <b>'+(idx+1)+' / '+TOTAL+'</b></span><span>❌ <b id="gerr">'+errors+'</b></span></div>'+
+    '<div class="prog"><i style="width:'+Math.round(idx/TOTAL*100)+'%"></i></div>'+
+    '<div class="task"><span class="badge '+p.type+'">'+(p.type==="neg"?"OLUMSUZ YAP":"SORU YAP")+'</span></div>'+
+    '<div class="cue"><b>'+p.prompt+'</b><span class="en">'+(p.type==="neg"?"Parçalarla olumsuz cümleyi kur.":"Parçalarla soru cümlesini kur.")+'</span></div>'+
+    '<div class="minihint">İpucu: her parçayı kullanmayacaksın — bir fazla parça var! / One extra piece — don’t use it all.</div>'+
+    '<div class="answer empty" id="ans"></div>'+
+    '<div class="pool" id="pool"></div>'+
+    '<button class="btn" id="check">Kontrol et ✓</button>'+
+    '<button class="btn sec" id="clear">↺ Temizle</button>'+
+    '<div class="fb" id="fb"></div>';
+  var ansEl=document.getElementById('ans'), poolEl=document.getElementById('pool');
+  function drawAns(){
+    ansEl.innerHTML=""; ansEl.classList.toggle('empty',picked.length===0);
+    picked.forEach(function(w,i){
+      // In a QUESTION, the soru eki 'mu' starts a NEW word → show a gap before it.
+      if(p.type==="q" && w==="mu"){
+        var gap=document.createElement('span'); gap.className="wordgap"; ansEl.appendChild(gap);
+      }
+      var b=document.createElement('button'); b.className="word"+(p.type==="q"&&w==="mu"?" quchip":"");
+      b.textContent=w;
+      b.onclick=function(){ picked.splice(i,1); refresh(); document.getElementById('fb').textContent=""; };
+      ansEl.appendChild(b);
+    });
+  }
+  function drawPool(){
+    poolEl.innerHTML="";
+    var consumed={};
+    pool.forEach(function(w){
+      var b=document.createElement('button'); b.className="word"; b.textContent=w;
+      var used=(consumed[w]||0), inP=picked.filter(function(x){return x===w;}).length;
+      if(inP>used){ b.classList.add('used'); consumed[w]=used+1; }
+      b.onclick=function(){ if(b.classList.contains('used'))return; picked.push(w); refresh(); document.getElementById('fb').textContent=""; };
+      poolEl.appendChild(b);
+    });
+  }
+  function refresh(){ drawAns(); drawPool(); }
+  function check(){
+    var ok = picked.length===p.target.length && picked.every(function(w,i){return w===p.target[i];});
+    var fb=document.getElementById('fb');
+    if(ok){
+      fb.className="fb good"; fb.innerHTML="Doğru! <b>"+joinTarget(p)+(p.type==="q"?"?":"")+"</b> "+(p.type==="neg"?"👍":"❓✅");
+      if(!puzzleHadError) correctFirst++;
+      card.classList.add('pop'); setTimeout(function(){card.classList.remove('pop');},400);
+      document.getElementById('check').disabled=true; document.getElementById('clear').disabled=true;
+      setTimeout(advance,1250);
+    }else{
+      errors++; puzzleHadError=true; document.getElementById('gerr').textContent=errors;
+      // helpful nudge: did they use the distractor?
+      var usedDist = picked.indexOf(p.distractor)>=0;
+      fb.className="fb bad";
+      fb.textContent = usedDist ? ("“"+p.distractor+"” buraya uymuyor. Onu çıkar! 🔁") : "Tam değil. Sırayı kontrol et 🔁";
+      card.classList.add('shake'); setTimeout(function(){card.classList.remove('shake');},400);
+    }
+  }
+  document.getElementById('check').onclick=check;
+  document.getElementById('clear').onclick=function(){ picked=[]; refresh(); document.getElementById('fb').textContent=""; };
+  refresh();
+}
+
+function advance(){ idx++; if(idx>=TOTAL) renderWin(); else renderPuzzle(); }
+
+function renderWin(){
+  stopTimer();
+  card.innerHTML=
+    '<div class="end">'+
+    '<div class="big">🏆</div>'+
+    '<h1 style="color:var(--purple-d);font-family:Baloo 2;margin:4px 0">Bitti, '+playerName.replace(/</g,'&lt;')+'!</h1>'+
+    '<p style="color:var(--ink-soft)">Bütün cümleleri kurdun! 👏</p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+correctFirst+' / '+TOTAL+'</div><div class="k">İlk denemede</div></div>'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn sec" id="again">↺ Baştan oyna</button>'+
+    '</div>';
+  OVT.renderSend("ovtSend", { oyun:"Şimdiki Zaman: Olumsuz & Soru", sure:fmt(elapsed), puan:correctFirst+"/"+TOTAL+" ilk denemede · "+errors+" hata" });
+  document.getElementById('again').onclick=function(){ renderPlayIntro(); };
+}
+
+// ---------- VIEW SWITCH ----------
+function setView(v){
+  view=v;
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(t){ t.classList.toggle('on', t.dataset.v===v); });
+  if(v==="learn"){ stopTimer(); renderLearn(); }
+  else renderPlayIntro();
+}
+Array.prototype.forEach.call(document.querySelectorAll('.tab'),function(t){ t.onclick=function(){ setView(t.dataset.v); }; });
+
+renderLearn();
+</script>
+</body>
+</html>

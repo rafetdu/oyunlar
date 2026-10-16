@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ders Saati Seçimi – Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lacivert:#1f3a5f; --turuncu:#e8833a; --zemin:#f6f3ee; --kart:#ffffff;
+    --yazi:#24303f; --soluk:#7a8594; --cizgi:#e3ddd3; --yesil:#2e8b57; --kirmizi:#c0392b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Nunito',system-ui,sans-serif;background:var(--zemin);color:var(--yazi)}
+  header{background:var(--lacivert);color:#fff;padding:28px 16px 34px;text-align:center}
+  header .okul{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+  header h1{margin:6px 0 4px;font-size:26px;font-weight:800}
+  header p{margin:0;opacity:.85;font-size:15px}
+  main{max-width:640px;margin:-18px auto 40px;padding:0 16px}
+  .kart{background:var(--kart);border-radius:16px;padding:20px;box-shadow:0 4px 18px rgba(31,58,95,.08);margin-bottom:16px}
+  label.baslik{display:block;font-weight:700;margin-bottom:8px}
+  input[type=text]{width:100%;padding:12px 14px;font:inherit;font-size:16px;border:2px solid var(--cizgi);border-radius:10px;outline:none}
+  input[type=text]:focus{border-color:var(--turuncu)}
+  .gun{margin-top:18px}
+  .gun:first-child{margin-top:4px}
+  .gun h2{font-size:16px;margin:0 0 10px;color:var(--lacivert)}
+  .gun h2 span{color:var(--soluk);font-weight:600}
+  .slotlar{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+  .slot{position:relative}
+  .slot input{position:absolute;opacity:0;pointer-events:none}
+  .slot label{display:block;text-align:center;padding:11px 6px;border:2px solid var(--cizgi);border-radius:10px;cursor:pointer;font-weight:700;user-select:none;transition:.15s}
+  .slot label:hover{border-color:var(--turuncu)}
+  .slot input:checked + label{background:var(--turuncu);border-color:var(--turuncu);color:#fff}
+  .slot input:focus-visible + label{outline:3px solid var(--lacivert);outline-offset:2px}
+  .slot.dolu label{background:#eceae6;border-color:#eceae6;color:#a7a39c;cursor:not-allowed;text-decoration:line-through}
+  .slot.dolu label small{display:block;text-decoration:none;font-weight:600;font-size:11px}
+  .alt{position:sticky;bottom:0;background:var(--zemin);padding:12px 0 16px}
+  button{width:100%;padding:15px;font:inherit;font-size:17px;font-weight:800;border:0;border-radius:12px;background:var(--lacivert);color:#fff;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  .mesaj{padding:12px 14px;border-radius:10px;margin-bottom:12px;font-weight:600;display:none}
+  .mesaj.hata{display:block;background:#fbeaea;color:var(--kirmizi)}
+  .mesaj.bilgi{display:block;background:#eef3f9;color:var(--lacivert)}
+  .tamam{text-align:center}
+  .tamam .tik{font-size:48px}
+  .tamam ul{list-style:none;padding:0;margin:16px 0 0}
+  .tamam li{padding:10px;border-bottom:1px solid var(--cizgi);font-weight:700}
+  .yukleniyor{text-align:center;color:var(--soluk);padding:20px}
+  footer{text-align:center;color:var(--soluk);font-size:13px;padding:0 16px 30px}
+</style>
+</head>
+<body>
+<header>
+  <div class="okul">Orhan Veli Türkçe Okulu</div>
+  <h1>Ders Saati Seçimi</h1>
+  <p>Adınızı yazın, uygun saatleri seçin ve kaydedin. Her ders 60 dakikadır.</p>
+</header>
+
+<main>
+  <div id="form">
+    <div class="kart">
+      <label class="baslik" for="ad">Adınız Soyadınız</label>
+      <input type="text" id="ad" autocomplete="name" placeholder="Örn. Ayşe Yılmaz">
+    </div>
+
+    <div class="kart">
+      <label class="baslik">Saatler <span style="font-weight:600;color:var(--soluk)">(birden fazla seçebilirsiniz)</span></label>
+      <div id="liste"><div class="yukleniyor">Saatler yükleniyor…</div></div>
+    </div>
+
+    <div class="alt">
+      <div id="mesaj" class="mesaj"></div>
+      <button id="kaydet" disabled>Saat seçin</button>
+    </div>
+  </div>
+
+  <div id="sonuc" class="kart tamam" style="display:none">
+    <div class="tik">✅</div>
+    <h2>Teşekkürler, <span id="sonucAd"></span>!</h2>
+    <p>Aşağıdaki derslerin kaydedildi:</p>
+    <ul id="sonucListe"></ul>
+  </div>
+</main>
+
+<footer>Özel Orhan Veli Türkçe Okulu – Türkçe Adresiniz</footer>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbx0H3CIMPeFCuiQQ2VsRl9gORLezcMxPG1HQ9F4bUduQmAR2MF1ANYvnp74ptxEsSf9/exec';
+let slotlar = [];
+let gonderiliyor = false;
+
+const $ = id => document.getElementById(id);
+
+function mesaj(metin, tur){ const m=$('mesaj'); m.textContent=metin||''; m.className='mesaj'+(metin?' '+tur:''); }
+
+function secilenler(){ return [...document.querySelectorAll('#liste input:checked')].map(i=>i.value); }
+
+function butonuGuncelle(){
+  const n = secilenler().length;
+  const b = $('kaydet');
+  b.disabled = gonderiliyor || n===0;
+  b.textContent = gonderiliyor ? 'Kaydediliyor…' : (n===0 ? 'Saat seçin' : n+' dersi kaydet');
+}
+
+function ciz(){
+  const onceki = new Set(secilenler());
+  const gruplar = {};
+  slotlar.forEach(s => { const k=s.id.slice(0,10); (gruplar[k] = gruplar[k] || {gun:s.gun,tarih:s.tarih,liste:[]}).liste.push(s); });
+  const liste = $('liste');
+  liste.innerHTML = '';
+  Object.keys(gruplar).sort().forEach(k => {
+    const g = gruplar[k];
+    const div = document.createElement('div'); div.className='gun';
+    const h = document.createElement('h2'); h.textContent = g.tarih+' '; const sp=document.createElement('span'); sp.textContent=g.gun; h.appendChild(sp);
+    const kutu = document.createElement('div'); kutu.className='slotlar';
+    g.liste.forEach(s => {
+      const id = 's'+s.id.replace(/\W/g,'');
+      const w = document.createElement('div'); w.className='slot'+(s.dolu?' dolu':'');
+      const inp = document.createElement('input'); inp.type='checkbox'; inp.id=id; inp.value=s.id; inp.disabled=s.dolu;
+      inp.checked = !s.dolu && onceki.has(s.id);
+      inp.addEventListener('change', butonuGuncelle);
+      const lab = document.createElement('label'); lab.htmlFor=id; lab.textContent=s.saat;
+      if (s.dolu){ const sm=document.createElement('small'); sm.textContent='Dolu'; lab.appendChild(sm); }
+      w.append(inp, lab); kutu.appendChild(w);
+    });
+    div.append(h, kutu); liste.appendChild(div);
+  });
+  butonuGuncelle();
+}
+
+async function yukle(){
+  try{
+    const r = await fetch(API, {cache:'no-store'});
+    const v = await r.json();
+    slotlar = v.slotlar || [];
+    ciz();
+  }catch(e){
+    if (!slotlar.length) $('liste').innerHTML = '<div class="yukleniyor">Saatler yüklenemedi. Sayfayı yenileyin.</div>';
+  }
+}
+
+$('kaydet').addEventListener('click', async () => {
+  const ad = $('ad').value.trim();
+  const sec = secilenler();
+  if (ad.length < 2){ mesaj('Lütfen önce adınızı yazın.', 'hata'); $('ad').focus(); return; }
+  if (!sec.length) return;
+  gonderiliyor = true; butonuGuncelle(); mesaj('');
+  try{
+    const r = await fetch(API, {method:'POST', body: JSON.stringify({ad, slotlar: sec})});
+    const v = await r.json();
+    if (v.ok){
+      $('sonucAd').textContent = ad;
+      const ul = $('sonucListe'); ul.innerHTML='';
+      slotlar.filter(s => sec.includes(s.id)).forEach(s => { const li=document.createElement('li'); li.textContent = s.tarih+' '+s.gun+' · '+s.saat; ul.appendChild(li); });
+      $('form').style.display='none'; $('sonuc').style.display='block';
+      window.scrollTo(0,0);
+    } else {
+      mesaj(v.hata || 'Bir sorun oluştu, tekrar deneyin.', 'hata');
+      await yukle();
+    }
+  }catch(e){
+    mesaj('Bağlantı sorunu. Lütfen tekrar deneyin.', 'hata');
+  }finally{
+    gonderiliyor = false; butonuGuncelle();
+  }
+});
+
+yukle();
+setInterval(() => { if (!gonderiliyor && $('form').style.display!=='none') yukle(); }, 15000);
+</script>
+</body>
+</html>

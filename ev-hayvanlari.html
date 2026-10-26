@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ev Hayvanları · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--zemin:#f3f8ec;--ink:#24301f;--muted:#6b7a63;--cizgi:#dce8cf;--yesil:#4f9d5d;--koyu:#2f6b3a;--turuncu:#f29e4c;--mor:#8e6bbf;--ok:#2e9e5b;--bad:#d64545;--sari:#f6c445}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--zemin);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer}
+.ekran{display:none;max-width:720px;margin:0 auto;padding:1.1rem 1rem 2.2rem}
+.ekran.on{display:block}
+h1,h2,h3{font-family:'Baloo 2',cursive;line-height:1.1}
+.ust{display:flex;justify-content:space-between;gap:.5rem;font-weight:800;font-size:.95rem;margin-bottom:.8rem;flex-wrap:wrap}
+.ust span{background:#fff;border:1px solid var(--cizgi);border-radius:999px;padding:.3rem .8rem}
+.btn{display:block;width:100%;border:none;border-radius:14px;padding:.95rem;font-weight:800;font-size:1.05rem;background:var(--yesil);color:#fff;box-shadow:0 5px 0 var(--koyu);margin-top:.8rem}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--koyu)}
+.btn.ikinci{background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--cizgi);border:2px solid var(--cizgi)}
+.ipucu{text-align:center;color:var(--muted);font-size:.88rem;margin:.3rem 0 .7rem}
+
+/* Giriş */
+.giris{text-align:center}
+.giris .hayvanlar{font-size:3rem;letter-spacing:.2rem;margin:1rem 0 .3rem}
+.giris h1{font-size:2.7rem;color:var(--koyu)}
+.giris p{color:var(--muted);max-width:460px;margin:.4rem auto 1rem}
+.giris label{display:block;text-align:left;font-weight:800;font-size:.9rem;margin:1rem 0 .3rem}
+.giris input{width:100%;padding:.8rem;border:2px solid var(--cizgi);border-radius:12px;font:inherit;font-size:1.05rem}
+.adimlar{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin:1rem 0;font-size:.9rem;font-weight:700}
+.adimlar div{background:#fff;border:1px solid var(--cizgi);border-radius:12px;padding:.7rem .4rem}
+.adimlar b{display:block;font-size:1.6rem}
+
+/* Eşleştirme */
+.tur-baslik{text-align:center;margin-bottom:.2rem;font-size:1.6rem;color:var(--koyu)}
+.eslestir{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.sutun{display:grid;gap:.55rem;align-content:start}
+.kutu{display:flex;align-items:center;gap:.6rem;min-height:64px;background:#fff;border:3px solid var(--cizgi);border-radius:16px;padding:.5rem .7rem;font-weight:800;font-size:1.12rem;text-align:left;transition:transform .12s,border-color .15s,background .15s}
+.kutu .e{font-size:2rem;line-height:1}
+.kutu.sec{border-color:var(--sari);background:#fffbe6;transform:scale(1.03)}
+.kutu.bitti{border-color:var(--ok);background:#ecf8ef;color:var(--koyu);cursor:default}
+.kutu.yanlis{animation:salla .4s;border-color:var(--bad)}
+.kutu.sag{justify-content:center;text-align:center}
+@keyframes salla{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.cumle-not{margin-top:1rem;min-height:2.6rem;text-align:center;font-weight:800;font-size:1.15rem;color:var(--koyu)}
+
+/* Park */
+#sPark{padding:0;max-width:none}
+.park-ust{position:fixed;top:0;left:0;right:0;z-index:5;padding:.6rem .8rem;display:grid;gap:.45rem;pointer-events:none}
+.park-ust .ust{margin:0}
+.gorev{pointer-events:auto;background:#fff;border:3px solid var(--sari);border-radius:16px;padding:.6rem .9rem;font-family:'Baloo 2',cursive;font-size:1.45rem;font-weight:800;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.gorev small{display:block;font-family:'Nunito',sans-serif;font-size:.8rem;color:var(--muted);font-weight:700}
+#cv{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
+.balon{position:fixed;z-index:6;left:50%;bottom:1.2rem;transform:translateX(-50%) translateY(160%);background:var(--ink);color:#fff;font-weight:800;padding:.7rem 1.1rem;border-radius:14px;transition:transform .25s;max-width:92vw;text-align:center}
+.balon.on{transform:translateX(-50%) translateY(0)}
+.panel-ovl{position:fixed;inset:0;z-index:10;background:rgba(20,30,15,.55);display:none;align-items:center;justify-content:center;padding:1rem}
+.panel-ovl.on{display:flex}
+.panel{background:#fff;border-radius:20px;max-width:420px;width:100%;padding:1.4rem 1.2rem;text-align:center}
+.panel h3{font-size:1.8rem;color:var(--koyu)}
+.panel p{margin-top:.5rem}
+.panel ul{text-align:left;margin:.8rem 0 0 1.1rem;display:grid;gap:.35rem}
+
+/* Bitiş */
+.bitis{text-align:center}
+.bitis h2{font-size:2.4rem;color:var(--koyu);margin-top:.5rem}
+.istat{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:1rem 0}
+.istat div{background:#fff;border:1px solid var(--cizgi);border-radius:14px;padding:.8rem .3rem}
+.istat b{display:block;font-family:'Baloo 2',cursive;font-size:1.7rem}
+.istat span{font-size:.8rem;color:var(--muted);font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+
+<section class="ekran on" id="sGiris">
+  <div class="giris">
+    <div class="hayvanlar">🐱🐶🐦🐰</div>
+    <h1>Ev Hayvanları</h1>
+    <p>Hayvanları ve yaptıkları şeyleri eşleştir. Sonra kedin Pamuk'la parka çık ve görevleri tamamla!</p>
+    <div class="adimlar"><div><b>🧩</b>1. Eşleştir</div><div><b>🐾</b>2. Kedim ile Parkta</div></div>
+    <label for="ad">Adın</label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="basla()">Başla</button>
+  </div>
+</section>
+
+<section class="ekran" id="sEs">
+  <div class="ust"><span id="esTur"></span><span id="esHata">❌ 0</span><span id="esSure">⏱ 00:00</span></div>
+  <h2 class="tur-baslik" id="esBaslik"></h2>
+  <p class="ipucu">Soldan bir kutuya, sonra sağdan eşine dokun.</p>
+  <div class="eslestir"><div class="sutun" id="solS"></div><div class="sutun" id="sagS"></div></div>
+  <div class="cumle-not" id="esNot"></div>
+</section>
+
+<section class="ekran" id="sPark">
+  <div class="park-ust">
+    <div class="ust"><span id="pSay"></span><span id="pHata">❌ 0</span><span id="pSure">⏱ 00:00</span></div>
+    <div class="gorev" id="gorev"></div>
+  </div>
+  <canvas id="cv"></canvas>
+  <div class="balon" id="balon"></div>
+  <div class="panel-ovl" id="pOvl"><div class="panel" id="pPanel"></div></div>
+</section>
+
+<section class="ekran" id="sBitis">
+  <div class="bitis">
+    <div style="font-size:3.4rem;margin-top:1rem">🐱🏠</div>
+    <h2>Pamuk eve döndü! 🎉</h2>
+    <p id="bAd" style="font-weight:800;font-size:1.1rem"></p>
+    <div class="istat">
+      <div><b id="bSure">00:00</b><span>süre</span></div>
+      <div><b id="bEs">0/11</b><span>ilk denemede eşleşme</span></div>
+      <div><b id="bHata">0</b><span>hata</span></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikinci" onclick="location.reload()">↺ Tekrar oyna</button>
+  </div>
+</section>
+
+<script>
+/* ═══════ 1. EŞLEŞTİRME ═══════
+   Her turda eşleşme tektir: bir hayvanın yalnızca bir eşi vardır. */
+const TURLAR=[
+  {baslik:"Ne yapar?", cift:[
+    {s:"🐱 kedi",  g:"miyavlar",     c:"Kedi miyavlar: Miyav!"},
+    {s:"🐶 köpek", g:"havlar",       c:"Köpek havlar: Hav hav!"},
+    {s:"🐦 kuş",   g:"öter",         c:"Kuş öter: Cik cik!"},
+    {s:"🐟 balık", g:"yüzer",        c:"Balık suda yüzer."},
+    {s:"🐰 tavşan",g:"zıplar",       c:"Tavşan hop hop zıplar."},
+    {s:"🐢 kaplumbağa",g:"yavaş yürür",c:"Kaplumbağa yavaş yavaş yürür."},
+  ]},
+  {baslik:"Kimin?", cift:[
+    {s:"🐶 köpek", g:"🦴 kemik",     c:"Bu, köpeğin kemiği."},
+    {s:"🐱 kedi",  g:"🧶 yumak",     c:"Bu, kedinin yumağı."},
+    {s:"🐰 tavşan",g:"🥕 havuç",     c:"Bu, tavşanın havucu."},
+    {s:"🐦 kuş",   g:"🪶 tüy",       c:"Bu, kuşun tüyü."},
+    {s:"🐟 balık", g:"🫧 akvaryum",  c:"Bu, balığın akvaryumu."},
+  ]},
+];
+const TOPLAM_CIFT=TURLAR.reduce((a,t)=>a+t.cift.length,0);
+let tur=0, secili=null, kalan=0, esIlk=0, yanlisCift=new Set();
+let t0=0, timer=0, hata=0;
+const $=id=>document.getElementById(id);
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function saat(){ const t="⏱ "+fmt(Date.now()-t0); ["esSure","pSure"].forEach(i=>$(i).textContent=t); }
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+function hataYaz(){ $("esHata").textContent="❌ "+hata; $("pHata").textContent="❌ "+hata; }
+
+function basla(){ t0=Date.now(); timer=setInterval(saat,500); hata=0; tur=0; esIlk=0; turKur(); }
+function parca(t){ const m=t.match(/^(\p{Extended_Pictographic}️?)\s(.+)$/u); return m?`<span class="e">${m[1]}</span><span>${m[2]}</span>`:`<span>${t}</span>`; }
+function turKur(){
+  const T=TURLAR[tur]; secili=null; kalan=T.cift.length; yanlisCift=new Set();
+  ekran("sEs");
+  $("esTur").textContent=`🧩 Tur ${tur+1}/${TURLAR.length}`; $("esBaslik").textContent=T.baslik; $("esNot").textContent="";
+  $("solS").innerHTML=karisik(T.cift.map((c,i)=>i)).map(i=>`<button class="kutu" data-i="${i}" data-y="s" onclick="sec(this)">${parca(T.cift[i].s)}</button>`).join("");
+  $("sagS").innerHTML=karisik(T.cift.map((c,i)=>i)).map(i=>`<button class="kutu sag" data-i="${i}" data-y="g" onclick="sec(this)">${parca(T.cift[i].g)}</button>`).join("");
+  hataYaz();
+}
+function sec(b){
+  if(b.classList.contains("bitti")) return;
+  if(!secili || secili.dataset.y===b.dataset.y){
+    document.querySelectorAll(".kutu.sec").forEach(x=>x.classList.remove("sec"));
+    secili=b; b.classList.add("sec"); return;
+  }
+  const a=secili; secili=null; a.classList.remove("sec");
+  const T=TURLAR[tur];
+  if(a.dataset.i===b.dataset.i){
+    [a,b].forEach(x=>{ x.classList.add("bitti"); x.disabled=true; });
+    if(!yanlisCift.has(a.dataset.i)) esIlk++;
+    $("esNot").textContent=T.cift[+a.dataset.i].c;
+    if(--kalan===0) setTimeout(()=>{ tur++; if(tur<TURLAR.length) turKur(); else Park.intro(); },1200);
+  }else{
+    hata++; hataYaz();
+    const sol=a.dataset.y==="s"?a:b; yanlisCift.add(sol.dataset.i);
+    [a,b].forEach(x=>{ x.classList.remove("yanlis"); void x.offsetWidth; x.classList.add("yanlis"); });
+  }
+}
+
+/* ═══════ 2. KEDİM İLE PARKTA ═══════
+   Ekrana dokun: Pamuk oraya yürür. Doğru eşyaya ulaşınca onu alır.
+   Karabaş adlı köpeğe yaklaşırsa Karabaş havlar, Pamuk korkup biraz bekler. */
+const Park=(function(){
+  const cv=$("cv"), ctx=cv.getContext("2d");
+  const GOREV=[
+    {m:"Köpeğin kemiğini bul.", e:"🦴", ad:"kemik"},
+    {m:"Tavşanın havucunu topla.", e:"🥕", ad:"havuç"},
+    {m:"Kuşun tüyünü bul.", e:"🪶", ad:"tüy"},
+    {m:"Köpeğin topunu getir.", e:"⚽", ad:"top"},
+    {m:"Pamuk, yumağını bul!", e:"🧶", ad:"yumak"},
+    {m:"Şimdi eve dön!", e:"🏠", ad:"ev"},
+  ];
+  const SASIRT=[{e:"🍎",ad:"elma"},{e:"🎈",ad:"balon"},{e:"🧸",ad:"oyuncak ayı"},{e:"🌸",ad:"çiçek"}];
+  let W,H,dpr,run=false,raf=0,last=0,clock=0, gi=0, parkIlk=0, ilk=true;
+  let kedi, kopek, esyalar, korku=0, agaclar, ordek, havT=0;
+  function boyut(){ dpr=Math.min(devicePixelRatio||1,2); W=innerWidth; H=innerHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  addEventListener("resize",()=>{ if(run) boyut(); });
+  function ustAlan(){ return 150; }
+  function rasgeleYer(kacin){
+    for(let n=0;n<200;n++){
+      const x=40+Math.random()*(W-80), y=ustAlan()+30+Math.random()*(H-ustAlan()-90);
+      if(havuz && Math.hypot((x-havuz.x)/havuz.rx,(y-havuz.y)/havuz.ry)<1.25) continue;
+      if(kacin.every(p=>Math.hypot(p.x-x,p.y-y)>70)) return {x,y};
+    }
+    return {x:W/2,y:H/2};
+  }
+  let havuz=null, evYeri=null;
+  function kur(){
+    havuz={x:W*.72,y:ustAlan()+ (H-ustAlan())*.55, rx:Math.min(110,W*.2), ry:55};
+    evYeri={x:56,y:H-70};
+    kedi={x:W*.5,y:H*.82,hx:W*.5,hy:H*.82,yon:1};
+    const dolu=[kedi,havuz,evYeri];
+    agaclar=[]; for(let i=0;i<6;i++){ const p=rasgeleYer(dolu); dolu.push(p); agaclar.push(p); }
+    esyalar=[];
+    GOREV.slice(0,5).forEach(g=>{ const p=rasgeleYer(dolu); dolu.push(p); esyalar.push({...g,...p,alindi:false}); });
+    SASIRT.forEach(g=>{ const p=rasgeleYer(dolu); dolu.push(p); esyalar.push({...g,...p,alindi:false,sasirt:true}); });
+    esyalar.push({...GOREV[5],x:evYeri.x,y:evYeri.y,ev:true});
+    kopek={x:W*.2,y:ustAlan()+80,hx:W*.6,hy:H*.5,t:0};
+    ordek={a:0};
+  }
+  function gorevYaz(){
+    const g=GOREV[gi];
+    $("gorev").innerHTML=`${g.m}<small>Görev ${gi+1}/${GOREV.length} · Ekrana dokun, Pamuk oraya yürüsün.</small>`;
+    $("pSay").textContent=`🐾 ${gi}/${GOREV.length}`;
+  }
+  let bT; function balon(m){ const e=$("balon"); e.textContent=m; e.classList.add("on"); clearTimeout(bT); bT=setTimeout(()=>e.classList.remove("on"),1800); }
+  cv.addEventListener("pointerdown",e=>{
+    if(!run||korku>0) return;
+    kedi.hx=e.clientX; kedi.hy=Math.max(ustAlan()+10,e.clientY);
+  });
+  function guncelle(dt){
+    clock+=dt;
+    // köpek gezinir
+    kopek.t-=dt;
+    if(kopek.t<=0||Math.hypot(kopek.hx-kopek.x,kopek.hy-kopek.y)<8){ const p=rasgeleYer([]); kopek.hx=p.x; kopek.hy=p.y; kopek.t=3+Math.random()*3; }
+    yuru(kopek,70,dt);
+    // kedi
+    if(korku>0){ korku-=dt; } else yuru(kedi,190,dt);
+    havT=Math.max(0,havT-dt);
+    if(korku<=0 && Math.hypot(kopek.x-kedi.x,kopek.y-kedi.y)<46){
+      korku=1.4; havT=1.4;   // hata sayılmaz, yalnızca zaman kaybettirir
+      balon("Karabaş havladı: Hav hav! 🐶  Pamuk miyavladı: Miyav! 🙀");
+      const hedef={x:kedi.hx,y:kedi.hy};
+      const ax=kedi.x-kopek.x, ay=kedi.y-kopek.y, d=Math.hypot(ax,ay)||1;
+      kedi.x=Math.min(W-30,Math.max(30,kedi.x+ax/d*60)); kedi.y=Math.max(ustAlan()+10,Math.min(H-30,kedi.y+ay/d*60));
+      kedi.hx=hedef.x; kedi.hy=hedef.y;   // korku geçince aynı hedefe devam eder
+      kopek.hx=kopek.x-ax/d*120; kopek.hy=kopek.y-ay/d*120; kopek.t=2;  // Karabaş da uzaklaşır
+    }
+    // eşyaya ulaştı mı?
+    if(korku<=0 && Math.hypot(kedi.hx-kedi.x,kedi.hy-kedi.y)<3){
+      const e=esyalar.find(o=>!o.alindi && Math.hypot(o.x-kedi.x,o.y-kedi.y)<34);
+      if(e && !e.kontrol){ e.kontrol=true; dene(e); }
+    }
+    esyalar.forEach(o=>{ if(Math.hypot(o.x-kedi.x,o.y-kedi.y)>40) o.kontrol=false; });
+  }
+  function yuru(c,hiz,dt){ const dx=c.hx-c.x, dy=c.hy-c.y, d=Math.hypot(dx,dy); if(d<2){ c.x=c.hx; c.y=c.hy; return; } const s=Math.min(d,hiz*dt); c.x+=dx/d*s; c.y+=dy/d*s; if(Math.abs(dx)>1) c.yon=dx>0?1:-1; c.yur=true; }
+  function dene(e){
+    const g=GOREV[gi];
+    if(e.ad===g.ad){
+      if(ilk) parkIlk++;
+      if(!e.ev) e.alindi=true;
+      balon(e.ev?"Pamuk eve döndü! 🏠":`Aferin! ${e.e} ${cap(e.ad)} Pamuk'ta.`);
+      gi++; ilk=true;
+      if(gi<GOREV.length) gorevYaz(); else { run=false; setTimeout(bitis,900); }
+    }else{
+      hata++; ilk=false; hataYaz();
+      balon(e.ev?`Daha eve dönme! ${g.m}`:`Bu ${e.ad}. ${g.m}`);
+    }
+  }
+  function cap(s){ return s.charAt(0).toLocaleUpperCase("tr")+s.slice(1); }
+  /* çizim */
+  function ciz(){
+    ctx.fillStyle="#9ccf7c"; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="rgba(255,255,255,.08)"; for(let i=0;i<40;i++){ ctx.beginPath(); ctx.arc((i*97)%W,(i*53)%H,30,0,7); ctx.fill(); }
+    // patika
+    ctx.strokeStyle="#e8d4a8"; ctx.lineWidth=34; ctx.lineCap="round"; ctx.beginPath(); ctx.moveTo(evYeri.x,evYeri.y); ctx.bezierCurveTo(W*.35,H*.9,W*.25,H*.45,W*.6,ustAlan()+40); ctx.stroke();
+    // havuz + ördek
+    ctx.fillStyle="#7cc4e8"; ctx.beginPath(); ctx.ellipse(havuz.x,havuz.y,havuz.rx,havuz.ry,0,0,7); ctx.fill();
+    ctx.strokeStyle="#5aa9d0"; ctx.lineWidth=4; ctx.stroke();
+    emoji("🦆",havuz.x+Math.sin(clock*.6)*havuz.rx*.5,havuz.y+Math.cos(clock*.6)*havuz.ry*.3,28);
+    // ağaçlar
+    agaclar.forEach(a=>{ ctx.fillStyle="rgba(0,0,0,.12)"; ctx.beginPath(); ctx.ellipse(a.x,a.y+22,26,8,0,0,7); ctx.fill(); emoji("🌳",a.x,a.y,52); });
+    // eşyalar
+    esyalar.forEach(o=>{ if(o.alindi) return; ctx.fillStyle="rgba(255,255,255,.55)"; ctx.beginPath(); ctx.arc(o.x,o.y,o.ev?32:24,0,7); ctx.fill(); emoji(o.e,o.x,o.y,o.ev?44:32); });
+    // köpek
+    emoji("🐕",kopek.x,kopek.y,40,kopek.hx<kopek.x?1:-1);
+    if(havT>0) yazi("Hav hav!",kopek.x,kopek.y-34);
+    // kedi
+    const z=korku>0?Math.sin(clock*40)*3:0;
+    emoji("🐈",kedi.x+z,kedi.y,42,kedi.yon>0?-1:1);
+    if(korku>0) yazi("Miyav!",kedi.x,kedi.y-34);
+    // hedef işareti
+    if(Math.hypot(kedi.hx-kedi.x,kedi.hy-kedi.y)>4){ ctx.strokeStyle="rgba(255,255,255,.9)"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(kedi.hx,kedi.hy,10+Math.sin(clock*8)*2,0,7); ctx.stroke(); }
+  }
+  function emoji(t,x,y,s,flip){ ctx.save(); ctx.translate(x,y); if(flip===-1) ctx.scale(-1,1); ctx.font=`${s}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(t,0,0); ctx.restore(); }
+  function yazi(t,x,y){ ctx.font="800 14px Nunito,sans-serif"; const w=ctx.measureText(t).width+14; ctx.fillStyle="#fff"; ctx.beginPath(); ctx.roundRect?ctx.roundRect(x-w/2,y-12,w,22,10):ctx.rect(x-w/2,y-12,w,22); ctx.fill(); ctx.fillStyle="#24301f"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(t,x,y); }
+  function dongu(t){ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t; guncelle(dt); ciz(); raf=requestAnimationFrame(dongu); }
+  function panel(h){ $("pPanel").innerHTML=h; $("pOvl").classList.add("on"); }
+  return {
+    intro(){
+      ekran("sPark"); boyut(); kur(); gi=0; parkIlk=0; ilk=true; gorevYaz(); ciz();
+      panel(`<h3>Kedim ile Parkta 🐾</h3>
+        <p>Kedin <b>Pamuk</b>'la parktasınız. Üstteki görevi oku ve doğru eşyayı bul!</p>
+        <ul><li>Ekranda bir yere dokun: Pamuk oraya yürür.</li><li>Pamuk doğru eşyaya ulaşınca onu alır.</li><li>Köpek <b>Karabaş</b>'a yaklaşma: Karabaş havlar, Pamuk korkup biraz bekler!</li></ul>
+        <button class="btn" onclick="Park.basla()">🐈 Parka çık</button>`);
+    },
+    basla(){ $("pOvl").classList.remove("on"); run=true; last=performance.now(); raf=requestAnimationFrame(dongu); },
+    get ilk(){ return parkIlk; }, toplam:GOREV.length,
+    get esyalar(){ return esyalar; }, get gi(){ return gi; }, get gorevler(){ return GOREV; },
+  };
+})();
+
+/* ═══════ BİTİŞ ═══════ */
+function bitis(){
+  clearInterval(timer);
+  const sure=fmt(Date.now()-t0), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Aferin ${ad}! Bütün görevleri tamamladın.`:"Aferin! Bütün görevleri tamamladın.";
+  $("bSure").textContent=sure; $("bEs").textContent=`${esIlk}/${TOPLAM_CIFT}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Ev Hayvanları", sure, puan:`Eşleştirme ${esIlk}/${TOPLAM_CIFT} ilk denemede · Park ${Park.ilk}/${Park.toplam} · ${hata} hata`});
+}
+OVT.fill("ad");
+</script>
+</body>
+</html>

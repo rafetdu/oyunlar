@@ -72,6 +72,8 @@ h1,h2,h3,.baloo{font-family:'Baloo 2',sans-serif;line-height:1.1}
 .asama div b{position:absolute;inset:0;width:0;background:var(--ana);transition:width .3s}
 .asama-ad{font-family:'Baloo 2';font-size:1.35rem;color:var(--ana);margin-bottom:2px}
 .yer{display:inline-block;color:#fff;font-weight:900;font-size:.78rem;padding:4px 10px;border-radius:99px;margin-bottom:10px}
+.gorev{display:inline-block;font-weight:800;font-size:.78rem;padding:4px 10px;border-radius:99px;background:#fff4e6;border:1px solid #ffd9b0;margin-bottom:10px}
+.gorev i{color:var(--muted);font-weight:600}
 .yer.m{background:var(--m)}.yer.k{background:var(--k)}.yer.s{background:var(--s)}
 .resim{font-size:4rem;text-align:center;margin:6px 0 2px}
 .anlam{text-align:center;color:var(--muted);font-weight:700;font-style:italic;margin-bottom:10px}
@@ -223,7 +225,7 @@ var OVT=(function(){
     <div class="kup">🏆🏘️</div>
     <h2>Kasaba turu bitti!</h2>
     <p id="bAd" style="font-weight:800"></p>
-    <p class="en">“Bir elma suyu ve bir peynir tostu, lütfen!”</p>
+    <p class="en">“Bir Rize çayı ve bir Ayvalık tostu, lütfen!”</p>
     <div class="ist">
       <div><b id="bSure">00:00</b><small>süre · time</small></div>
       <div><b id="bIlk">0</b><small>ilk denemede doğru</small></div>
@@ -240,39 +242,51 @@ var OVT=(function(){
    y: yer (m market, k kafe, s kasaba) · a: birinci ad · b: ikinci ad · e: resim · en: İngilizce · t: ne anlatır
    ozel: kuraldan ayrılan (su→suyu, durak→durağı) */
 const S=[
+ /* market */
  {y:"m",a:"çilek",b:"reçel",e:"🍓",en:"strawberry jam",t:"tur"},
- {y:"m",a:"elma",b:"su",c:"suyu",e:"🧃",en:"apple juice",t:"tur",ozel:"su → suyu"},
- {y:"m",a:"portakal",b:"su",c:"suyu",e:"🍊",en:"orange juice",t:"tur",ozel:"su → suyu"},
- {y:"m",a:"domates",b:"çorba",e:"🍅",en:"tomato soup",t:"tur"},
- {y:"m",a:"kedi",b:"mama",e:"🐱",en:"cat food",t:"icin"},
- {y:"m",a:"diş",b:"fırça",e:"🪥",en:"toothbrush",t:"icin"},
- {y:"m",a:"muz",b:"süt",e:"🍌",en:"banana milk",t:"tur"},
- {y:"m",a:"çikolata",b:"kutu",e:"🍫",en:"chocolate box",t:"icin"},
- {y:"m",a:"su",b:"şişe",e:"💧",en:"water bottle",t:"icin"},
- {y:"m",a:"el",b:"çanta",e:"👜",en:"handbag",t:"icin"},
- {y:"k",a:"peynir",b:"tost",e:"🧀",en:"cheese toast",t:"tur"},
- {y:"k",a:"elma",b:"çay",e:"🍵",en:"apple tea",t:"tur"},
+ {y:"m",a:"zeytin",b:"yağ",e:"🫒",en:"olive oil",t:"tur"},
+ {y:"m",a:"çocuk",b:"ayakkabı",e:"👟",en:"children's shoes",t:"tur"},
+ {y:"m",a:"elma",b:"su",c:"suyu",e:"🧃",en:"apple juice",t:"ham",ozel:"su → suyu"},
+ {y:"m",a:"portakal",b:"su",c:"suyu",e:"🍊",en:"orange juice",t:"ham",ozel:"su → suyu"},
+ {y:"m",a:"badem",b:"ezme",e:"🥜",en:"almond paste",t:"ham"},
+ {y:"m",a:"kedi",b:"mama",e:"🐱",en:"cat food",t:"ham"},
+ {y:"m",a:"diş",b:"fırça",e:"🪥",en:"toothbrush",t:"ham"},
+ {y:"m",a:"su",b:"şişe",e:"💧",en:"water bottle",t:"ham"},
+ {y:"m",a:"el",b:"çanta",e:"👜",en:"handbag",t:"tur"},
+ {y:"m",a:"Ankara",b:"bal",e:"🍯",en:"honey from Ankara",t:"koken"},
+ {y:"m",a:"Antep",b:"fıstık",c:"fıstığı",e:"🌰",en:"pistachio from Antep",t:"koken",ozel:"fıstık → fıstığı (k → ğ)"},
+ {y:"m",a:"Malatya",b:"kayısı",e:"🍑",en:"apricot from Malatya",t:"koken"},
+ {y:"m",a:"Amasya",b:"elma",e:"🍎",en:"apple from Amasya",t:"koken"},
+ /* kafe */
+ {y:"k",a:"Rize",b:"çay",e:"🍵",en:"tea from Rize",t:"koken"},
+ {y:"k",a:"Türk",b:"kahve",e:"☕",en:"Turkish coffee",t:"koken"},
+ {y:"k",a:"Ayvalık",b:"tost",e:"🥪",en:"Ayvalık-style toastie",t:"koken"},
  {y:"k",a:"mercimek",b:"çorba",e:"🥣",en:"lentil soup",t:"tur"},
- {y:"k",a:"Türk",b:"kahve",e:"☕",en:"Turkish coffee",t:"tur"},
- {y:"k",a:"çikolata",b:"pasta",e:"🍰",en:"chocolate cake",t:"tur"},
+ {y:"k",a:"domates",b:"çorba",e:"🍅",en:"tomato soup",t:"tur"},
+ {y:"k",a:"elma",b:"çay",e:"🍏",en:"apple tea",t:"tur"},
  {y:"k",a:"meyve",b:"salata",e:"🥗",en:"fruit salad",t:"tur"},
- {y:"k",a:"kafe",b:"menü",e:"📋",en:"café menu",t:"neyin"},
- {y:"k",a:"doğum",b:"gün",e:"🎂",en:"birthday",t:"konu"},
- {y:"s",a:"okul",b:"bahçe",e:"🌳",en:"school garden",t:"neyin"},
- {y:"s",a:"otobüs",b:"durak",c:"durağı",e:"🚏",en:"bus stop",t:"neyin",ozel:"durak → durağı (k → ğ)"},
- {y:"s",a:"futbol",b:"top",e:"⚽",en:"football",t:"icin"},
- {y:"s",a:"kapı",b:"kol",e:"🚪",en:"door handle",t:"neyin"},
- {y:"s",a:"Türkçe",b:"öğretmen",e:"👩‍🏫",en:"Turkish teacher",t:"konu"},
- {y:"s",a:"Türkçe",b:"ders",e:"📚",en:"Turkish lesson",t:"konu"},
- {y:"s",a:"okul",b:"otobüs",e:"🚌",en:"school bus",t:"icin"},
- {y:"s",a:"köpek",b:"kulübe",e:"🐶",en:"dog house",t:"icin"},
- {y:"s",a:"göz",b:"doktor",e:"👓",en:"eye doctor",t:"konu"},
- {y:"s",a:"spor",b:"ayakkabı",e:"👟",en:"trainers",t:"icin"},
- {y:"s",a:"kasaba",b:"meydan",e:"⛲",en:"town square",t:"neyin"},
- {y:"s",a:"kar",b:"top",e:"❄️",en:"snowball",t:"tur"},
- {y:"s",a:"gece",b:"lamba",e:"🌙",en:"night lamp",t:"icin"},
- {y:"s",a:"yaz",b:"tatil",e:"🏖️",en:"summer holiday",t:"konu"},
+ {y:"k",a:"sabah",b:"kahvaltı",e:"🍳",en:"morning breakfast",t:"zmm"},
+ {y:"k",a:"kafe",b:"menü",e:"📋",en:"café menu",t:"zmm"},
+ {y:"k",a:"doğum",b:"gün",e:"🎂",en:"birthday",t:"zmm"},
+ {y:"k",a:"aşçı",b:"şapka",e:"👨‍🍳",en:"chef's hat",t:"zmm"},
+ /* kasaba */
+ {y:"s",a:"okul",b:"bahçe",e:"🌳",en:"school garden",t:"zmm"},
+ {y:"s",a:"otobüs",b:"durak",c:"durağı",e:"🚏",en:"bus stop",t:"zmm",ozel:"durak → durağı (k → ğ)"},
+ {y:"s",a:"kasaba",b:"meydan",e:"⛲",en:"town square",t:"zmm"},
+ {y:"s",a:"yaz",b:"tatil",e:"🏖️",en:"summer holiday",t:"zmm"},
+ {y:"s",a:"gece",b:"lamba",e:"🌙",en:"night lamp",t:"zmm"},
+ {y:"s",a:"polis",b:"araba",e:"🚓",en:"police car",t:"zmm"},
+ {y:"s",a:"itfaiye",b:"araba",e:"🚒",en:"fire engine",t:"zmm"},
+ {y:"s",a:"Türkçe",b:"öğretmen",e:"👩‍🏫",en:"Turkish teacher",t:"tur"},
+ {y:"s",a:"Türkçe",b:"ders",e:"📚",en:"Turkish lesson",t:"tur"},
+ {y:"s",a:"göz",b:"doktor",e:"👓",en:"eye doctor",t:"tur"},
+ {y:"s",a:"kapı",b:"kol",e:"🚪",en:"door handle",t:"zmm"},
+ {y:"s",a:"kar",b:"top",e:"❄️",en:"snowball",t:"ham"},
+ {y:"s",a:"futbol",b:"top",e:"⚽",en:"football",t:"ham"},
+ {y:"s",a:"okul",b:"otobüs",e:"🚌",en:"school bus",t:"ham"},
+ {y:"s",a:"köpek",b:"kulübe",e:"🐶",en:"dog house",t:"ham"},
 ];
+const TUR={tur:["🏷️ Ne tür?","What kind?"],ham:["🧱 Neden yapılmış? Ne için?","Made of what? Made for what?"],koken:["📍 Nereden geliyor?","Where is it from?"],zmm:["🕒 Ne zaman? Nerede? Hangi meslek?","When? Where? Which job?"]};
 const YER={m:"🛒 Market",k:"☕ Kafe",s:"🏘️ Kasaba"};
 const SESLI="aeıioöuü";
 function sonSesli(w){ for(let i=w.length-1;i>=0;i--) if(SESLI.includes(w[i])) return w[i]; return "e"; }
@@ -298,18 +312,18 @@ const SLAYT=[
  <p>“Çilek reçel” demeyiz. <b>“Çilek reçeli”</b> deriz.</p><span class="en">We don't say “çilek reçel”. We say “çilek reçeli”.</span>
  <div class="yanyana">
   <div class="yanlis-k">çilek reçel</div><div class="dogru-k">✅ çilek reçel<span class="ek">i</span></div>
-  <div class="yanlis-k">peynir tost</div><div class="dogru-k">✅ peynir tost<span class="ek">u</span></div>
+  <div class="yanlis-k">kar top</div><div class="dogru-k">✅ kar top<span class="ek">u</span></div>
   <div class="yanlis-k">kedi mama</div><div class="dogru-k">✅ kedi mama<span class="ek">sı</span></div>
   <div class="yanlis-k">okul otobüs</div><div class="dogru-k">✅ okul otobüs<span class="ek">ü</span></div>
  </div>
  <div class="not">👉 Birinci ad hiç değişmez. Ek her zaman <b>ikinci ada</b> gelir.<span class="en">The first noun never changes. The ending always goes on the second noun.</span></div>`,
 `<h2>Ne anlatır?</h2><span class="en">What does it tell us?</span>
- <p>Birinci ad bazen <b>türü</b> söyler, bazen de başka bir şeyi.</p><span class="en">Sometimes the first noun tells us the kind, sometimes something else.</span>
+ <p>Birinci ad ikinci ad hakkında bize bir bilgi verir. Dört çeşit bilgi var:</p><span class="en">The first noun gives us information about the second noun. There are four kinds:</span>
  <div class="gruplar">
-  <div class="grup"><h3>🍓 Ne tür?</h3><span class="en">What kind?</span><ul><li>çilek reçeli</li><li>peynir tostu</li><li>elma çayı</li><li>mercimek çorbası</li></ul></div>
-  <div class="grup"><h3>🏫 Neyin?</h3><span class="en">Part of what?</span><ul><li>okul bahçesi</li><li>kapı kolu</li><li>kafe menüsü</li><li>kasaba meydanı</li></ul></div>
-  <div class="grup"><h3>🐱 Ne için?</h3><span class="en">For what / whom?</span><ul><li>kedi maması</li><li>diş fırçası</li><li>okul otobüsü</li><li>futbol topu</li></ul></div>
-  <div class="grup"><h3>📚 Ne ile ilgili?</h3><span class="en">About what?</span><ul><li>Türkçe dersi</li><li>göz doktoru</li><li>doğum günü</li><li>yaz tatili</li></ul></div>
+  <div class="grup"><h3>🏷️ Ne tür?</h3><span class="en">What kind?</span><ul><li>çilek reçeli</li><li>zeytin yağı</li><li>çocuk ayakkabısı</li><li>mercimek çorbası</li></ul></div>
+  <div class="grup"><h3>🧱 Neden yapılmış? Ne için?</h3><span class="en">Made of what? For what?</span><ul><li>badem ezmesi</li><li>kar topu</li><li>kedi maması</li><li>diş fırçası</li></ul></div>
+  <div class="grup"><h3>📍 Nereden geliyor?</h3><span class="en">Where is it from?</span><ul><li>Rize çayı</li><li>Ankara balı</li><li>Amasya elması</li><li>Ayvalık tostu</li></ul></div>
+  <div class="grup"><h3>🕒 Ne zaman? Nerede? Hangi meslek?</h3><span class="en">When? Where? Which job?</span><ul><li>yaz tatili</li><li>okul bahçesi</li><li>aşçı şapkası</li><li>polis arabası</li></ul></div>
  </div>`,
 `<h2>Hangi ek?</h2><span class="en">Which ending?</span>
  <p>İkinci adın <b>son harfine</b> ve <b>son sesli harfine</b> bak.</p><span class="en">Look at the last letter and the last vowel of the second noun.</span>
@@ -317,15 +331,15 @@ const SLAYT=[
   <tr><th>Son sesli<br><i>last vowel</i></th><th>Sessizle biter<br><i>ends in consonant</i></th><th>Sesliyle biter<br><i>ends in vowel</i></th></tr>
   <tr><td class="sesli">e · i</td><td>reçel<span class="ek">i</span></td><td>bahçe<span class="ek">si</span></td></tr>
   <tr><td class="sesli">a · ı</td><td>çay<span class="ek">ı</span></td><td>çorba<span class="ek">sı</span></td></tr>
-  <tr><td class="sesli">o · u</td><td>tost<span class="ek">u</span></td><td>kutu<span class="ek">su</span></td></tr>
+  <tr><td class="sesli">o · u</td><td>top<span class="ek">u</span></td><td>kutu<span class="ek">su</span></td></tr>
   <tr><td class="sesli">ö · ü</td><td>süt<span class="ek">ü</span></td><td>menü<span class="ek">sü</span></td></tr>
  </table>
  <div class="not">💡 Sesli harfle bitiyorsa araya <b>s</b> gelir: mama → mama<span class="ek">sı</span>.<span class="en">If it ends in a vowel, add s: mama → maması.</span></div>`,
-`<h2>Dikkat! İki özel sözcük</h2><span class="en">Careful! Two special words</span>
+`<h2>Dikkat! Özel sözcükler</h2><span class="en">Careful! Special words</span>
  <div class="formul"><div class="p"><b>🍎</b>elma</div><div class="op">+</div><div class="p"><b>💧</b>su</div><div class="op">=</div><div class="p sonuc"><b>🧃</b>elma su<span class="ek">yu</span></div></div>
  <p><b>su → suyu</b> · elma suyu, portakal suyu<span class="en">su → suyu (not “susu”!)</span></p>
  <div class="formul"><div class="p"><b>🚌</b>otobüs</div><div class="op">+</div><div class="p"><b>🚏</b>durak</div><div class="op">=</div><div class="p sonuc"><b>🚏</b>otobüs dura<span class="ek">ğı</span></div></div>
- <p><b>durak → durağı</b> · k harfi ğ olur<span class="en">The letter k becomes ğ.</span></p>
+ <p><b>durak → durağı</b> · <b>fıstık → fıstığı</b> (Antep fıstığı) · k harfi ğ olur<span class="en">The letter k becomes ğ.</span></p>
  <div class="not">🏘️ Şimdi kasabaya gidiyoruz! 4 bölüm var. Kolaydan zora!<span class="en">Now let's go to town! There are 4 parts, from easy to hard.</span></div>`
 ];
 let si=0;
@@ -389,7 +403,7 @@ function basliK(x){
   const a=ASAMA[asama];
   cubuk(qi/liste.length);
   return `<div class="asama-ad">${a.ad} <small style="font-size:.9rem;color:var(--muted)">${qi+1}/${liste.length}</small></div>
-   <span class="yer ${x.y}">${YER[x.y]}</span>
+   <span class="yer ${x.y}">${YER[x.y]}</span> <span class="gorev">${TUR[x.t][0]} <i>${TUR[x.t][1]}</i></span>
    <div class="resim">${x.e}</div><div class="anlam">🇬🇧 ${x.en}</div>`;
 }
 function soruKur(){ denendi=false; [tur1,tur2,tur3][asama](liste[qi]); }
@@ -405,7 +419,7 @@ function yanlisIsle(x,kutu){
 
 /* 1 · Hangisi doğru? */
 function yanlisEk(x){
-  if(x.b==="su") return "susu"; if(x.b==="durak") return "durakı";
+  if(x.b==="su") return "susu"; if(x.ozel) return x.b+x.c.slice(-1);
   const v=x.ek.slice(-1), digerleri=["i","ı","u","ü"].filter(z=>z!==v);
   return x.b+x.ek.slice(0,-1)+digerleri[Math.floor(Math.random()*3)];
 }
@@ -452,7 +466,7 @@ function tur3(x){
   const w=x.c, v=w.slice(-1);
   let fazla;
   if(x.b==="su") fazla=["s","u","ı"];
-  else if(x.b==="durak") fazla=["k","i","u"];
+  else if(x.ozel) fazla=["k",...["i","ı","u","ü"].filter(z=>z!==v).slice(0,2)];
   else{
     const d=["i","ı","u","ü"].filter(z=>z!==v);
     fazla = x.ek.length===1 ? ["s",...karisik(d).slice(0,2)] : karisik(d).slice(0,3);

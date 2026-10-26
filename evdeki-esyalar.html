@@ -184,10 +184,10 @@ var OVT=(function(){
   <p class="ipucu" style="margin-bottom:.4rem">Eşyayı doğru odaya sürükle ya da odaya dokun.</p>
   <div class="ev"><div class="cati"></div>
     <div class="odalar">
-      <button class="oda" id="odaSalon"  data-oda="salon"  onclick="yerlestir('salon')"><h3>Salon</h3><small>living room</small><div class="icler"></div></button>
-      <button class="oda" id="odaMutfak" data-oda="mutfak" onclick="yerlestir('mutfak')"><h3>Mutfak</h3><small>kitchen</small><div class="icler"></div></button>
-      <button class="oda" id="odaYatak"  data-oda="yatak"  onclick="yerlestir('yatak')"><h3>Yatak odası</h3><small>bedroom</small><div class="icler"></div></button>
-      <button class="oda" id="odaBanyo"  data-oda="banyo"  onclick="yerlestir('banyo')"><h3>Banyo</h3><small>bathroom</small><div class="icler"></div></button>
+      <button class="oda" id="odaSalon"  data-oda="salon"  onclick="yerlestir('salon')"><h3>Salon</h3><div class="icler"></div></button>
+      <button class="oda" id="odaMutfak" data-oda="mutfak" onclick="yerlestir('mutfak')"><h3>Mutfak</h3><div class="icler"></div></button>
+      <button class="oda" id="odaYatak"  data-oda="yatak"  onclick="yerlestir('yatak')"><h3>Yatak odası</h3><div class="icler"></div></button>
+      <button class="oda" id="odaBanyo"  data-oda="banyo"  onclick="yerlestir('banyo')"><h3>Banyo</h3><div class="icler"></div></button>
     </div>
   </div>
 </section>
@@ -330,7 +330,7 @@ function evBasla(){
 }
 function esyaGoster(){
   const w=sira[ei]; ilkDeneme=true;
-  $("esya").innerHTML=`${svg(w.ic)}<div><div class="tr">${w.tr}</div><div class="en">${w.en}</div></div>`;
+  $("esya").innerHTML=`${svg(w.ic)}<div><div class="tr">${w.tr}</div></div>`;
   $("eSay").textContent=`📦 ${ei+1}/${sira.length}`;
   $("eHata").textContent=`❌ ${hata}`;
 }

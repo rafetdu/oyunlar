@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kasabada Bir Gün · İki Ad Yan Yana · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7e8;--kart:#ffffff;--ink:#2d2a26;--muted:#7a7068;--cizgi:#eadfcc;--ana:#e85d3f;--ana2:#ff8a5c;--ok:#22a06b;--bad:#e5484d;--sari:#ffc94d;
+  --m:#2f9e5b;--k:#b0662b;--s:#2f6fd1}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;
+  background-image:radial-gradient(circle at 10% 0%,#ffe3c2 0,transparent 40%),radial-gradient(circle at 100% 30%,#e3f1ff 0,transparent 35%)}
+h1,h2,h3,.baloo{font-family:'Baloo 2',sans-serif;line-height:1.1}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.ekran{display:none}.ekran.on{display:block;animation:gel .35s ease}
+@keyframes gel{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kutu{background:var(--kart);border-radius:22px;padding:20px;box-shadow:0 8px 24px rgba(90,60,20,.08);border:1px solid var(--cizgi)}
+.btn{display:block;width:100%;font:inherit;font-weight:900;font-size:1.1rem;padding:14px 18px;border:none;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,var(--ana),var(--ana2));color:#fff;box-shadow:0 6px 16px rgba(232,93,63,.3);margin-top:14px;transition:transform .1s}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.5}
+.btn.ikincil{background:#fff;color:var(--ink);border:2px solid var(--cizgi);box-shadow:none}
+.en{display:block;color:var(--muted);font-size:.88rem;font-weight:600;font-style:italic;margin-top:2px}
+
+/* giriş */
+.giris{text-align:center;padding-top:10px}
+.kasaba{font-size:3.2rem;letter-spacing:.1em;margin:10px 0 4px}
+.giris h1{font-size:2.3rem;color:var(--ana);margin:6px 0}
+.giris .alt{font-weight:800;color:var(--muted)}
+.giris p{margin:14px 0;line-height:1.5}
+.giris label{display:block;text-align:left;font-weight:800;margin:14px 0 6px}
+.giris input{width:100%;font:inherit;font-size:1.1rem;padding:12px 14px;border-radius:12px;border:2px solid var(--cizgi);background:#fff}
+.yolharita{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.yolharita span{font-weight:800;font-size:.85rem;padding:6px 10px;border-radius:99px;color:#fff}
+
+/* anlatım */
+.slayt h2{font-size:1.6rem;color:var(--ana);margin-bottom:4px}
+.slayt .en{margin-bottom:12px}
+.formul{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:16px 0;font-weight:900;font-size:1.25rem}
+.formul .p{background:#fff4e6;border:2px solid #ffd9b0;border-radius:14px;padding:8px 12px;text-align:center}
+.formul .p b{display:block;font-size:2rem}
+.formul .op{font-size:1.6rem;color:var(--muted)}
+.formul .sonuc{background:#e8f7ef;border-color:#a8e0c2}
+.ek{color:var(--ana);text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:3px}
+.yanyana{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.yanyana div{padding:10px;border-radius:12px;font-weight:800;text-align:center}
+.yanlis-k{background:#fdecec;color:var(--bad);text-decoration:line-through}
+.dogru-k{background:#e8f7ef;color:var(--ok)}
+.gruplar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.grup{border-radius:14px;padding:10px;background:#faf6ef;border:1px solid var(--cizgi)}
+.grup h3{font-size:1.05rem}
+.grup ul{list-style:none;margin-top:6px}
+.grup li{font-weight:700;padding:2px 0}
+.tablo{width:100%;border-collapse:collapse;margin-top:10px;font-size:.95rem}
+.tablo th,.tablo td{padding:8px 6px;border-bottom:1px solid var(--cizgi);text-align:center}
+.tablo th{font-size:.8rem;color:var(--muted)}
+.tablo td.sesli{font-weight:900;font-size:1.1rem}
+.not{margin-top:14px;background:#fff8dc;border:2px dashed var(--sari);border-radius:14px;padding:12px;font-weight:700;line-height:1.45}
+.noktalar{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.noktalar i{width:9px;height:9px;border-radius:50%;background:var(--cizgi)}
+.noktalar i.on{background:var(--ana);width:22px;border-radius:9px}
+.iki-btn{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+
+/* oyun başlık */
+.ust{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;font-weight:900}
+.ust span{background:#fff;border:1px solid var(--cizgi);border-radius:99px;padding:6px 12px;font-size:.9rem}
+.asama{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.asama div{height:8px;border-radius:9px;background:var(--cizgi);position:relative;overflow:hidden}
+.asama div b{position:absolute;inset:0;width:0;background:var(--ana);transition:width .3s}
+.asama-ad{font-family:'Baloo 2';font-size:1.35rem;color:var(--ana);margin-bottom:2px}
+.yer{display:inline-block;color:#fff;font-weight:900;font-size:.78rem;padding:4px 10px;border-radius:99px;margin-bottom:10px}
+.yer.m{background:var(--m)}.yer.k{background:var(--k)}.yer.s{background:var(--s)}
+.resim{font-size:4rem;text-align:center;margin:6px 0 2px}
+.anlam{text-align:center;color:var(--muted);font-weight:700;font-style:italic;margin-bottom:10px}
+.soru-tr{text-align:center;font-weight:900;font-size:1.05rem}
+.secenek{display:grid;gap:10px;margin-top:12px}
+.secenek button{font:inherit;font-weight:900;font-size:1.25rem;padding:14px;border-radius:14px;border:2px solid var(--cizgi);background:#fff;cursor:pointer;color:var(--ink)}
+.secenek button.d{border-color:var(--ok);background:#e8f7ef;color:var(--ok)}
+.secenek button.y{border-color:var(--bad);background:#fdecec;color:var(--bad)}
+.ifade{text-align:center;font-size:1.7rem;font-weight:900;margin:10px 0}
+.ifade .bos{display:inline-block;min-width:2.2rem;border-bottom:4px solid var(--ana);color:var(--ana)}
+.ekler{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.ekler button{font:inherit;font-weight:900;font-size:1.25rem;padding:12px 0;border-radius:12px;border:2px solid var(--cizgi);background:#fff;cursor:pointer;color:var(--ink)}
+.ekler button.y{border-color:var(--bad);background:#fdecec;color:var(--bad)}
+.ekler button.d{border-color:var(--ok);background:#e8f7ef;color:var(--ok)}
+.mesaj{min-height:1.4rem;margin-top:12px;text-align:center;font-weight:800;line-height:1.4}
+.mesaj.ok{color:var(--ok)}.mesaj.bad{color:var(--bad)}
+.ipucu{margin-top:10px;background:#fff8dc;border-radius:12px;padding:10px;font-weight:700;text-align:center;line-height:1.4}
+.yazi{display:flex;justify-content:center;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap}
+.yazi .ilk{font-size:1.5rem;font-weight:900}
+.kutucuk{display:flex;gap:4px;flex-wrap:nowrap}
+.kutucuk span{width:2.2rem;height:2.7rem;border-radius:10px;border:2px solid var(--cizgi);background:#fff;display:grid;place-items:center;font-size:1.4rem;font-weight:900}
+.kutucuk span.dolu{border-color:var(--ana)}
+.kutucuk.dogru span{border-color:var(--ok);color:var(--ok);background:#e8f7ef}
+.harfler{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px}
+.harfler button{width:3rem;height:3rem;font:inherit;font-weight:900;font-size:1.4rem;border-radius:12px;border:2px solid var(--cizgi);background:#fff;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 var(--cizgi)}
+.harfler button:disabled{opacity:.2;box-shadow:none}
+.fazla{text-align:center;font-weight:800;color:#b7791f;margin-top:6px;font-size:.95rem}
+.alt-btn{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.salla{animation:salla .35s}
+@keyframes salla{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* etiket ustası */
+.raflar{display:grid;gap:14px;margin-top:10px}
+.raf h3{font-size:1.1rem;margin-bottom:6px}
+.raf .izgara{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.etiket{background:#fff;border:2px solid var(--cizgi);border-radius:16px;padding:10px;text-align:center}
+.etiket .e{font-size:2.2rem}
+.etiket .lbl{font-weight:900;font-size:1.05rem;margin:4px 0 8px;background:#fff4e6;border-radius:8px;padding:4px}
+.etiket .bt{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.etiket .bt button,.etiket .fix button{font:inherit;font-weight:900;font-size:.9rem;padding:8px 4px;border-radius:10px;border:2px solid var(--cizgi);background:#fff;cursor:pointer;color:var(--ink)}
+.etiket .fix{display:grid;gap:6px}
+.etiket .fix p{font-size:.8rem;font-weight:800;color:var(--muted)}
+.etiket.bitti{border-color:var(--ok);background:#f2fbf6}
+.etiket.bitti .lbl{background:#e8f7ef;color:var(--ok)}
+.etiket.salla{border-color:var(--bad)}
+
+/* bitiş */
+.bitis{text-align:center}
+.bitis .kup{font-size:4rem;animation:gel .8s ease}
+.bitis h2{font-size:2rem;color:var(--ana);margin:6px 0}
+.ist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.ist div{background:#fff;border:1px solid var(--cizgi);border-radius:14px;padding:10px 4px}
+.ist b{display:block;font-family:'Baloo 2';font-size:1.5rem;color:var(--ana)}
+.ist small{color:var(--muted);font-weight:700}
+.ara{text-align:center}
+.ara .buyuk{font-size:3.5rem}
+.ara h2{color:var(--ana);font-size:1.7rem;margin:6px 0}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+
+<!-- GİRİŞ -->
+<section class="ekran on" id="sGiris">
+  <div class="giris kutu">
+    <div class="kasaba">🛒☕🏘️</div>
+    <h1>Kasabada Bir Gün</h1>
+    <div class="alt">İki ad yan yana · <i>Two nouns together</i></div>
+    <p>Bugün kasabada geziyoruz: markete, kafeye ve sokaklara gideceğiz. Her yerde <b>iki addan oluşan</b> adlar var!
+      <span class="en">Today we walk around town: the market, the café and the streets. Everywhere there are names made of two nouns!</span></p>
+    <div class="yolharita"><span style="background:var(--m)">🛒 Market</span><span style="background:var(--k)">☕ Kafe</span><span style="background:var(--s)">🏘️ Kasaba</span></div>
+    <label for="ad">Adın <span class="en" style="display:inline">· Your name</span></label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="anlatimBasla()">Başla · Start ▶</button>
+  </div>
+</section>
+
+<!-- ANLATIM -->
+<section class="ekran" id="sAnlat">
+  <div class="kutu slayt" id="slayt"></div>
+  <div class="noktalar" id="noktalar"></div>
+  <div class="iki-btn">
+    <button class="btn ikincil" id="geriBtn" onclick="slaytGit(-1)">◀ Geri</button>
+    <button class="btn" id="ileriBtn" onclick="slaytGit(1)">İleri · Next ▶</button>
+  </div>
+</section>
+
+<!-- ARA EKRAN -->
+<section class="ekran" id="sAra">
+  <div class="kutu ara" id="ara"></div>
+  <button class="btn" onclick="asamaBasla()">Hadi! · Let's go ▶</button>
+</section>
+
+<!-- OYUN -->
+<section class="ekran" id="sOyun">
+  <div class="ust"><span id="uAsama">1/4</span><span id="uHata">❌ 0</span><span id="uSure">⏱ 00:00</span></div>
+  <div class="asama" id="asamaBar"><div><b></b></div><div><b></b></div><div><b></b></div><div><b></b></div></div>
+  <div class="kutu" id="oyunKutu"></div>
+</section>
+
+<!-- BİTİŞ -->
+<section class="ekran" id="sBitis">
+  <div class="kutu bitis">
+    <div class="kup">🏆🏘️</div>
+    <h2>Kasaba turu bitti!</h2>
+    <p id="bAd" style="font-weight:800"></p>
+    <p class="en">“Bir elma suyu ve bir peynir tostu, lütfen!”</p>
+    <div class="ist">
+      <div><b id="bSure">00:00</b><small>süre · time</small></div>
+      <div><b id="bIlk">0</b><small>ilk denemede doğru</small></div>
+      <div><b id="bHata">0</b><small>hata · mistakes</small></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikincil" onclick="location.reload()">↻ Tekrar oyna</button>
+  </div>
+</section>
+
+</div>
+<script>
+/* ════════ SÖZCÜKLER ════════
+   y: yer (m market, k kafe, s kasaba) · a: birinci ad · b: ikinci ad · e: resim · en: İngilizce · t: ne anlatır
+   ozel: kuraldan ayrılan (su→suyu, durak→durağı) */
+const S=[
+ {y:"m",a:"çilek",b:"reçel",e:"🍓",en:"strawberry jam",t:"tur"},
+ {y:"m",a:"elma",b:"su",c:"suyu",e:"🧃",en:"apple juice",t:"tur",ozel:"su → suyu"},
+ {y:"m",a:"portakal",b:"su",c:"suyu",e:"🍊",en:"orange juice",t:"tur",ozel:"su → suyu"},
+ {y:"m",a:"domates",b:"çorba",e:"🍅",en:"tomato soup",t:"tur"},
+ {y:"m",a:"kedi",b:"mama",e:"🐱",en:"cat food",t:"icin"},
+ {y:"m",a:"diş",b:"fırça",e:"🪥",en:"toothbrush",t:"icin"},
+ {y:"m",a:"muz",b:"süt",e:"🍌",en:"banana milk",t:"tur"},
+ {y:"m",a:"çikolata",b:"kutu",e:"🍫",en:"chocolate box",t:"icin"},
+ {y:"m",a:"su",b:"şişe",e:"💧",en:"water bottle",t:"icin"},
+ {y:"m",a:"el",b:"çanta",e:"👜",en:"handbag",t:"icin"},
+ {y:"k",a:"peynir",b:"tost",e:"🧀",en:"cheese toast",t:"tur"},
+ {y:"k",a:"elma",b:"çay",e:"🍵",en:"apple tea",t:"tur"},
+ {y:"k",a:"mercimek",b:"çorba",e:"🥣",en:"lentil soup",t:"tur"},
+ {y:"k",a:"Türk",b:"kahve",e:"☕",en:"Turkish coffee",t:"tur"},
+ {y:"k",a:"çikolata",b:"pasta",e:"🍰",en:"chocolate cake",t:"tur"},
+ {y:"k",a:"meyve",b:"salata",e:"🥗",en:"fruit salad",t:"tur"},
+ {y:"k",a:"kafe",b:"menü",e:"📋",en:"café menu",t:"neyin"},
+ {y:"k",a:"doğum",b:"gün",e:"🎂",en:"birthday",t:"konu"},
+ {y:"s",a:"okul",b:"bahçe",e:"🌳",en:"school garden",t:"neyin"},
+ {y:"s",a:"otobüs",b:"durak",c:"durağı",e:"🚏",en:"bus stop",t:"neyin",ozel:"durak → durağı (k → ğ)"},
+ {y:"s",a:"futbol",b:"top",e:"⚽",en:"football",t:"icin"},
+ {y:"s",a:"kapı",b:"kol",e:"🚪",en:"door handle",t:"neyin"},
+ {y:"s",a:"Türkçe",b:"öğretmen",e:"👩‍🏫",en:"Turkish teacher",t:"konu"},
+ {y:"s",a:"Türkçe",b:"ders",e:"📚",en:"Turkish lesson",t:"konu"},
+ {y:"s",a:"okul",b:"otobüs",e:"🚌",en:"school bus",t:"icin"},
+ {y:"s",a:"köpek",b:"kulübe",e:"🐶",en:"dog house",t:"icin"},
+ {y:"s",a:"göz",b:"doktor",e:"👓",en:"eye doctor",t:"konu"},
+ {y:"s",a:"spor",b:"ayakkabı",e:"👟",en:"trainers",t:"icin"},
+ {y:"s",a:"kasaba",b:"meydan",e:"⛲",en:"town square",t:"neyin"},
+ {y:"s",a:"kar",b:"top",e:"❄️",en:"snowball",t:"tur"},
+ {y:"s",a:"gece",b:"lamba",e:"🌙",en:"night lamp",t:"icin"},
+ {y:"s",a:"yaz",b:"tatil",e:"🏖️",en:"summer holiday",t:"konu"},
+];
+const YER={m:"🛒 Market",k:"☕ Kafe",s:"🏘️ Kasaba"};
+const SESLI="aeıioöuü";
+function sonSesli(w){ for(let i=w.length-1;i>=0;i--) if(SESLI.includes(w[i])) return w[i]; return "e"; }
+function uyum(v){ return {e:"i",i:"i",a:"ı",ı:"ı",o:"u",u:"u",ö:"ü",ü:"ü"}[v]; }
+function ekBul(b){ const v=uyum(sonSesli(b)); return (SESLI.includes(b[b.length-1])?"s":"")+v; }
+S.forEach(x=>{ if(!x.c) x.c=x.b+ekBul(x.b); x.ek=x.ozel?null:x.c.slice(x.b.length); });
+function tam(x){ return x.a+" "+x.c; }
+function kural(x){
+  if(x.ozel) return `Dikkat, özel sözcük: <b>${x.ozel}</b><span class="en">Special word: ${x.ozel}</span>`;
+  const son=x.b[x.b.length-1], v=sonSesli(x.b), sesliBiter=SESLI.includes(son);
+  return `<b>${x.b}</b> ${sesliBiter?`sesli harfle (<b>${son}</b>) bitiyor → önce <b>s</b>`:`sessiz harfle (<b>${son}</b>) bitiyor → <b>s</b> yok`}. Son sesli <b>${v}</b> → <b>${uyum(v)}</b>. Yani: <b>${x.b}<span class="ek">${x.ek}</span></b>
+   <span class="en">“${x.b}” ends in a ${sesliBiter?"vowel → add s":"consonant → no s"}. Last vowel ${v} → ${uyum(v)}.</span>`;
+}
+
+/* ════════ ANLATIM ════════ */
+const SLAYT=[
+`<h2>İki ad yan yana gelir</h2><span class="en">Two nouns come side by side</span>
+ <div class="formul"><div class="p"><b>🍓</b>çilek</div><div class="op">+</div><div class="p"><b>🫙</b>reçel</div><div class="op">=</div><div class="p sonuc"><b>🍓🫙</b>çilek reçel<span class="ek">i</span></div></div>
+ <p>İki ad yan yana gelir ve <b>bir şeyin adı</b> olur. Birinci ad bize “hangisi?” sorusunun cevabını verir. İkinci ad asıl şeydir.</p>
+ <span class="en">Two nouns together become the name of one thing. The first noun tells us “which one?”. The second noun is the main thing.</span>
+ <div class="formul"><div class="p"><b>🏫</b>okul</div><div class="op">+</div><div class="p"><b>🌳</b>bahçe</div><div class="op">=</div><div class="p sonuc"><b>🏫🌳</b>okul bahçe<span class="ek">si</span></div></div>`,
+`<h2>İkinci ad bir ek alır!</h2><span class="en">The second noun gets an ending!</span>
+ <p>“Çilek reçel” demeyiz. <b>“Çilek reçeli”</b> deriz.</p><span class="en">We don't say “çilek reçel”. We say “çilek reçeli”.</span>
+ <div class="yanyana">
+  <div class="yanlis-k">çilek reçel</div><div class="dogru-k">✅ çilek reçel<span class="ek">i</span></div>
+  <div class="yanlis-k">peynir tost</div><div class="dogru-k">✅ peynir tost<span class="ek">u</span></div>
+  <div class="yanlis-k">kedi mama</div><div class="dogru-k">✅ kedi mama<span class="ek">sı</span></div>
+  <div class="yanlis-k">okul otobüs</div><div class="dogru-k">✅ okul otobüs<span class="ek">ü</span></div>
+ </div>
+ <div class="not">👉 Birinci ad hiç değişmez. Ek her zaman <b>ikinci ada</b> gelir.<span class="en">The first noun never changes. The ending always goes on the second noun.</span></div>`,
+`<h2>Ne anlatır?</h2><span class="en">What does it tell us?</span>
+ <p>Birinci ad bazen <b>türü</b> söyler, bazen de başka bir şeyi.</p><span class="en">Sometimes the first noun tells us the kind, sometimes something else.</span>
+ <div class="gruplar">
+  <div class="grup"><h3>🍓 Ne tür?</h3><span class="en">What kind?</span><ul><li>çilek reçeli</li><li>peynir tostu</li><li>elma çayı</li><li>mercimek çorbası</li></ul></div>
+  <div class="grup"><h3>🏫 Neyin?</h3><span class="en">Part of what?</span><ul><li>okul bahçesi</li><li>kapı kolu</li><li>kafe menüsü</li><li>kasaba meydanı</li></ul></div>
+  <div class="grup"><h3>🐱 Ne için?</h3><span class="en">For what / whom?</span><ul><li>kedi maması</li><li>diş fırçası</li><li>okul otobüsü</li><li>futbol topu</li></ul></div>
+  <div class="grup"><h3>📚 Ne ile ilgili?</h3><span class="en">About what?</span><ul><li>Türkçe dersi</li><li>göz doktoru</li><li>doğum günü</li><li>yaz tatili</li></ul></div>
+ </div>`,
+`<h2>Hangi ek?</h2><span class="en">Which ending?</span>
+ <p>İkinci adın <b>son harfine</b> ve <b>son sesli harfine</b> bak.</p><span class="en">Look at the last letter and the last vowel of the second noun.</span>
+ <table class="tablo">
+  <tr><th>Son sesli<br><i>last vowel</i></th><th>Sessizle biter<br><i>ends in consonant</i></th><th>Sesliyle biter<br><i>ends in vowel</i></th></tr>
+  <tr><td class="sesli">e · i</td><td>reçel<span class="ek">i</span></td><td>bahçe<span class="ek">si</span></td></tr>
+  <tr><td class="sesli">a · ı</td><td>çay<span class="ek">ı</span></td><td>çorba<span class="ek">sı</span></td></tr>
+  <tr><td class="sesli">o · u</td><td>tost<span class="ek">u</span></td><td>kutu<span class="ek">su</span></td></tr>
+  <tr><td class="sesli">ö · ü</td><td>süt<span class="ek">ü</span></td><td>menü<span class="ek">sü</span></td></tr>
+ </table>
+ <div class="not">💡 Sesli harfle bitiyorsa araya <b>s</b> gelir: mama → mama<span class="ek">sı</span>.<span class="en">If it ends in a vowel, add s: mama → maması.</span></div>`,
+`<h2>Dikkat! İki özel sözcük</h2><span class="en">Careful! Two special words</span>
+ <div class="formul"><div class="p"><b>🍎</b>elma</div><div class="op">+</div><div class="p"><b>💧</b>su</div><div class="op">=</div><div class="p sonuc"><b>🧃</b>elma su<span class="ek">yu</span></div></div>
+ <p><b>su → suyu</b> · elma suyu, portakal suyu<span class="en">su → suyu (not “susu”!)</span></p>
+ <div class="formul"><div class="p"><b>🚌</b>otobüs</div><div class="op">+</div><div class="p"><b>🚏</b>durak</div><div class="op">=</div><div class="p sonuc"><b>🚏</b>otobüs dura<span class="ek">ğı</span></div></div>
+ <p><b>durak → durağı</b> · k harfi ğ olur<span class="en">The letter k becomes ğ.</span></p>
+ <div class="not">🏘️ Şimdi kasabaya gidiyoruz! 4 bölüm var. Kolaydan zora!<span class="en">Now let's go to town! There are 4 parts, from easy to hard.</span></div>`
+];
+let si=0;
+const $=id=>document.getElementById(id);
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function anlatimBasla(){ si=0; ekran("sAnlat"); slaytGoster(); }
+function slaytGoster(){
+  $("slayt").innerHTML=SLAYT[si];
+  $("noktalar").innerHTML=SLAYT.map((_,i)=>`<i class="${i===si?"on":""}"></i>`).join("");
+  $("geriBtn").disabled=si===0;
+  $("ileriBtn").textContent=si===SLAYT.length-1?"Kasabaya git 🏘️":"İleri · Next ▶";
+}
+function slaytGit(d){ si+=d; if(si>=SLAYT.length){ oyunBasla(); return; } if(si<0) si=0; slaytGoster(); window.scrollTo(0,0); }
+
+/* ════════ OYUN ════════ */
+let t0=0,timer=0,hata=0,ilk=0,toplam=0,asama=0,qi=0,denendi=false,liste=[];
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function hataEkle(){ hata++; $("uHata").textContent="❌ "+hata; }
+function cubuk(oran){ [...$("asamaBar").children].forEach((d,i)=>d.firstChild.style.width=(i<asama?100:(i===asama?oran*100:0))+"%"); }
+/* yerleri iç içe sırala: market, kafe, kasaba, market... */
+function karisikYer(n,filtre){
+  const g={m:karisik(S.filter(x=>x.y==="m"&&(!filtre||filtre(x)))),k:karisik(S.filter(x=>x.y==="k"&&(!filtre||filtre(x)))),s:karisik(S.filter(x=>x.y==="s"&&(!filtre||filtre(x))))};
+  const out=[]; let sira=karisik(["m","k","s"]), i=0;
+  while(out.length<n && (g.m.length||g.k.length||g.s.length)){ const y=sira[i%3]; if(g[y].length) out.push(g[y].pop()); i++; }
+  return out;
+}
+const ASAMA=[
+ {ad:"1. Hangisi doğru?",en:"Which one is right?",e:"👀",n:10,
+  acik:"Resme bak, doğru adı seç.",acikEn:"Look at the picture and choose the right name."},
+ {ad:"2. Eki seç",en:"Choose the ending",e:"🧩",n:12,
+  acik:"İkinci ada hangi ek gelir? Doğru eki seç.",acikEn:"Which ending goes on the second noun?"},
+ {ad:"3. Harf harf yaz",en:"Write it letter by letter",e:"✏️",n:8,
+  acik:"İkinci adı ekiyle birlikte harf harf yaz. Dikkat: fazla harfler var!",acikEn:"Write the second noun with its ending. Careful: there are extra letters!"},
+ {ad:"4. Etiket ustası",en:"Label master",e:"🏷️",n:12,
+  acik:"Kasabadaki etiketlere bak. Doğru mu, yanlış mı? Yanlışları düzelt!",acikEn:"Check the labels in town. Right or wrong? Fix the wrong ones!"},
+];
+function oyunBasla(){ t0=Date.now(); timer=setInterval(()=>$("uSure").textContent="⏱ "+fmt(Date.now()-t0),500); asama=0; araGoster(); }
+function araGoster(){
+  const a=ASAMA[asama];
+  $("ara").innerHTML=`<div class="buyuk">${a.e}</div><h2>${a.ad}</h2><span class="en">${a.en}</span><p style="margin-top:12px;font-weight:700">${a.acik}</p><span class="en">${a.acikEn}</span>`;
+  ekran("sAra");
+}
+function asamaBasla(){
+  const a=ASAMA[asama]; qi=0;
+  if(asama===0) liste=karisikYer(a.n);
+  if(asama===1) liste=karisikYer(a.n,x=>!x.ozel);
+  if(asama===2) liste=karisikYer(a.n);
+  if(asama===3) liste=etiketHazirla();
+  $("uAsama").textContent=`Bölüm ${asama+1}/4`;
+  ekran("sOyun");
+  if(asama===3) etiketKur(); else soruKur();
+}
+function sonraki(){
+  qi++;
+  if(qi<liste.length){ soruKur(); return; }
+  asama++; cubuk(0);
+  if(asama<ASAMA.length) araGoster(); else bitis();
+}
+function basliK(x){
+  const a=ASAMA[asama];
+  cubuk(qi/liste.length);
+  return `<div class="asama-ad">${a.ad} <small style="font-size:.9rem;color:var(--muted)">${qi+1}/${liste.length}</small></div>
+   <span class="yer ${x.y}">${YER[x.y]}</span>
+   <div class="resim">${x.e}</div><div class="anlam">🇬🇧 ${x.en}</div>`;
+}
+function soruKur(){ denendi=false; [tur1,tur2,tur3][asama](liste[qi]); }
+function dogruBitir(x){
+  if(!denendi){ ilk++; } toplam++;
+  $("mesaj").innerHTML=`✅ Harika! <b>${tam(x)}</b>`; $("mesaj").className="mesaj ok";
+  setTimeout(sonraki,1300);
+}
+function yanlisIsle(x,kutu){
+  denendi=true; hataEkle();
+  kutu.classList.remove("salla"); void kutu.offsetWidth; kutu.classList.add("salla");
+}
+
+/* 1 · Hangisi doğru? */
+function yanlisEk(x){
+  if(x.b==="su") return "susu"; if(x.b==="durak") return "durakı";
+  const v=x.ek.slice(-1), digerleri=["i","ı","u","ü"].filter(z=>z!==v);
+  return x.b+x.ek.slice(0,-1)+digerleri[Math.floor(Math.random()*3)];
+}
+function tur1(x){
+  const ops=karisik([tam(x), x.a+" "+x.b, x.a+" "+yanlisEk(x)]);
+  $("oyunKutu").innerHTML=basliK(x)+`<div class="soru-tr">Hangisi doğru?<span class="en">Which one is right?</span></div>
+    <div class="secenek">${ops.map(o=>`<button onclick="sec1(this)" data-o="${o}">${o}</button>`).join("")}</div>
+    <div class="mesaj" id="mesaj"></div><div id="ipucu"></div>`;
+}
+function sec1(b){
+  const x=liste[qi];
+  if(b.dataset.o===tam(x)){ b.classList.add("d"); document.querySelectorAll(".secenek button").forEach(z=>z.disabled=true); dogruBitir(x); }
+  else{
+    b.classList.add("y"); b.disabled=true; yanlisIsle(x,b);
+    const bare=b.dataset.o===x.a+" "+x.b;
+    $("mesaj").innerHTML=bare?"❌ İkinci ad ek almalı!<span class='en'>The second noun needs an ending!</span>":"❌ Ek yanlış. Tekrar dene!<span class='en'>Wrong ending. Try again!</span>";
+    $("mesaj").className="mesaj bad";
+    $("ipucu").innerHTML=`<div class="ipucu">${kural(x)}</div>`;
+  }
+}
+
+/* 2 · Eki seç */
+function tur2(x){
+  const ekler=["i","ı","u","ü","si","sı","su","sü"];
+  $("oyunKutu").innerHTML=basliK(x)+`<div class="ifade">${x.a} ${x.b}<span class="bos" id="bos">?</span></div>
+    <div class="soru-tr">Hangi ek?<span class="en">Which ending?</span></div>
+    <div class="ekler">${ekler.map(e=>`<button onclick="sec2(this)" data-e="${e}">-${e}</button>`).join("")}</div>
+    <div class="mesaj" id="mesaj"></div><div id="ipucu"></div>`;
+}
+function sec2(b){
+  const x=liste[qi];
+  if(b.dataset.e===x.ek){ b.classList.add("d"); $("bos").textContent=x.ek; document.querySelectorAll(".ekler button").forEach(z=>z.disabled=true); dogruBitir(x); }
+  else{
+    b.classList.add("y"); b.disabled=true; yanlisIsle(x,b);
+    $("mesaj").innerHTML="❌ Tekrar dene! <span class='en'>Try again!</span>"; $("mesaj").className="mesaj bad";
+    $("ipucu").innerHTML=`<div class="ipucu">${kural(x)}</div>`;
+  }
+}
+
+/* 3 · Harf harf yaz */
+let yazilan=[],yanlisSay=0;
+function tur3(x){
+  yazilan=[]; yanlisSay=0;
+  const w=x.c, v=w.slice(-1);
+  let fazla;
+  if(x.b==="su") fazla=["s","u","ı"];
+  else if(x.b==="durak") fazla=["k","i","u"];
+  else{
+    const d=["i","ı","u","ü"].filter(z=>z!==v);
+    fazla = x.ek.length===1 ? ["s",...karisik(d).slice(0,2)] : karisik(d).slice(0,3);
+  }
+  const taslar=karisik([...w,...fazla]);
+  $("oyunKutu").innerHTML=basliK(x)+`<div class="yazi"><span class="ilk">${x.a}</span><div class="kutucuk" id="kutucuk">${[...w].map(()=>"<span></span>").join("")}</div></div>
+   <div class="fazla">⚠️ Dikkat: ${fazla.length} fazla harf var! <span class="en" style="display:inline">· ${fazla.length} extra letters!</span></div>
+   <div class="harfler" id="harfler">${taslar.map(h=>`<button data-h="${h}" onclick="harf(this)">${h}</button>`).join("")}</div>
+   <div class="alt-btn"><button class="btn ikincil" onclick="sil()">⌫ Sil</button><button class="btn" id="kBtn" onclick="kontrol3()">✔ Kontrol et</button></div>
+   <div class="mesaj" id="mesaj"></div><div id="ipucu"></div>`;
+}
+function kutucukGoster(){ const w=liste[qi].c; $("kutucuk").innerHTML=[...w].map((_,i)=>`<span class="${yazilan[i]?"dolu":""}">${yazilan[i]?yazilan[i].h:""}</span>`).join(""); }
+function harf(b){ const w=liste[qi].c; if(yazilan.length>=w.length) return; yazilan.push({h:b.dataset.h,b}); b.disabled=true; kutucukGoster(); $("mesaj").textContent=""; }
+function sil(){ const z=yazilan.pop(); if(z){ z.b.disabled=false; kutucukGoster(); } }
+function kontrol3(){
+  const x=liste[qi], w=yazilan.map(z=>z.h).join("");
+  if(w.length<x.c.length){ $("mesaj").innerHTML="Bütün kutuları doldur.<span class='en'>Fill all the boxes.</span>"; $("mesaj").className="mesaj bad"; return; }
+  if(w===x.c){ $("kutucuk").classList.add("dogru"); $("kBtn").disabled=true; document.querySelectorAll("#harfler button").forEach(z=>z.disabled=true); dogruBitir(x); return; }
+  yanlisIsle(x,$("kutucuk")); yanlisSay++;
+  let i=0; while(i<w.length && w[i]===x.c[i]) i++;
+  yazilan.slice(i).forEach(z=>z.b.disabled=false); yazilan=yazilan.slice(0,i); kutucukGoster();
+  $("mesaj").innerHTML="❌ Olmadı, tekrar dene! <span class='en'>Not quite, try again!</span>"; $("mesaj").className="mesaj bad";
+  $("ipucu").innerHTML=`<div class="ipucu">${yanlisSay>=2?kural(x):"💡 Son sesli harfe bak. <span class='en'>Look at the last vowel.</span>"}</div>`;
+}
+
+/* 4 · Etiket ustası */
+let etiketKalan=0;
+function etiketHazirla(){
+  const sec=[...karisik(S.filter(x=>x.y==="m")).slice(0,4),...karisik(S.filter(x=>x.y==="k")).slice(0,4),...karisik(S.filter(x=>x.y==="s")).slice(0,4)];
+  const yanlislar=new Set(karisik(sec.map((_,i)=>i)).slice(0,6));
+  return sec.map((x,i)=>{
+    let yazi=tam(x), dogru=true;
+    if(yanlislar.has(i)){ dogru=false; yazi=Math.random()<.5? x.a+" "+x.b : x.a+" "+yanlisEk(x); }
+    return {x,yazi,dogru,bitti:false};
+  });
+}
+function etiketKur(){
+  etiketKalan=liste.length; cubuk(0);
+  const grup=y=>liste.map((t,i)=>({t,i})).filter(o=>o.t.x.y===y);
+  $("oyunKutu").innerHTML=`<div class="asama-ad">${ASAMA[3].ad}</div>
+   <p style="font-weight:700">Bu etiketler doğru mu? <span class="en">Are these labels right?</span></p>
+   <div class="raflar">${["m","k","s"].map(y=>`<div class="raf"><h3><span class="yer ${y}">${YER[y]}</span></h3><div class="izgara">${grup(y).map(o=>`
+     <div class="etiket" id="et${o.i}"><div class="e">${o.t.x.e}</div><div class="lbl" id="lbl${o.i}">${o.t.yazi}</div>
+     <div class="bt" id="bt${o.i}"><button onclick="etiket(${o.i},true)">✅ Doğru</button><button onclick="etiket(${o.i},false)">❌ Yanlış</button></div></div>`).join("")}</div></div>`).join("")}</div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function etiketSalla(i){ const k=$("et"+i); k.classList.remove("salla"); void k.offsetWidth; k.classList.add("salla"); }
+function etiket(i,dedi){
+  const t=liste[i];
+  if(dedi===t.dogru){
+    if(t.dogru){ etiketTamam(i); }
+    else{
+      const ops=karisik([tam(t.x), t.x.a+" "+t.x.b===t.yazi ? t.x.a+" "+yanlisEk(t.x) : t.x.a+" "+t.x.b, t.yazi]);
+      $("bt"+i).className="fix"; $("bt"+i).innerHTML=`<p>Doğrusu hangisi? · Which is right?</p>`+ops.map(o=>`<button onclick="duzelt(${i},this)" data-o="${o}">${o}</button>`).join("");
+    }
+  }else{
+    t.hatali=true; hataEkle(); etiketSalla(i);
+    $("mesaj").innerHTML=t.dogru?"❌ Bu etiket aslında doğru! <span class='en'>This label is actually right!</span>":"❌ Bu etikette bir hata var! <span class='en'>This label has a mistake!</span>";
+    $("mesaj").className="mesaj bad";
+  }
+}
+function duzelt(i,b){
+  const t=liste[i];
+  if(b.dataset.o===tam(t.x)){ $("lbl"+i).textContent=tam(t.x); etiketTamam(i); }
+  else{ t.hatali=true; hataEkle(); b.disabled=true; etiketSalla(i); $("mesaj").innerHTML=`❌ ${kural(t.x)}`; $("mesaj").className="mesaj bad"; }
+}
+function etiketTamam(i){
+  const t=liste[i]; t.bitti=true; toplam++; if(!t.hatali) ilk++;
+  $("et"+i).classList.add("bitti"); $("bt"+i).innerHTML=`<b style="color:var(--ok)">✔ ${t.dogru?"Doğru":"Düzeltildi"}</b>`;
+  $("mesaj").textContent=""; etiketKalan--;
+  cubuk(1-etiketKalan/liste.length);
+  if(etiketKalan===0){ $("mesaj").innerHTML="🎉 Bütün etiketler hazır!"; $("mesaj").className="mesaj ok"; setTimeout(()=>{ asama++; cubuk(0); bitis(); },1500); }
+}
+
+function bitis(){
+  clearInterval(timer);
+  const sure=fmt(Date.now()-t0), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Tebrikler ${ad}! Kasabadaki bütün adları buldun.`:"Tebrikler! Kasabadaki bütün adları buldun.";
+  $("bSure").textContent=sure; $("bIlk").textContent=`${ilk}/${toplam}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Kasabada Bir Gün (İki Ad Yan Yana)", sure, puan:`${ilk}/${toplam} ilk denemede · ${hata} hata`});
+}
+document.addEventListener("keydown",e=>{
+  if(asama!==2||!$("sOyun").classList.contains("on")) return;
+  if(e.key==="Backspace"){ e.preventDefault(); sil(); return; }
+  if(e.key==="Enter"){ kontrol3(); return; }
+  const k=e.key.toLocaleLowerCase("tr");
+  const b=[...document.querySelectorAll("#harfler button")].find(z=>!z.disabled&&z.dataset.h===k); if(b) harf(b);
+});
+OVT.fill("ad");
+</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Müzede Hırsız Var! · Fiziksel Özellikler · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1424;--panel:#182038;--panel2:#212b4a;--cizgi:#34406a;--altin:#e8c069;--altin2:#f6dc9a;--ok:#4cd68f;--bad:#ff6b6b;--ink:#eef1fb;--muted:#a3abc9}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#2a3563 0%,var(--bg) 60%) fixed}
+h1,h2,h3,.pf{font-family:'Playfair Display',serif;line-height:1.15}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.ekran{display:none}.ekran.on{display:block;animation:gel .35s ease}
+@keyframes gel{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kutu{background:var(--panel);border:1px solid var(--cizgi);border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.btn{display:block;width:100%;font:inherit;font-weight:900;font-size:1.1rem;padding:14px;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--altin),var(--altin2));color:#2a1d05;margin-top:14px;box-shadow:0 6px 18px rgba(232,192,105,.25)}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.45}
+.btn.ikincil{background:transparent;color:var(--ink);border:2px solid var(--cizgi);box-shadow:none}
+.en{display:block;color:var(--muted);font-size:.86rem;font-style:italic;font-weight:600;margin-top:2px}
+.giris{text-align:center}
+.giris .buyuk{font-size:3.4rem;margin:8px 0}
+.giris h1{font-size:2.2rem;color:var(--altin)}
+.giris p{margin:12px 0;line-height:1.5}
+.giris label{display:block;text-align:left;font-weight:800;margin:12px 0 6px}
+.giris input{width:100%;font:inherit;font-size:1.1rem;padding:12px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink)}
+.brif h2{color:var(--altin);font-size:1.5rem;margin-bottom:6px}
+.brif h3{color:var(--altin2);font-size:1.05rem;margin:14px 0 6px}
+.sozler{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sozler div{background:var(--panel2);border-radius:10px;padding:6px 8px;font-weight:800;font-size:.95rem}
+.sozler i{display:block;color:var(--muted);font-weight:600;font-size:.78rem}
+.tablo{width:100%;border-collapse:collapse;margin-top:6px}
+.tablo td,.tablo th{padding:7px 4px;border-bottom:1px solid var(--cizgi);text-align:center}
+.tablo th{font-size:.8rem;color:var(--muted)}
+.ek{color:var(--altin);font-weight:900}
+.not{margin-top:12px;background:rgba(232,192,105,.1);border:1px dashed var(--altin);border-radius:12px;padding:10px;font-weight:700;line-height:1.45}
+.ust{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;font-weight:900}
+.ust span{background:var(--panel);border:1px solid var(--cizgi);border-radius:99px;padding:6px 12px;font-size:.9rem}
+.odalar{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.odalar i{height:8px;border-radius:9px;background:var(--cizgi)}
+.odalar i.acik{background:var(--ok)}.odalar i.simdi{background:var(--altin)}
+.oda-ad{font-family:'Playfair Display';color:var(--altin);font-size:1.35rem}
+.alt-say{color:var(--muted);font-weight:800;font-size:.9rem;margin-bottom:8px}
+.ampuller{display:flex;gap:5px;justify-content:center;margin:6px 0 10px}
+.ampuller b{width:12px;height:12px;border-radius:50%;background:var(--cizgi)}
+.ampuller b.on{background:var(--altin);box-shadow:0 0 10px var(--altin)}
+.sahne{background:linear-gradient(#26305a,#1a2240);border-radius:16px;padding:8px;margin:8px 0;position:relative}
+.sahne svg{display:block;width:100%;height:auto}
+.dizi{display:grid;gap:8px}
+.dizi.d3{grid-template-columns:repeat(3,1fr)}
+.dizi.d2{grid-template-columns:repeat(2,1fr)}
+.kisi{background:linear-gradient(#2a3563,#1b2342);border:3px solid transparent;border-radius:14px;padding:4px 4px 0;cursor:pointer;position:relative;transition:transform .1s}
+.kisi:active{transform:scale(.97)}
+.kisi svg{display:block;width:100%;height:auto}
+.kisi .no{position:absolute;top:4px;left:8px;font-weight:900;color:var(--altin)}
+.kisi.ok{border-color:var(--ok)}.kisi.y{border-color:var(--bad);opacity:.45}
+.kisi.ok2{border-color:var(--altin);box-shadow:0 0 0 3px rgba(232,192,105,.3)}
+.ok-isaret{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:1.6rem}
+.soru{text-align:center;font-weight:900;font-size:1.1rem;margin-top:6px}
+.secenek{display:grid;gap:8px;margin-top:10px}
+.secenek button{font:inherit;font-weight:900;font-size:1.15rem;padding:12px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer}
+.secenek button.d{border-color:var(--ok);color:var(--ok)}
+.secenek button.y{border-color:var(--bad);color:var(--bad);opacity:.6}
+.eslestir{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.eslestir .kol{display:grid;gap:8px}
+.eslestir button{font:inherit;font-weight:900;font-size:1rem;padding:12px 6px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer;min-height:3.6rem}
+.eslestir button.sec{border-color:var(--altin);background:rgba(232,192,105,.15)}
+.eslestir button.bitti{border-color:var(--ok);color:var(--ok);opacity:.7}
+.eslestir button.y{border-color:var(--bad)}
+.eslestir .e{font-size:1.5rem;display:block}
+.kelime{text-align:center;font-size:3rem;margin:4px 0}
+.kok{text-align:center;font-weight:900;font-size:1.3rem}
+.yazi-alan{margin:10px 0;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap}
+.yazi-alan span{flex:1 1 0;max-width:2.4rem;min-width:0;height:2.9rem;border-radius:10px;background:var(--panel2);border:2px solid var(--cizgi);display:grid;place-items:center;font-size:1.5rem;font-weight:900}
+.yazi-alan span.dolu{border-color:var(--altin)}
+.yazi-alan.dogru span{border-color:var(--ok);color:var(--ok)}
+.fazla{text-align:center;font-weight:800;color:var(--altin2);font-size:.95rem}
+.harfler{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px}
+.harfler button{width:3rem;height:3rem;font:inherit;font-weight:900;font-size:1.4rem;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer;box-shadow:0 3px 0 var(--cizgi)}
+.harfler button:disabled{opacity:.18;box-shadow:none}
+.iki{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.tanik{background:var(--panel2);border-left:4px solid var(--altin);border-radius:10px;padding:10px 12px;margin-top:8px;font-weight:800;line-height:1.4}
+.tanik small{color:var(--muted);display:block;font-weight:700}
+.mesaj{min-height:1.4rem;margin-top:10px;text-align:center;font-weight:800;line-height:1.4}
+.mesaj.ok{color:var(--ok)}.mesaj.bad{color:var(--bad)}
+.ceza{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--bad);color:#fff;font-weight:900;padding:6px 14px;border-radius:99px;opacity:0;transition:opacity .2s;z-index:9}
+.ceza.on{opacity:1}
+.salla{animation:salla .35s}
+@keyframes salla{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.kapi-ara{text-align:center}
+.kapi-ara .buyuk{font-size:3.4rem}
+.kapi-ara h2{color:var(--altin);font-size:1.6rem;margin:6px 0}
+.bitis{text-align:center}
+.bitis .buyuk{font-size:3.6rem}
+.bitis h2{color:var(--ok);font-size:1.9rem;margin:6px 0}
+.ist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.ist div{background:var(--panel2);border-radius:12px;padding:10px 4px}
+.ist b{display:block;font-family:'Playfair Display';font-size:1.4rem;color:var(--altin)}
+.ist small{color:var(--muted);font-weight:700}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="ceza" id="ceza">+10 sn</div>
+<div class="wrap">
+
+<section class="ekran on" id="sGiris">
+  <div class="kutu giris">
+    <div class="buyuk">🏛️🖼️🔒</div>
+    <h1>Müzede Hırsız Var!</h1>
+    <span class="en">There's a thief in the museum!</span>
+    <p>Gece yarısı müzeden bir tablo çalındı. Bütün kapılar kilitlendi! Kapıları açmak için insanları <b>doğru anlat</b> ve hırsızı bul.
+      <span class="en">At midnight a painting was stolen. All the doors are locked! Describe people correctly and find the thief to open them.</span></p>
+    <label for="ad">Adın · <i>Your name</i></label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="brifing()">🔦 Müzeye gir</button>
+  </div>
+</section>
+
+<section class="ekran" id="sBrif">
+  <div class="kutu brif">
+    <h2>📋 Bekçinin notu</h2>
+    <span class="en">The guard's note</span>
+    <h3>📏 Boy · <i>height</i></h3>
+    <div class="sozler"><div>uzun boylu<i>tall</i></div><div>kısa boylu<i>short</i></div><div>orta boylu<i>medium height</i></div></div>
+    <h3>💇 Saç · <i>hair</i></h3>
+    <div class="sozler"><div>sarışın<i>blond</i></div><div>siyah saçlı<i>black-haired</i></div><div>kahverengi saçlı<i>brown-haired</i></div><div>kızıl saçlı<i>red-haired</i></div><div>beyaz saçlı<i>white-haired</i></div><div>kel<i>bald</i></div><div>uzun saçlı<i>long-haired</i></div><div>kısa saçlı<i>short-haired</i></div><div>düz saçlı<i>straight-haired</i></div><div>kıvırcık saçlı<i>curly-haired</i></div></div>
+    <h3>👁️ Göz ve yüz · <i>eyes and face</i></h3>
+    <div class="sozler"><div>mavi gözlü<i>blue-eyed</i></div><div>yeşil gözlü<i>green-eyed</i></div><div>kahverengi gözlü<i>brown-eyed</i></div><div>gözlüklü<i>wears glasses</i></div><div>sakallı<i>bearded</i></div><div>bıyıklı<i>with a moustache</i></div><div>çilli<i>freckled</i></div></div>
+    <h3>🎂 Yaş · <i>age</i></h3>
+    <div class="sozler"><div>genç<i>young</i></div><div>yaşlı<i>old</i></div></div>
+    <h3>✨ Sihirli ek: -lı · -li · -lu · -lü</h3>
+    <span class="en">The magic ending means “with / having”.</span>
+    <table class="tablo">
+      <tr><th>Ad · <i>noun</i></th><th>Sıfat · <i>adjective</i></th></tr>
+      <tr><td>sakal · bıyık · saç</td><td>sakal<span class="ek">lı</span> · bıyık<span class="ek">lı</span> · saç<span class="ek">lı</span></td></tr>
+      <tr><td>çil</td><td>çil<span class="ek">li</span></td></tr>
+      <tr><td>boy</td><td>boy<span class="ek">lu</span></td></tr>
+      <tr><td>göz · gözlük</td><td>göz<span class="ek">lü</span> · gözlük<span class="ek">lü</span></td></tr>
+    </table>
+    <div class="not">👉 Son sesli harfe bak: a, ı → <b>-lı</b> · e, i → <b>-li</b> · o, u → <b>-lu</b> · ö, ü → <b>-lü</b>
+      <span class="en">Look at the last vowel of the noun.</span></div>
+  </div>
+  <button class="btn" onclick="baslat()">🔑 Hazırım! · I'm ready!</button>
+</section>
+
+<section class="ekran" id="sAra">
+  <div class="kutu kapi-ara" id="ara"></div>
+  <button class="btn" onclick="odaBasla()">🚪 Odaya gir</button>
+</section>
+
+<section class="ekran" id="sOda">
+  <div class="ust"><span id="uOda">Oda 1/5</span><span id="uHata">❌ 0</span><span id="uSure">⏱ 00:00</span></div>
+  <div class="odalar" id="odalar"></div>
+  <div class="kutu" id="odaKutu"></div>
+</section>
+
+<section class="ekran" id="sBitis">
+  <div class="kutu bitis">
+    <div class="buyuk">🖼️✨🚪</div>
+    <h2>Hırsız yakalandı!</h2>
+    <p id="bAd" style="font-weight:800"></p>
+    <span class="en">The thief is caught and the painting is back!</span>
+    <div class="ist">
+      <div><b id="bSure">00:00</b><small>süre (cezalar dahil)</small></div>
+      <div><b id="bIlk">0</b><small>ilk denemede</small></div>
+      <div><b id="bHata">0</b><small>hata</small></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikincil" onclick="location.reload()">↻ Tekrar oyna</button>
+  </div>
+</section>
+</div>
+
+<script>
+/* ════════ KİŞİ ÇİZİMİ ════════ */
+const SACRENK={sari:"#f0cd5a",siyah:"#2a201d",kahve:"#7b4a28",kizil:"#d3542a",beyaz:"#e4e4e8"};
+const GOZRENK={mavi:"#3b8ff0",yesil:"#2fae5a",kahve:"#6b3f1f"};
+const TEN=["#f6d3b5","#e9b48f","#c98d63","#9a6542","#f1c9a5"];
+const GOMLEK=["#e85d75","#4f8fe8","#46b98c","#f2a541","#9b6be8","#e86fb4","#5bc0d6"];
+const BOY={uzun:228,orta:192,kisa:156};
+function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+function kisiCiz(p){
+  const G=236, H=BOY[p.boy], top=G-H, R=22, cx=50, cy=top+R+2;
+  const hc=SACRENK[p.renk]||"#2a201d", ten=p.ten, gom=p.gomlek;
+  const tTop=cy+R+2, lTop=tTop+(G-tTop)*0.45;
+  let s=`<svg viewBox="0 0 100 240" xmlns="http://www.w3.org/2000/svg">`;
+  for(const h of [228,192,156]) s+=`<line x1="0" x2="100" y1="${G-h}" y2="${G-h}" stroke="rgba(255,255,255,.13)" stroke-dasharray="3 3"/>`;
+  // arka saç
+  if(p.sacBoy==="uzun"){
+    if(p.tip==="duz") s+=`<path d="M${cx-R-1},${cy-6} Q${cx-R-4},${cy+38} ${cx-R+2},${cy+46} L${cx+R-2},${cy+46} Q${cx+R+4},${cy+38} ${cx+R+1},${cy-6} Z" fill="${hc}"/>`;
+    else for(let y=cy-4;y<=cy+40;y+=8){ s+=`<circle cx="${cx-R+1}" cy="${y}" r="7" fill="${hc}"/><circle cx="${cx+R-1}" cy="${y}" r="7" fill="${hc}"/>`; }
+  }
+  // bacaklar, ayakkabı
+  s+=`<rect x="${cx-11}" y="${lTop-2}" width="9" height="${G-lTop-2}" rx="3" fill="#2d3550"/><rect x="${cx+2}" y="${lTop-2}" width="9" height="${G-lTop-2}" rx="3" fill="#2d3550"/>`;
+  s+=`<ellipse cx="${cx-7}" cy="${G-1}" rx="7" ry="3" fill="#111"/><ellipse cx="${cx+7}" cy="${G-1}" rx="7" ry="3" fill="#111"/>`;
+  // gövde ve kollar
+  s+=`<rect x="${cx-17}" y="${tTop+2}" width="7" height="${(lTop-tTop)*0.95}" rx="3.5" fill="${gom}"/><rect x="${cx+10}" y="${tTop+2}" width="7" height="${(lTop-tTop)*0.95}" rx="3.5" fill="${gom}"/>`;
+  s+=`<circle cx="${cx-13.5}" cy="${tTop+2+(lTop-tTop)*0.95}" r="3.6" fill="${ten}"/><circle cx="${cx+13.5}" cy="${tTop+2+(lTop-tTop)*0.95}" r="3.6" fill="${ten}"/>`;
+  s+=`<rect x="${cx-12}" y="${tTop}" width="24" height="${lTop-tTop+4}" rx="7" fill="${gom}"/>`;
+  s+=`<rect x="${cx-4}" y="${cy+R-4}" width="8" height="8" fill="${ten}"/>`;
+  // kulak, baş
+  s+=`<circle cx="${cx-R}" cy="${cy+2}" r="4" fill="${ten}"/><circle cx="${cx+R}" cy="${cy+2}" r="4" fill="${ten}"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="${ten}"/>`;
+  if(p.sacBoy==="kel") s+=`<ellipse cx="${cx-7}" cy="${cy-14}" rx="5" ry="2.5" fill="#fff" opacity=".35"/>`;
+  // ön saç
+  if(p.sacBoy!=="kel"){
+    if(p.tip==="duz") s+=`<path d="M${cx-R-1},${cy+2} Q${cx-R-3},${cy-R-5} ${cx},${cy-R-4} Q${cx+R+3},${cy-R-5} ${cx+R+1},${cy+2} Q${cx+R-3},${cy-10} ${cx+6},${cy-12} Q${cx-4},${cy-8} ${cx-R+3},${cy-6} Z" fill="${hc}"/>`;
+    else { for(let a=190;a<=350;a+=20){ const r=a*Math.PI/180; s+=`<circle cx="${cx+Math.cos(r)*(R-1)}" cy="${cy+Math.sin(r)*(R-1)}" r="7.5" fill="${hc}"/>`; } s+=`<circle cx="${cx}" cy="${cy-R+2}" r="8" fill="${hc}"/>`; }
+  }
+  // kaşlar, gözler
+  const ey=cy-1, ex=8;
+  const kas=p.sacBoy==="kel"?(p.yas==="yasli"?"#bbb":"#5a4030"):hc;
+  s+=`<path d="M${cx-ex-4},${ey-6} Q${cx-ex},${ey-8} ${cx-ex+4},${ey-6}" stroke="${kas==="#e4e4e8"?"#aaa":kas}" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M${cx+ex-4},${ey-6} Q${cx+ex},${ey-8} ${cx+ex+4},${ey-6}" stroke="${kas==="#e4e4e8"?"#aaa":kas}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
+  for(const d of [-1,1]){ const x=cx+d*ex; s+=`<ellipse cx="${x}" cy="${ey}" rx="4.4" ry="3.6" fill="#fff"/><circle cx="${x}" cy="${ey}" r="2.7" fill="${GOZRENK[p.goz]}"/><circle cx="${x}" cy="${ey}" r="1.1" fill="#111"/>`; }
+  // burun, ağız
+  s+=`<path d="M${cx},${cy+1} Q${cx+3},${cy+6} ${cx},${cy+7}" stroke="rgba(0,0,0,.35)" stroke-width="1.3" fill="none"/>`;
+  if(p.sakal){ const bc=p.sacBoy==="kel"?(p.yas==="yasli"?SACRENK.beyaz:SACRENK.kahve):hc;
+    s+=`<path d="M${cx-R+1},${cy+1} Q${cx-R+3},${cy+R+8} ${cx},${cy+R+9} Q${cx+R-3},${cy+R+8} ${cx+R-1},${cy+1} Q${cx+12},${cy+14} ${cx},${cy+13} Q${cx-12},${cy+14} ${cx-R+1},${cy+1} Z" fill="${bc}"/>`; }
+  s+=`<path d="M${cx-5},${cy+12} Q${cx},${cy+16} ${cx+5},${cy+12}" stroke="#8a3b3b" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  if(p.biyik){ const bc=p.sacBoy==="kel"?(p.yas==="yasli"?SACRENK.beyaz:SACRENK.kahve):hc;
+    s+=`<path d="M${cx-11},${cy+12} Q${cx-6},${cy+5} ${cx},${cy+8.5} Q${cx+6},${cy+5} ${cx+11},${cy+12} Q${cx},${cy+10.5} ${cx-11},${cy+12} Z" fill="${bc}" stroke="${bc==="#e4e4e8"?"#bbb":bc}" stroke-width="1.6" stroke-linejoin="round"/>`; }
+  if(p.cil) for(const d of [-1,1]) for(const [dx,dy] of [[0,0],[3,1.5],[-2,2],[1.5,3.5]]) s+=`<circle cx="${cx+d*(12+dx)}" cy="${cy+6+dy}" r=".9" fill="#a0522d"/>`;
+  if(p.yas==="yasli") s+=`<path d="M${cx-8},${cy-13} Q${cx},${cy-15} ${cx+8},${cy-13} M${cx-6},${cy-10} Q${cx},${cy-12} ${cx+6},${cy-10}" stroke="rgba(0,0,0,.25)" stroke-width="1" fill="none"/>`;
+  if(p.gozluk) s+=`<circle cx="${cx-ex}" cy="${ey}" r="6.2" fill="rgba(255,255,255,.12)" stroke="#1b1b1b" stroke-width="1.8"/><circle cx="${cx+ex}" cy="${ey}" r="6.2" fill="rgba(255,255,255,.12)" stroke="#1b1b1b" stroke-width="1.8"/><path d="M${cx-ex+6},${ey} L${cx+ex-6},${ey}" stroke="#1b1b1b" stroke-width="1.8"/>`;
+  return s+`</svg>`;
+}
+/* rastgele kişi */
+function yeniKisi(o={}){
+  const yas=o.yas||(Math.random()<.25?"yasli":"genc");
+  let sacBoy=o.sacBoy||rnd(["uzun","kisa","kisa","uzun",yas==="yasli"?"kel":"kisa"]);
+  if(sacBoy==="kel"&&o.yas==="genc") sacBoy="kisa";
+  let renk=o.renk||(yas==="yasli"?"beyaz":rnd(["sari","siyah","kahve","kizil"]));
+  if(yas==="genc"&&renk==="beyaz") renk="siyah";
+  if(o.renk==="beyaz") { renk="beyaz"; }
+  const erkek= o.erkek!==undefined?o.erkek:Math.random()<.5;
+  const p={boy:o.boy||rnd(["uzun","orta","kisa"]),yas,sacBoy,renk,tip:o.tip||rnd(["duz","kivircik"]),goz:o.goz||rnd(["mavi","yesil","kahve"]),
+    gozluk:o.gozluk!==undefined?o.gozluk:Math.random()<.3,cil:o.cil!==undefined?o.cil:Math.random()<.2,
+    sakal:o.sakal!==undefined?o.sakal:(erkek&&Math.random()<.35),biyik:o.biyik!==undefined?o.biyik:(erkek&&Math.random()<.3),
+    ten:rnd(TEN),gomlek:rnd(GOMLEK)};
+  if(p.sacBoy==="kel"){ p.renk="yok"; p.tip="yok"; }
+  return p;
+}
+/* kişinin özellikleri: [grup, sözcük] */
+const RENKAD={sari:"sarışın",siyah:"siyah saçlı",kahve:"kahverengi saçlı",kizil:"kızıl saçlı",beyaz:"beyaz saçlı"};
+const GOZAD={mavi:"mavi gözlü",yesil:"yeşil gözlü",kahve:"kahverengi gözlü"};
+function ozellik(p){
+  const f=[["boy",p.boy==="uzun"?"uzun boylu":p.boy==="orta"?"orta boylu":"kısa boylu"],["yas",p.yas==="genc"?"genç":"yaşlı"],["goz",GOZAD[p.goz]]];
+  if(p.sacBoy==="kel") f.push(["sac","kel"]); else { f.push(["sac",p.sacBoy==="uzun"?"uzun saçlı":"kısa saçlı"],["sac",RENKAD[p.renk]],["sac",p.tip==="duz"?"düz saçlı":"kıvırcık saçlı"]); }
+  if(p.gozluk) f.push(["yuz","gözlüklü"]); if(p.sakal) f.push(["yuz","sakallı"]); if(p.biyik) f.push(["yuz","bıyıklı"]); if(p.cil) f.push(["yuz","çilli"]);
+  return f;
+}
+function uyar(p,soz){ return ozellik(p).some(x=>x[1]===soz); }
+function cumle(sozler){ return sozler.length===1?sozler[0]:sozler.slice(0,-1).join(", ")+" ve "+sozler[sozler.length-1]; }
+/* n kişilik dizi + yalnızca hedefin uyduğu k özellik */
+function diziKur(n,k){
+  for(let deneme=0;deneme<5000;deneme++){
+    const kisiler=Array.from({length:n},()=>yeniKisi()); const h=Math.floor(Math.random()*n), hedef=kisiler[h];
+    const f=karisik(ozellik(hedef));
+    // saçtan en çok bir ipucu
+    const adaylar=[]; let sacVar=false;
+    for(const x of f){ if(x[0]==="sac"){ if(sacVar) continue; sacVar=true; } adaylar.push(x[1]); }
+    for(let t=0;t<30;t++){
+      const sec=karisik(adaylar).slice(0,k);
+      if(sec.length<k) break;
+      const uyan=kisiler.filter(p=>sec.every(s=>uyar(p,s)));
+      // her ipucu gerekli olsun
+      const gerekli=sec.every((_,i)=>kisiler.filter(p=>sec.filter((__,j)=>j!==i).every(s=>uyar(p,s))).length>1);
+      if(uyan.length===1&&(k===1||gerekli)) return {kisiler,h,ipucu:sec};
+    }
+  }
+  return diziKur(n,Math.max(1,k-1));
+}
+
+/* ════════ OYUN ════════ */
+const $=id=>document.getElementById(id);
+let t0=0,ceza=0,timer=0,hata=0,ilk=0,toplam=0,oda=0,adim=0,denendi=false,veri=null;
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function gecen(){ return Date.now()-t0+ceza*1000; }
+function yanlis(el){ hata++; ceza+=10; denendi=true; $("uHata").textContent="❌ "+hata; const c=$("ceza"); c.classList.add("on"); setTimeout(()=>c.classList.remove("on"),900);
+  if(el){ el.classList.remove("salla"); void el.offsetWidth; el.classList.add("salla"); } }
+function dogru(){ toplam++; if(!denendi) ilk++; denendi=false; }
+function mesaj(h,c){ $("mesaj").innerHTML=h; $("mesaj").className="mesaj "+(c||""); }
+
+const ODA=[
+ {ad:"Oda 1 · Giriş Salonu",e:"🚪",en:"Entrance Hall",acik:"Kamera görüntülerine bak. Bu kişi nasıl? Doğru sıfatı seç.",acikEn:"Look at the camera pictures. What does this person look like? Choose the right adjective.",n:10},
+ {ad:"Oda 2 · Heykel Salonu",e:"🗿",en:"Statue Hall",acik:"Heykeller ikişer ikişer duruyor. Zıt anlamlıları eşleştir.",acikEn:"The statues stand in pairs. Match the opposites.",n:1},
+ {ad:"Oda 3 · Yazı Odası",e:"✒️",en:"Writing Room",acik:"Ada doğru eki ekle ve sıfatı harf harf yaz. Dikkat: fazla harfler var!",acikEn:"Add the right ending and spell the adjective. Careful: extra letters!",n:7},
+ {ad:"Oda 4 · Tanık Odası",e:"🕵️",en:"Witness Room",acik:"Tanıklar birini anlatıyor. Anlatılan kişiyi bul.",acikEn:"Witnesses describe someone. Find the person.",n:6},
+ {ad:"Oda 5 · Tablo Salonu",e:"🖼️",en:"Painting Hall",acik:"Üç tanık hırsızı gördü. İpuçlarını oku ve hırsızı yakala!",acikEn:"Three witnesses saw the thief. Read the clues and catch the thief!",n:1},
+];
+function brifing(){ ekran("sBrif"); }
+function baslat(){ t0=Date.now(); timer=setInterval(()=>$("uSure").textContent="⏱ "+fmt(gecen()),500); oda=0; araGoster(); }
+function araGoster(){ const o=ODA[oda]; $("ara").innerHTML=`<div class="buyuk">${o.e}</div><h2>${o.ad}</h2><span class="en">${o.en}</span><p style="margin-top:10px;font-weight:700">${o.acik}</p><span class="en">${o.acikEn}</span>`; ekran("sAra"); }
+function odaBasla(){
+  adim=0; denendi=false;
+  $("uOda").textContent=`Oda ${oda+1}/5`;
+  $("odalar").innerHTML=ODA.map((_,i)=>`<i class="${i<oda?"acik":i===oda?"simdi":""}"></i>`).join("");
+  ekran("sOda");
+  [oda1Hazirla,oda2,oda3Hazirla,oda4,oda5][oda]();
+}
+function odaBitti(){ setTimeout(()=>{ oda++; if(oda<ODA.length) araGoster(); else bitis(); },1500); }
+function baslik(){ const o=ODA[oda]; return `<div class="oda-ad">${o.ad}</div>`+(o.n>1?`<div class="ampuller">${Array.from({length:o.n},(_,i)=>`<b class="${i<adim?"on":""}"></b>`).join("")}</div>`:""); }
+
+/* ── ODA 1: resim → sıfat ── */
+const GRUP1=[
+ {g:"boy",s:["uzun boylu","orta boylu","kısa boylu"]},
+ {g:"renk",s:["sarışın","siyah saçlı","kahverengi saçlı","kızıl saçlı"]},
+ {g:"sacBoy",s:["uzun saçlı","kısa saçlı","kel"]},
+ {g:"tip",s:["düz saçlı","kıvırcık saçlı"]},
+ {g:"goz",s:["mavi gözlü","yeşil gözlü","kahverengi gözlü"]},
+ {g:"yuz",s:["gözlüklü","sakallı","bıyıklı","çilli"]},
+ {g:"yas",s:["genç","yaşlı"]},
+];
+let o1=[];
+function oda1Hazirla(){
+  const plan=karisik(["uzun boylu","kısa boylu","sarışın","kızıl saçlı","kel","kıvırcık saçlı","düz saçlı","mavi gözlü","yeşil gözlü","gözlüklü","sakallı","bıyıklı","çilli","yaşlı","uzun saçlı"]).slice(0,10);
+  o1=plan; oda1Soru();
+}
+function kisiIcin(soz){
+  const O={sakal:false,biyik:false,gozluk:false,cil:false};
+  const m={"uzun boylu":{boy:"uzun"},"orta boylu":{boy:"orta"},"kısa boylu":{boy:"kisa"},"sarışın":{renk:"sari",yas:"genc",sacBoy:"uzun"},"siyah saçlı":{renk:"siyah",yas:"genc"},"kahverengi saçlı":{renk:"kahve",yas:"genc"},
+   "kızıl saçlı":{renk:"kizil",yas:"genc",sacBoy:"uzun"},"kel":{sacBoy:"kel",yas:"yasli"},"uzun saçlı":{sacBoy:"uzun",yas:"genc"},"kısa saçlı":{sacBoy:"kisa",yas:"genc"},"düz saçlı":{tip:"duz",sacBoy:"uzun",yas:"genc"},"kıvırcık saçlı":{tip:"kivircik",sacBoy:"uzun",yas:"genc"},
+   "mavi gözlü":{goz:"mavi"},"yeşil gözlü":{goz:"yesil"},"kahverengi gözlü":{goz:"kahve"},"gözlüklü":{gozluk:true},"sakallı":{sakal:true,erkek:true,yas:"genc",sacBoy:"kisa"},"bıyıklı":{biyik:true,erkek:true,yas:"genc",sacBoy:"kisa",renk:"siyah"},"çilli":{cil:true},"genç":{yas:"genc"},"yaşlı":{yas:"yasli",renk:"beyaz"}};
+  return yeniKisi(Object.assign({},O,{erkek:false},m[soz]));
+}
+function oda1Soru(){
+  const soz=o1[adim], grup=GRUP1.find(g=>g.s.includes(soz)), p=kisiIcin(soz);
+  let ops=karisik([soz,...karisik(grup.s.filter(x=>x!==soz)).slice(0,2)]);
+  let resim;
+  if(grup.g==="boy"){ // boy için üç kişi yan yana, okla göster
+    const boylar=karisik(["uzun","orta","kisa"].filter(b=>b!==p.boy)); const dizi=karisik([p,yeniKisi({boy:boylar[0],sakal:false,biyik:false}),yeniKisi({boy:boylar[1],sakal:false,biyik:false})]);
+    resim=`<div class="dizi d3">${dizi.map(k=>`<div class="kisi" style="cursor:default">${k===p?'<span class="ok-isaret">⬇️</span>':""}${kisiCiz(k)}</div>`).join("")}</div>`;
+  } else resim=`<div class="sahne" style="max-width:220px;margin:8px auto">${kisiCiz(p)}</div>`;
+  $("odaKutu").innerHTML=baslik()+`<div class="alt-say">📷 Kamera ${adim+1}/${o1.length}</div>${resim}
+   <div class="soru">${grup.g==="boy"?"Oktaki kişi nasıl?":"Bu kişi nasıl?"}<span class="en">${grup.g==="boy"?"What does the person with the arrow look like?":"What does this person look like?"}</span></div>
+   <div class="secenek">${ops.map(o=>`<button data-o="${o}" onclick="sec1(this)">${o}</button>`).join("")}</div><div class="mesaj" id="mesaj"></div>`;
+}
+function sec1(b){
+  const soz=o1[adim];
+  if(b.dataset.o===soz){ b.classList.add("d"); document.querySelectorAll(".secenek button").forEach(x=>x.disabled=true); dogru(); mesaj(`✅ Evet, bu kişi <b>${soz}</b>.`,"ok");
+    setTimeout(()=>{ adim++; if(adim<o1.length) oda1Soru(); else { $("odaKutu").innerHTML=baslik()+`<div class="mesaj ok">🔓 Kapı açıldı!</div>`; odaBitti(); } },1200); }
+  else { b.classList.add("y"); b.disabled=true; yanlis(b); mesaj("❌ Tekrar bak! <span class='en'>Look again!</span>","bad"); }
+}
+
+/* ── ODA 2: zıt anlamlılar ── */
+const ZIT=[["uzun boylu","kısa boylu","🦒","🐭"],["genç","yaşlı","🧒","👴"],["düz saçlı","kıvırcık saçlı","〰️","🌀"],["uzun saçlı","kısa saçlı","👩‍🦰","👦"],["sakallı","sakalsız","🧔","😊"]];
+let o2sec=null,o2kalan=0;
+function oda2(){
+  o2kalan=ZIT.length; o2sec=null;
+  const sol=karisik(ZIT.map((z,i)=>({t:z[0],e:z[2],i}))), sag=karisik(ZIT.map((z,i)=>({t:z[1],e:z[3],i})));
+  $("odaKutu").innerHTML=baslik()+`<p style="font-weight:700">Önce soldan, sonra sağdan bir heykele dokun.<span class="en">Tap one on the left, then its opposite on the right.</span></p>
+   <div class="eslestir"><div class="kol">${sol.map(x=>`<button data-i="${x.i}" data-k="sol" onclick="sec2(this)"><span class="e">${x.e}</span>${x.t}</button>`).join("")}</div>
+   <div class="kol">${sag.map(x=>`<button data-i="${x.i}" data-k="sag" onclick="sec2(this)"><span class="e">${x.e}</span>${x.t}</button>`).join("")}</div></div>
+   <div class="not" style="margin-top:12px">💡 <b>-sız · -siz · -suz · -süz</b> = “yok” <span class="en">“without”: sakalsız = without a beard</span></div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function sec2(b){
+  if(b.classList.contains("bitti")) return;
+  if(b.dataset.k==="sol"){ document.querySelectorAll('[data-k="sol"]').forEach(x=>x.classList.remove("sec")); b.classList.add("sec"); o2sec=b; mesaj(""); return; }
+  if(!o2sec){ mesaj("Önce soldan seç. <span class='en'>Choose on the left first.</span>","bad"); return; }
+  if(o2sec.dataset.i===b.dataset.i){ [o2sec,b].forEach(x=>{x.classList.remove("sec");x.classList.add("bitti");x.disabled=true;}); dogru(); mesaj(`✅ ${o2sec.textContent.replace(/^\S+/,"").trim()} ↔ ${b.textContent.replace(/^\S+/,"").trim()}`,"ok"); o2sec=null; o2kalan--;
+    if(!o2kalan){ mesaj("🔓 Bütün heykeller eşleşti, kapı açıldı!","ok"); odaBitti(); } }
+  else { yanlis(b); mesaj("❌ Bunlar zıt değil. <span class='en'>These are not opposites.</span>","bad"); }
+}
+
+/* ── ODA 3: harf harf ── */
+const YAZ=[{k:"sakal",c:"sakallı",e:"🧔",en:"bearded"},{k:"bıyık",c:"bıyıklı",e:"🥸",en:"with a moustache"},{k:"gözlük",c:"gözlüklü",e:"👓",en:"wearing glasses"},
+ {k:"çil",c:"çilli",e:"🙂",en:"freckled"},{k:"boy",c:"boylu",e:"📏",en:"…height (uzun boylu)"},{k:"saç",c:"saçlı",e:"💇",en:"…haired (kızıl saçlı)"},{k:"göz",c:"gözlü",e:"👁️",en:"…eyed (mavi gözlü)"}];
+let o3=[],yazilan=[],o3yanlis=0;
+function oda3Hazirla(){ o3=karisik(YAZ); oda3Soru(); }
+function oda3Soru(){
+  const q=o3[adim]; yazilan=[]; o3yanlis=0; denendi=false;
+  const v=q.c.slice(-1), fazla=["ı","i","u","ü"].filter(x=>x!==v);
+  const taslar=karisik([...q.c,...fazla]);
+  $("odaKutu").innerHTML=baslik()+`<div class="kelime">${q.e}</div><div class="kok">${q.k} + ? </div><div class="en" style="text-align:center">🇬🇧 ${q.en}</div>
+   <div class="yazi-alan" id="yazi">${[...q.c].map(()=>"<span></span>").join("")}</div>
+   <div class="fazla">⚠️ Dikkat: ${fazla.length} fazla harf var! <i style="color:var(--muted)">· ${fazla.length} extra letters!</i></div>
+   <div class="harfler" id="harfler">${taslar.map(h=>`<button data-h="${h}" onclick="harf(this)">${h}</button>`).join("")}</div>
+   <div class="iki"><button class="btn ikincil" onclick="sil()">⌫ Sil</button><button class="btn" id="kBtn" onclick="kontrol3()">✔ Kontrol et</button></div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function yaziGoster(){ const c=o3[adim].c; $("yazi").innerHTML=[...c].map((_,i)=>`<span class="${yazilan[i]?"dolu":""}">${yazilan[i]?yazilan[i].h:""}</span>`).join(""); }
+function harf(b){ if(yazilan.length>=o3[adim].c.length) return; yazilan.push({h:b.dataset.h,b}); b.disabled=true; yaziGoster(); mesaj(""); }
+function sil(){ const x=yazilan.pop(); if(x){ x.b.disabled=false; yaziGoster(); } }
+function kontrol3(){
+  const q=o3[adim], w=yazilan.map(x=>x.h).join("");
+  if(w.length<q.c.length){ mesaj("Bütün kutuları doldur. <span class='en'>Fill all the boxes.</span>","bad"); return; }
+  if(w===q.c){ $("yazi").classList.add("dogru"); $("kBtn").disabled=true; document.querySelectorAll("#harfler button").forEach(x=>x.disabled=true); dogru(); mesaj(`✅ <b>${q.k} → ${q.c}</b>`,"ok");
+    setTimeout(()=>{ adim++; if(adim<o3.length) oda3Soru(); else { $("odaKutu").innerHTML=baslik()+`<div class="mesaj ok">🔓 Kapı açıldı!</div>`; odaBitti(); } },1300); return; }
+  yanlis($("yazi")); o3yanlis++;
+  let i=0; while(i<w.length&&w[i]===q.c[i]) i++;
+  yazilan.slice(i).forEach(x=>x.b.disabled=false); yazilan=yazilan.slice(0,i); yaziGoster();
+  const ses=[...q.k].reverse().find(h=>"aeıioöuü".includes(h));
+  mesaj(o3yanlis>=2?`❌ İpucu: <b>${q.k}</b> → son sesli <b>${ses}</b> → <b>-l${q.c.slice(-1)}</b>`:"❌ Son sesli harfe bak! <span class='en'>Look at the last vowel!</span>","bad");
+}
+
+/* ── ODA 4: tanık ── */
+let o4=null;
+function oda4(){ o4=diziKur(4,adim<2?2:3); denendi=false;
+  $("odaKutu").innerHTML=baslik()+`<div class="tanik"><small>🗣️ Tanık ${adim+1}/${ODA[3].n} · <i>Witness</i></small>“Gördüğüm kişi <b>${cumle(o4.ipucu)}</b>.”</div>
+   <div class="soru" style="margin:10px 0 6px">Hangisi? <span class="en">Which one?</span></div>
+   <div class="dizi d2">${o4.kisiler.map((k,i)=>`<div class="kisi" onclick="sec4(this,${i})"><span class="no">${i+1}</span>${kisiCiz(k)}</div>`).join("")}</div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function sec4(el,i){
+  if(el.classList.contains("y")||el.classList.contains("ok")) return;
+  if(i===o4.h){ el.classList.add("ok"); dogru(); mesaj(`✅ Evet! ${i+1} numara ${cumle(o4.ipucu)}.`,"ok");
+    setTimeout(()=>{ adim++; if(adim<ODA[3].n) oda4(); else { $("odaKutu").innerHTML=baslik()+`<div class="mesaj ok">🔓 Kapı açıldı!</div>`; odaBitti(); } },1400); }
+  else{ el.classList.add("y"); yanlis(el); const p=o4.kisiler[i], olmayan=o4.ipucu.filter(s=>!uyar(p,s));
+    mesaj(`❌ ${i+1} numara <b>${olmayan[0]}</b> değil. <span class='en'>Number ${i+1} is not “${olmayan[0]}”.</span>`,"bad"); }
+}
+
+/* ── ODA 5: hırsız ── */
+let o5=null;
+function oda5(){ o5=diziKur(6,3); denendi=false;
+  $("odaKutu").innerHTML=baslik()+`<p style="font-weight:700">Gece kameraları 6 kişiyi gördü. Hırsız hangisi?<span class="en">The night cameras saw 6 people. Who is the thief?</span></p>
+   ${o5.ipucu.map((s,i)=>`<div class="tanik"><small>🗣️ ${["Bekçi","Temizlikçi","Ressam"][i]} · <i>${["Guard","Cleaner","Painter"][i]}</i></small>“Hırsız <b>${s}</b>.”</div>`).join("")}
+   <div class="soru" style="margin:10px 0 6px">Hırsızı yakala! <span class="en">Catch the thief!</span></div>
+   <div class="dizi d2">${o5.kisiler.map((k,i)=>`<div class="kisi" onclick="sec5(this,${i})"><span class="no">${i+1}</span>${kisiCiz(k)}</div>`).join("")}</div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function sec5(el,i){
+  if(el.classList.contains("y")||el.classList.contains("ok")) return;
+  if(i===o5.h){ el.classList.add("ok"); dogru(); mesaj(`🚨 Yakaladın! Hırsız ${cumle(o5.ipucu)}.`,"ok"); odaBitti(); }
+  else{ el.classList.add("y"); yanlis(el); const p=o5.kisiler[i], olmayan=o5.ipucu.filter(s=>!uyar(p,s));
+    mesaj(`❌ ${i+1} numara <b>${olmayan[0]}</b> değil. <span class='en'>Number ${i+1} is not “${olmayan[0]}”.</span>`,"bad"); }
+}
+
+function bitis(){
+  clearInterval(timer); const sure=fmt(gecen()), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Tebrikler dedektif ${ad}! Tablo müzeye geri döndü.`:"Tebrikler dedektif! Tablo müzeye geri döndü.";
+  $("bSure").textContent=sure; $("bIlk").textContent=`${ilk}/${toplam}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Müzede Hırsız Var! (Fiziksel Özellikler)", sure, puan:`${ilk}/${toplam} ilk denemede · ${hata} hata`});
+}
+document.addEventListener("keydown",e=>{
+  if(oda!==2||!$("sOda").classList.contains("on")) return;
+  if(e.key==="Backspace"){ e.preventDefault(); sil(); return; } if(e.key==="Enter"){ kontrol3(); return; }
+  const k=e.key.toLocaleLowerCase("tr"); const b=[...document.querySelectorAll("#harfler button")].find(x=>!x.disabled&&x.dataset.h===k); if(b) harf(b);
+});
+OVT.fill("ad");
+</script>
+</body>
+</html>

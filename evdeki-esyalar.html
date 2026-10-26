@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evdeki Eşyalar · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --duvar:#fdf6ec; --ink:#2b2622; --muted:#7a6f66; --cizgi:#eadfce;
+  --salon:#f4a259; --mutfak:#5b8e7d; --yatak:#8e7dbe; --banyo:#4ea5d9;
+  --cati:#c0504d; --ok:#2e9e5b; --bad:#d64545; --sari:#f6c445;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--duvar);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer}
+.ekran{display:none;max-width:720px;margin:0 auto;padding:1.2rem 1rem 2.5rem}
+.ekran.on{display:block}
+h1,h2,h3{font-family:'Baloo 2',cursive;line-height:1.1}
+.ust{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:.95rem;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap}
+.ust span{background:#fff;border:1px solid var(--cizgi);border-radius:999px;padding:.3rem .8rem}
+.btn{display:block;width:100%;border:none;border-radius:14px;padding:.95rem;font-weight:800;font-size:1.05rem;background:var(--cati);color:#fff;box-shadow:0 5px 0 #8f3532;margin-top:.8rem}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8f3532}
+.btn.ikinci{background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--cizgi);border:2px solid var(--cizgi)}
+
+/* Giriş */
+.ev-logo{width:180px;margin:1rem auto .5rem;display:block}
+.giris{text-align:center}
+.giris h1{font-size:2.6rem;color:var(--cati)}
+.giris p{color:var(--muted);margin:.4rem auto 1rem;max-width:460px}
+.giris label{display:block;text-align:left;font-weight:800;font-size:.9rem;margin:1rem 0 .3rem}
+.giris input{width:100%;padding:.8rem;border:2px solid var(--cizgi);border-radius:12px;font:inherit;font-size:1.05rem}
+.adimlar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:1rem 0;text-align:center;font-size:.85rem;font-weight:700}
+.adimlar div{background:#fff;border:1px solid var(--cizgi);border-radius:12px;padding:.6rem .3rem}
+.adimlar b{display:block;font-size:1.4rem}
+
+/* Kartlar */
+.kart-alan{perspective:1200px;margin:.4rem 0 1rem}
+.kart{position:relative;height:300px;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.kart.don{transform:rotateY(180deg)}
+.yuz{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;background:#fff;border:3px solid var(--cizgi);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;text-align:center;box-shadow:0 10px 24px rgba(80,60,40,.08)}
+.yuz.arka{transform:rotateY(180deg);background:#fffaf0}
+.yuz svg{width:120px;height:120px}
+.yuz .tr{font-family:'Baloo 2',cursive;font-size:2.3rem;font-weight:800;margin-top:.3rem}
+.yuz .oda{font-size:.8rem;font-weight:800;color:#fff;border-radius:999px;padding:.15rem .7rem;margin-top:.3rem}
+.yuz .en{font-size:1.8rem;font-weight:800;color:var(--cati)}
+.yuz .ornek{font-size:1.15rem;margin-top:.8rem;max-width:420px}
+.ipucu{text-align:center;color:var(--muted);font-size:.85rem}
+.ses{position:absolute;top:.6rem;right:.6rem;border:none;background:var(--duvar);border-radius:50%;width:44px;height:44px;font-size:1.3rem;z-index:2}
+.kart-btn{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.kart-btn .btn{margin-top:0}
+.kart-btn .tekrar{background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--cizgi);border:2px solid var(--cizgi)}
+.kart-btn .bil{background:var(--ok);box-shadow:0 5px 0 #1f6f40}
+.kucuk-btn{display:flex;justify-content:space-between;margin-top:.8rem}
+.kucuk-btn button{background:none;border:none;color:var(--muted);font-weight:800;text-decoration:underline}
+
+/* Ev planı */
+.tasima{display:flex;align-items:center;gap:.8rem;background:#fff;border:3px dashed var(--sari);border-radius:18px;padding:.7rem 1rem;margin-bottom:.8rem;touch-action:none;user-select:none;-webkit-user-select:none}
+.tasima .esya{display:flex;align-items:center;gap:.7rem;cursor:grab;flex:1}
+.tasima svg{width:72px;height:72px;flex:none}
+.tasima .tr{font-family:'Baloo 2',cursive;font-size:1.9rem;font-weight:800;line-height:1}
+.tasima .en{color:var(--muted);font-weight:700}
+.tasima .kutu{font-size:2rem}
+.tasima.salla{animation:salla .4s}
+@keyframes salla{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.surukle{position:fixed;z-index:50;pointer-events:none;transform:translate(-50%,-50%) scale(1.05);opacity:.92;filter:drop-shadow(0 10px 18px rgba(0,0,0,.25))}
+.surukle svg{width:80px;height:80px}
+.ev{position:relative;margin-top:2.6rem}
+.cati{position:absolute;left:-2%;right:-2%;top:-2.6rem;height:2.8rem;background:var(--cati);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.odalar{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#8b5e3c;padding:6px;border-radius:0 0 12px 12px}
+.oda{position:relative;min-height:150px;border:none;border-radius:6px;padding:.5rem;text-align:left;color:#fff;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.oda h3{font-size:1.35rem}
+.oda small{font-weight:700;opacity:.85;font-size:.78rem}
+.oda .icler{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto}
+.oda .icler svg{width:30px;height:30px;background:rgba(255,255,255,.85);border-radius:8px;padding:2px}
+.oda.hedef{transform:scale(1.03);box-shadow:0 0 0 4px var(--sari)}
+.oda.yanlis{animation:salla .4s;box-shadow:0 0 0 4px var(--bad)}
+.oda.dogru{box-shadow:0 0 0 4px #fff,0 0 0 8px var(--ok)}
+#odaSalon{background:var(--salon)} #odaMutfak{background:var(--mutfak)} #odaYatak{background:var(--yatak)} #odaBanyo{background:var(--banyo)}
+
+/* Cümleler */
+.cumle{background:#fff;border:3px solid var(--cizgi);border-radius:20px;padding:1.3rem 1rem;font-size:1.35rem;font-weight:700;text-align:center;line-height:1.6;min-height:120px;display:flex;align-items:center;justify-content:center}
+.cumle .bos{display:inline-block;min-width:140px;border-bottom:3px solid var(--sari);margin:0 .3rem;color:var(--ok)}
+.cumle.dogru{border-color:var(--ok);background:#effaf3}
+.havuz{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.havuz button{border:none;border-radius:14px;padding:.9rem .5rem;font-weight:800;font-size:1.1rem;color:#fff}
+.havuz button.yanlis{animation:salla .4s;outline:4px solid var(--bad)}
+.h-salon{background:var(--salon)} .h-mutfak{background:var(--mutfak)} .h-yatak{background:var(--yatak)} .h-banyo{background:var(--banyo)}
+
+/* Bitiş */
+.bitis{text-align:center}
+.bitis h2{font-size:2.4rem;color:var(--cati)}
+.istat{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:1rem 0}
+.istat div{background:#fff;border:1px solid var(--cizgi);border-radius:14px;padding:.8rem .3rem}
+.istat b{display:block;font-family:'Baloo 2',cursive;font-size:1.7rem}
+.istat span{font-size:.8rem;color:var(--muted);font-weight:700}
+.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%) translateY(150%);background:var(--ink);color:#fff;font-weight:800;padding:.7rem 1.1rem;border-radius:14px;transition:transform .25s;z-index:60;max-width:92vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+
+<!-- GİRİŞ -->
+<section class="ekran on" id="sGiris">
+  <div class="giris">
+    <svg class="ev-logo" viewBox="0 0 200 150" aria-hidden="true"><polygon points="100,8 192,70 8,70" fill="#c0504d"/><rect x="24" y="68" width="152" height="76" rx="6" fill="#8b5e3c"/><rect x="30" y="74" width="68" height="32" rx="4" fill="#f4a259"/><rect x="102" y="74" width="68" height="32" rx="4" fill="#5b8e7d"/><rect x="30" y="108" width="68" height="32" rx="4" fill="#8e7dbe"/><rect x="102" y="108" width="68" height="32" rx="4" fill="#4ea5d9"/><circle cx="100" cy="44" r="10" fill="#fdf6ec"/></svg>
+    <h1>Evdeki Eşyalar</h1>
+    <p>Taşınma günü! Önce 20 eşyanın adını öğren, sonra her eşyayı doğru odaya yerleştir.</p>
+    <div class="adimlar"><div><b>🃏</b>1. Kartlar</div><div><b>🏠</b>2. Evi yerleştir</div><div><b>✏️</b>3. Cümleler</div></div>
+    <label for="ad">Adın</label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="basla(false)">Başla</button>
+    <button class="btn ikinci" onclick="basla(true)">Kartları geç, eve geç →</button>
+  </div>
+</section>
+
+<!-- 1. KARTLAR -->
+<section class="ekran" id="sKart">
+  <div class="ust"><span id="kSay"></span><span id="kSure">⏱ 00:00</span></div>
+  <div class="kart-alan"><div class="kart" id="kart" onclick="cevir()">
+    <div class="yuz on-yuz" id="kOn"></div>
+    <div class="yuz arka" id="kArka"></div>
+  </div></div>
+  <p class="ipucu">Karta dokun, çevir. · Boşluk = çevir, ← → = geç</p>
+  <div class="kart-btn" style="margin-top:.8rem">
+    <button class="btn tekrar" onclick="kartCevap(false)">↺ Tekrar et</button>
+    <button class="btn bil" onclick="kartCevap(true)">Biliyorum ✓</button>
+  </div>
+  <div class="kucuk-btn"><button onclick="karistir()">🔀 Karıştır</button><button onclick="evBasla()">Kartları geç →</button></div>
+</section>
+
+<!-- 2. EVİ YERLEŞTİR -->
+<section class="ekran" id="sEv">
+  <div class="ust"><span id="eSay"></span><span id="eHata">❌ 0</span><span id="eSure">⏱ 00:00</span></div>
+  <div class="tasima" id="tasima"><div class="esya" id="esya"></div><span class="kutu">📦</span></div>
+  <p class="ipucu" style="margin-bottom:.4rem">Eşyayı doğru odaya sürükle ya da odaya dokun.</p>
+  <div class="ev"><div class="cati"></div>
+    <div class="odalar">
+      <button class="oda" id="odaSalon"  data-oda="salon"  onclick="yerlestir('salon')"><h3>Salon</h3><small>living room</small><div class="icler"></div></button>
+      <button class="oda" id="odaMutfak" data-oda="mutfak" onclick="yerlestir('mutfak')"><h3>Mutfak</h3><small>kitchen</small><div class="icler"></div></button>
+      <button class="oda" id="odaYatak"  data-oda="yatak"  onclick="yerlestir('yatak')"><h3>Yatak odası</h3><small>bedroom</small><div class="icler"></div></button>
+      <button class="oda" id="odaBanyo"  data-oda="banyo"  onclick="yerlestir('banyo')"><h3>Banyo</h3><small>bathroom</small><div class="icler"></div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CÜMLELER -->
+<section class="ekran" id="sCumle">
+  <div class="ust"><span id="cSay"></span><span id="cHata">❌ 0</span><span id="cSure">⏱ 00:00</span></div>
+  <h2 style="text-align:center;margin-bottom:.6rem">Hangi odada?</h2>
+  <div class="cumle" id="cumle"></div>
+  <div class="havuz" id="havuz"></div>
+</section>
+
+<!-- BİTİŞ -->
+<section class="ekran" id="sBitis">
+  <div class="bitis">
+    <svg class="ev-logo" viewBox="0 0 200 150" aria-hidden="true"><polygon points="100,8 192,70 8,70" fill="#c0504d"/><rect x="24" y="68" width="152" height="76" rx="6" fill="#8b5e3c"/><rect x="30" y="74" width="68" height="32" rx="4" fill="#f4a259"/><rect x="102" y="74" width="68" height="32" rx="4" fill="#5b8e7d"/><rect x="30" y="108" width="68" height="32" rx="4" fill="#8e7dbe"/><rect x="102" y="108" width="68" height="32" rx="4" fill="#4ea5d9"/><circle cx="100" cy="44" r="10" fill="#f6c445"/></svg>
+    <h2>Ev hazır! 🎉</h2>
+    <p id="bAd" style="font-weight:800;font-size:1.1rem"></p>
+    <div class="istat">
+      <div><b id="bSure">00:00</b><span>süre</span></div>
+      <div><b id="bEv">0/20</b><span>ilk denemede oda</span></div>
+      <div><b id="bHata">0</b><span>hata</span></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikinci" onclick="location.reload()">↺ Tekrar oyna</button>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════ SÖZCÜKLER ════════════ */
+const I={ // basit çizimler (viewBox 0 0 64 64)
+kanepe:`<rect x="6" y="26" width="52" height="18" rx="5" fill="#e07a5f"/><rect x="10" y="18" width="44" height="14" rx="5" fill="#f2a07b"/><rect x="2" y="24" width="10" height="22" rx="4" fill="#c8634a"/><rect x="52" y="24" width="10" height="22" rx="4" fill="#c8634a"/><rect x="8" y="44" width="4" height="8" fill="#6b4a2f"/><rect x="52" y="44" width="4" height="8" fill="#6b4a2f"/>`,
+koltuk:`<rect x="16" y="14" width="32" height="22" rx="6" fill="#81b29a"/><rect x="14" y="32" width="36" height="14" rx="4" fill="#6a9c84"/><rect x="8" y="28" width="10" height="20" rx="4" fill="#5a8a73"/><rect x="46" y="28" width="10" height="20" rx="4" fill="#5a8a73"/><rect x="14" y="48" width="4" height="8" fill="#6b4a2f"/><rect x="46" y="48" width="4" height="8" fill="#6b4a2f"/>`,
+televizyon:`<rect x="6" y="10" width="52" height="34" rx="4" fill="#2b2d42"/><rect x="10" y="14" width="44" height="26" rx="2" fill="#8ecae6"/><path d="M14 36 L26 24 L34 32 L40 26 L50 36 Z" fill="#219ebc"/><rect x="28" y="44" width="8" height="6" fill="#2b2d42"/><rect x="18" y="50" width="28" height="4" rx="2" fill="#2b2d42"/>`,
+kitaplik:`<rect x="10" y="4" width="44" height="56" rx="2" fill="#8b5e3c"/><rect x="14" y="8" width="36" height="14" fill="#f3e1c7"/><rect x="14" y="26" width="36" height="14" fill="#f3e1c7"/><rect x="14" y="44" width="36" height="12" fill="#f3e1c7"/><rect x="16" y="9" width="5" height="13" fill="#e63946"/><rect x="22" y="11" width="5" height="11" fill="#457b9d"/><rect x="28" y="9" width="4" height="13" fill="#f4a261"/><rect x="16" y="28" width="6" height="12" fill="#2a9d8f"/><rect x="23" y="27" width="4" height="13" fill="#e9c46a"/><rect x="34" y="29" width="12" height="4" fill="#e76f51"/><rect x="16" y="46" width="5" height="10" fill="#6d597a"/><rect x="22" y="47" width="5" height="9" fill="#e63946"/>`,
+sehpa:`<rect x="6" y="30" width="52" height="6" rx="3" fill="#a0522d"/><rect x="12" y="36" width="4" height="18" fill="#7a3e22"/><rect x="48" y="36" width="4" height="18" fill="#7a3e22"/><rect x="26" y="20" width="10" height="10" rx="2" fill="#fff" stroke="#888"/><path d="M36 22 q6 3 0 6" stroke="#888" fill="none" stroke-width="2"/>`,
+buzdolabi:`<rect x="16" y="4" width="32" height="56" rx="4" fill="#e9f1f7" stroke="#9fb3c8" stroke-width="2"/><line x1="16" y1="24" x2="48" y2="24" stroke="#9fb3c8" stroke-width="2"/><rect x="40" y="10" width="3" height="10" rx="1" fill="#6c7a89"/><rect x="40" y="30" width="3" height="16" rx="1" fill="#6c7a89"/><circle cx="24" cy="14" r="3" fill="#e63946"/>`,
+firin:`<rect x="8" y="8" width="48" height="48" rx="4" fill="#d9d9d9" stroke="#8d8d8d" stroke-width="2"/><rect x="14" y="22" width="36" height="28" rx="3" fill="#3d3d3d"/><rect x="18" y="26" width="28" height="18" rx="2" fill="#f4a261"/><circle cx="18" cy="15" r="3" fill="#555"/><circle cx="28" cy="15" r="3" fill="#555"/><circle cx="38" cy="15" r="3" fill="#555"/><circle cx="48" cy="15" r="3" fill="#555"/>`,
+bulasik:`<rect x="10" y="6" width="44" height="52" rx="4" fill="#eef2f5" stroke="#9fb3c8" stroke-width="2"/><rect x="10" y="6" width="44" height="10" rx="4" fill="#cfd8e0"/><circle cx="44" cy="11" r="2.5" fill="#2e9e5b"/><rect x="16" y="9" width="16" height="4" rx="2" fill="#6c7a89"/><circle cx="26" cy="38" r="9" fill="#fff" stroke="#9fb3c8" stroke-width="2"/><circle cx="40" cy="38" r="9" fill="#fff" stroke="#9fb3c8" stroke-width="2"/>`,
+caydanlik:`<path d="M20 34 h24 l4 20 h-32 z" fill="#b5651d"/><path d="M48 40 q10 2 6 10" stroke="#8a4b14" stroke-width="3" fill="none"/><path d="M24 14 h16 l3 20 h-22 z" fill="#d98c3a"/><path d="M43 20 q8 0 7 8" stroke="#a5632a" stroke-width="3" fill="none"/><rect x="28" y="9" width="8" height="5" rx="2" fill="#7a4512"/><rect x="18" y="32" width="28" height="3" fill="#7a4512"/>`,
+tencere:`<rect x="12" y="26" width="40" height="26" rx="5" fill="#9aa5b1"/><rect x="4" y="30" width="10" height="4" rx="2" fill="#4a5560"/><rect x="50" y="30" width="10" height="4" rx="2" fill="#4a5560"/><path d="M10 26 q22 -12 44 0 z" fill="#c4ccd4"/><rect x="28" y="12" width="8" height="5" rx="2" fill="#4a5560"/><path d="M24 8 q2 -4 0 -6 M32 8 q2 -4 0 -6 M40 8 q2 -4 0 -6" stroke="#bbb" fill="none"/>`,
+yatak:`<rect x="4" y="20" width="8" height="34" rx="2" fill="#8b5e3c"/><rect x="52" y="30" width="8" height="24" rx="2" fill="#8b5e3c"/><rect x="8" y="34" width="50" height="12" rx="3" fill="#f1faee"/><rect x="12" y="26" width="14" height="9" rx="4" fill="#fff" stroke="#ccc"/><rect x="24" y="30" width="34" height="14" rx="3" fill="#8e7dbe"/>`,
+yastik:`<path d="M8 22 q4 -8 24 -6 q20 -2 24 6 q4 10 0 20 q-4 8 -24 6 q-20 2 -24 -6 q-4 -10 0 -20z" fill="#fbe8f0" stroke="#e5a9c1" stroke-width="2"/><path d="M20 30 q12 6 24 0" stroke="#e5a9c1" fill="none" stroke-width="2"/>`,
+yorgan:`<rect x="6" y="14" width="52" height="36" rx="6" fill="#ffd166"/><path d="M6 26 h52 M6 38 h52 M19 14 v36 M32 14 v36 M45 14 v36" stroke="#f4a259" stroke-width="2"/><rect x="6" y="14" width="52" height="36" rx="6" fill="none" stroke="#e09f3e" stroke-width="2"/>`,
+gardirop:`<rect x="10" y="4" width="44" height="54" rx="3" fill="#a47148"/><line x1="32" y1="6" x2="32" y2="56" stroke="#6b4a2f" stroke-width="2"/><circle cx="28" cy="32" r="2" fill="#f6c445"/><circle cx="36" cy="32" r="2" fill="#f6c445"/><rect x="12" y="58" width="5" height="4" fill="#6b4a2f"/><rect x="47" y="58" width="5" height="4" fill="#6b4a2f"/>`,
+komodin:`<rect x="14" y="26" width="36" height="28" rx="3" fill="#b07d56"/><line x1="14" y1="40" x2="50" y2="40" stroke="#7a5236" stroke-width="2"/><circle cx="32" cy="33" r="2" fill="#f6c445"/><circle cx="32" cy="47" r="2" fill="#f6c445"/><rect x="28" y="16" width="3" height="10" fill="#555"/><path d="M22 16 h18 l-4 -8 h-10 z" fill="#ffd166"/>`,
+kuvet:`<path d="M6 28 h52 v6 q0 14 -14 14 h-24 q-14 0 -14 -14 z" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/><path d="M8 32 h48" stroke="#4ea5d9" stroke-width="4"/><rect x="12" y="48" width="4" height="8" fill="#94a3b8"/><rect x="48" y="48" width="4" height="8" fill="#94a3b8"/><path d="M50 28 v-14 q0 -6 -6 -6" stroke="#94a3b8" stroke-width="3" fill="none"/><circle cx="20" cy="22" r="3" fill="#bde0fe"/><circle cx="27" cy="18" r="2" fill="#bde0fe"/>`,
+dus:`<path d="M14 58 v-40 q0 -12 14 -12 h8" stroke="#94a3b8" stroke-width="4" fill="none"/><path d="M30 10 h16 l-4 8 h-8 z" fill="#64748b"/><g fill="#4ea5d9"><circle cx="34" cy="26" r="2"/><circle cx="40" cy="28" r="2"/><circle cx="36" cy="34" r="2"/><circle cx="43" cy="36" r="2"/><circle cx="33" cy="42" r="2"/><circle cx="40" cy="45" r="2"/></g>`,
+lavabo:`<path d="M10 24 h44 q0 14 -22 14 q-22 0 -22 -14z" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/><rect x="28" y="38" width="8" height="20" fill="#e2e8f0" stroke="#94a3b8"/><path d="M32 24 v-10 h8" stroke="#64748b" stroke-width="3" fill="none"/><circle cx="40" cy="18" r="2" fill="#4ea5d9"/>`,
+disfircasi:`<rect x="6" y="36" width="40" height="6" rx="3" transform="rotate(-25 26 39)" fill="#4ea5d9"/><rect x="38" y="16" width="16" height="7" rx="2" transform="rotate(-25 46 19)" fill="#fff" stroke="#94a3b8"/><path d="M40 12 l2 -4 M44 10 l2 -4 M48 8 l2 -4" stroke="#94a3b8" stroke-width="2" transform="rotate(-25 46 19) translate(-2 4)"/>`,
+sampuan:`<rect x="20" y="20" width="24" height="38" rx="6" fill="#8ecae6"/><rect x="26" y="10" width="12" height="10" rx="2" fill="#219ebc"/><rect x="30" y="6" width="10" height="5" rx="2" fill="#023047"/><rect x="24" y="30" width="16" height="12" rx="2" fill="#fff"/><circle cx="32" cy="36" r="3" fill="#ffb703"/>`
+};
+const ODA={salon:{ad:"Salon",en:"living room",renk:"#f4a259",loc:"salonda"},mutfak:{ad:"Mutfak",en:"kitchen",renk:"#5b8e7d",loc:"mutfakta"},yatak:{ad:"Yatak odası",en:"bedroom",renk:"#8e7dbe",loc:"yatak odasında"},banyo:{ad:"Banyo",en:"bathroom",renk:"#4ea5d9",loc:"banyoda"}};
+const SOZ=[
+ {tr:"kanepe",en:"sofa",oda:"salon",ic:"kanepe",ornek:"Babam kanepede uyuyor."},
+ {tr:"koltuk",en:"armchair",oda:"salon",ic:"koltuk",ornek:"Dedem koltukta gazete okuyor."},
+ {tr:"televizyon",en:"television",oda:"salon",ic:"televizyon",ornek:"Akşamları televizyon izliyoruz."},
+ {tr:"kitaplık",en:"bookcase",oda:"salon",ic:"kitaplik",ornek:"Kitaplıkta çok kitap var."},
+ {tr:"sehpa",en:"coffee table",oda:"salon",ic:"sehpa",ornek:"Çayımı sehpaya koydum."},
+ {tr:"buzdolabı",en:"fridge",oda:"mutfak",ic:"buzdolabi",ornek:"Süt buzdolabında."},
+ {tr:"fırın",en:"oven",oda:"mutfak",ic:"firin",ornek:"Annem fırında kek yapıyor."},
+ {tr:"bulaşık makinesi",en:"dishwasher",oda:"mutfak",ic:"bulasik",ornek:"Tabakları bulaşık makinesine koy."},
+ {tr:"çaydanlık",en:"teapot",oda:"mutfak",ic:"caydanlik",ornek:"Çaydanlıkta çay demleniyor."},
+ {tr:"tencere",en:"saucepan",oda:"mutfak",ic:"tencere",ornek:"Tencerede çorba var."},
+ {tr:"yatak",en:"bed",oda:"yatak",ic:"yatak",ornek:"Saat dokuzda yatağa giriyorum."},
+ {tr:"yastık",en:"pillow",oda:"yatak",ic:"yastik",ornek:"Yastığım çok yumuşak."},
+ {tr:"yorgan",en:"duvet",oda:"yatak",ic:"yorgan",ornek:"Kışın kalın yorgan kullanırız."},
+ {tr:"gardırop",en:"wardrobe",oda:"yatak",ic:"gardirop",ornek:"Kıyafetlerim gardıropta."},
+ {tr:"komodin",en:"bedside table",oda:"yatak",ic:"komodin",ornek:"Gözlüğüm komodinin üstünde."},
+ {tr:"küvet",en:"bathtub",oda:"banyo",ic:"kuvet",ornek:"Kardeşim küvette yıkanıyor."},
+ {tr:"duş",en:"shower",oda:"banyo",ic:"dus",ornek:"Sabah duş alıyorum."},
+ {tr:"lavabo",en:"washbasin",oda:"banyo",ic:"lavabo",ornek:"Ellerimi lavaboda yıkıyorum."},
+ {tr:"diş fırçası",en:"toothbrush",oda:"banyo",ic:"disfircasi",ornek:"Diş fırçam mavi."},
+ {tr:"şampuan",en:"shampoo",oda:"banyo",ic:"sampuan",ornek:"Bu şampuan elma kokuyor."},
+];
+/* Cümleler: kartlardaki örneklerden farklı; her oda iki kez doğru cevap */
+const CUM=[
+ {s:"Buzdolabı ve fırın ___.",d:"mutfak"},
+ {s:"Kanepe ve televizyon ___.",d:"salon"},
+ {s:"Yatağım ve gardırobum ___.",d:"yatak"},
+ {s:"Küvet ve duş ___.",d:"banyo"},
+ {s:"Annem akşam yemeğini ___ hazırlıyor.",d:"mutfak"},
+ {s:"Her sabah dişlerimi ___ fırçalarım.",d:"banyo"},
+ {s:"Misafirler gelince ___ otururuz.",d:"salon"},
+ {s:"Her gece ___ uyurum.",d:"yatak"},
+];
+function svg(k,ek=""){ return `<svg viewBox="0 0 64 64" ${ek} aria-hidden="true">${I[k]}</svg>`; }
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+
+/* ════════════ GENEL ════════════ */
+let t0=0, timer=0, hata=0, kartTekrar=0, evIlk=0, cumleIlk=0;
+const $=id=>document.getElementById(id);
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function saat(){ const t="⏱ "+fmt(Date.now()-t0); ["kSure","eSure","cSure"].forEach(i=>$(i).textContent=t); }
+let toastT; function toast(m){ const e=$("toast"); e.textContent=m; e.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>e.classList.remove("on"),1600); }
+function basla(gec){
+  t0=Date.now(); hata=0; kartTekrar=0; clearInterval(timer); timer=setInterval(saat,500);
+  if(gec) evBasla(); else kartBasla();
+}
+
+/* ════════════ 1. KARTLAR ════════════ */
+let deste=[], ki=0, trSes=null;
+function sesHazir(){ if(!("speechSynthesis" in window)) return; const v=speechSynthesis.getVoices(); trSes=v.find(x=>/^tr/i.test(x.lang))||null; }
+if("speechSynthesis" in window){ sesHazir(); speechSynthesis.onvoiceschanged=sesHazir; }
+function oku(t){ if(!trSes) return; const u=new SpeechSynthesisUtterance(t); u.lang="tr-TR"; u.voice=trSes; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+function kartBasla(){ deste=karisik(SOZ.slice()); ki=0; ekran("sKart"); kartGoster(); }
+function karistir(){ deste=karisik(deste); kartGoster(); }
+function kartGoster(){
+  const w=deste[0], o=ODA[w.oda];
+  $("kart").classList.remove("don");
+  const sesBtn=trSes?`<button class="ses" onclick="event.stopPropagation();oku('${w.tr}')" aria-label="Sesli oku">🔊</button>`:"";
+  $("kOn").innerHTML=`${sesBtn}${svg(w.ic)}<div class="tr">${w.tr}</div><div class="oda" style="background:${o.renk}">${o.ad}</div>`;
+  $("kArka").innerHTML=`${trSes?`<button class="ses" onclick="event.stopPropagation();oku('${w.ornek.replace(/'/g,"\\'")}')" aria-label="Cümleyi oku">🔊</button>`:""}<div class="en">${w.en}</div><div class="tr" style="font-size:1.5rem">${w.tr}</div><div class="ornek">“${w.ornek}”</div>`;
+  $("kSay").textContent=`🃏 ${SOZ.length-deste.length+1}/${SOZ.length} · ${deste.length} kart kaldı`;
+}
+function cevir(){ $("kart").classList.toggle("don"); }
+function kartCevap(bil){
+  const w=deste.shift();
+  if(!bil){ deste.push(w); kartTekrar++; }
+  if(deste.length===0){ toast("Bütün kartlar tamam! Şimdi evi yerleştir."); setTimeout(evBasla,700); return; }
+  kartGoster();
+}
+document.addEventListener("keydown",e=>{
+  if(!$("sKart").classList.contains("on")) return;
+  if(e.code==="Space"){ e.preventDefault(); cevir(); }
+  if(e.key==="ArrowRight") kartCevap(true);
+  if(e.key==="ArrowLeft") kartCevap(false);
+});
+
+/* ════════════ 2. EVİ YERLEŞTİR ════════════ */
+let sira=[], ei=0, ilkDeneme=true;
+function evBasla(){
+  if(!t0){ t0=Date.now(); timer=setInterval(saat,500); }
+  sira=karisik(SOZ.slice()); ei=0; evIlk=0;
+  document.querySelectorAll(".oda .icler").forEach(x=>x.innerHTML="");
+  ekran("sEv"); esyaGoster();
+}
+function esyaGoster(){
+  const w=sira[ei]; ilkDeneme=true;
+  $("esya").innerHTML=`${svg(w.ic)}<div><div class="tr">${w.tr}</div><div class="en">${w.en}</div></div>`;
+  $("eSay").textContent=`📦 ${ei+1}/${sira.length}`;
+  $("eHata").textContent=`❌ ${hata}`;
+}
+function yerlestir(oda){
+  const w=sira[ei]; if(!w) return;
+  const el=document.querySelector(`.oda[data-oda="${oda}"]`);
+  if(w.oda===oda){
+    if(ilkDeneme) evIlk++;
+    el.classList.add("dogru"); setTimeout(()=>el.classList.remove("dogru"),450);
+    el.querySelector(".icler").insertAdjacentHTML("beforeend",svg(w.ic,`title="${w.tr}"`));
+    toast(`✔ ${cap(w.tr)} ${ODA[oda].loc}.`);
+    ei++;
+    if(ei<sira.length) setTimeout(esyaGoster,300); else setTimeout(cumleBasla,900);
+  }else{
+    hata++; ilkDeneme=false; $("eHata").textContent=`❌ ${hata}`;
+    el.classList.remove("yanlis"); void el.offsetWidth; el.classList.add("yanlis"); setTimeout(()=>el.classList.remove("yanlis"),450);
+    toast(`${cap(w.tr)} ${ODA[oda].loc} olmaz. Bir daha dene!`);
+  }
+}
+function cap(s){ return s.charAt(0).toLocaleUpperCase("tr")+s.slice(1); }
+/* Sürükle-bırak (fare ve dokunmatik) */
+(function(){
+  let hayalet=null, uzerinde=null, basX=0, basY=0, suruk=false;
+  const kaynak=$("esya");
+  kaynak.addEventListener("pointerdown",e=>{ basX=e.clientX; basY=e.clientY; suruk=true; kaynak.setPointerCapture(e.pointerId); });
+  kaynak.addEventListener("pointermove",e=>{
+    if(!suruk) return;
+    if(!hayalet && Math.hypot(e.clientX-basX,e.clientY-basY)>8){
+      hayalet=document.createElement("div"); hayalet.className="surukle"; hayalet.innerHTML=svg(sira[ei].ic); document.body.appendChild(hayalet);
+    }
+    if(!hayalet) return;
+    hayalet.style.left=e.clientX+"px"; hayalet.style.top=e.clientY+"px";
+    const alt=document.elementFromPoint(e.clientX,e.clientY); const oda=alt&&alt.closest(".oda");
+    if(uzerinde&&uzerinde!==oda) uzerinde.classList.remove("hedef");
+    uzerinde=oda; if(oda) oda.classList.add("hedef");
+  });
+  const bitir=()=>{ suruk=false; if(hayalet){ hayalet.remove(); hayalet=null; if(uzerinde){ uzerinde.classList.remove("hedef"); yerlestir(uzerinde.dataset.oda); } } uzerinde=null; };
+  kaynak.addEventListener("pointerup",bitir); kaynak.addEventListener("pointercancel",bitir);
+})();
+
+/* ════════════ 3. CÜMLELER ════════════ */
+let csira=[], ci=0, cIlk=true;
+function cumleBasla(){ csira=karisik(CUM.slice()); ci=0; cumleIlk=0; ekran("sCumle"); cumleGoster(); }
+function cumleGoster(){
+  const c=csira[ci]; cIlk=true;
+  $("cumle").className="cumle";
+  $("cumle").innerHTML="<p>"+c.s.replace("___",`<span class="bos" id="bos">&nbsp;</span>`)+"</p>";
+  $("havuz").innerHTML=["salon","mutfak","yatak","banyo"].map(o=>`<button class="h-${o}" onclick="cevap('${o}',this)">${ODA[o].loc}</button>`).join("");
+  $("cSay").textContent=`✏️ ${ci+1}/${csira.length}`; $("cHata").textContent=`❌ ${hata}`;
+}
+function cevap(o,b){
+  const c=csira[ci];
+  if(o===c.d){
+    if(cIlk) cumleIlk++;
+    $("bos").textContent=ODA[o].loc; $("cumle").classList.add("dogru");
+    document.querySelectorAll("#havuz button").forEach(x=>x.disabled=true);
+    ci++; setTimeout(()=>{ if(ci<csira.length) cumleGoster(); else bitis(); },900);
+  }else{
+    hata++; cIlk=false; $("cHata").textContent=`❌ ${hata}`;
+    b.classList.remove("yanlis"); void b.offsetWidth; b.classList.add("yanlis");
+  }
+}
+
+/* ════════════ BİTİŞ ════════════ */
+function bitis(){
+  clearInterval(timer);
+  const sure=fmt(Date.now()-t0), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Aferin ${ad}! Bütün eşyalar yerinde.`:"Aferin! Bütün eşyalar yerinde.";
+  $("bSure").textContent=sure; $("bEv").textContent=`${evIlk}/${SOZ.length}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Evdeki Eşyalar", sure, puan:`Odalar ${evIlk}/${SOZ.length} ilk denemede · Cümleler ${cumleIlk}/${CUM.length} · ${hata} hata · ${kartTekrar} kart tekrarı`});
+}
+OVT.fill("ad");
+</script>
+</body>
+</html>

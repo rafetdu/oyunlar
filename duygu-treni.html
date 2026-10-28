@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Duygu Treni · Duygular · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f0ff;--kart:#fff;--ink:#26233a;--muted:#6f6a8a;--cizgi:#e3defa;--ana:#6c4ce0;--ana2:#9b7bff;--ok:#1f9d6b;--bad:#e0475a;--sari:#ffcc4d}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;
+  background-image:radial-gradient(circle at 0 0,#ffe6f2 0,transparent 35%),radial-gradient(circle at 100% 20%,#dff5ff 0,transparent 35%)}
+h1,h2,h3{font-family:'Fredoka',sans-serif;line-height:1.1}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.ekran{display:none}.ekran.on{display:block;animation:gel .35s ease}
+@keyframes gel{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kutu{background:var(--kart);border-radius:22px;padding:18px;border:1px solid var(--cizgi);box-shadow:0 8px 24px rgba(60,40,140,.08)}
+.btn{display:block;width:100%;font:inherit;font-weight:900;font-size:1.1rem;padding:14px;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--ana),var(--ana2));color:#fff;margin-top:14px;box-shadow:0 6px 16px rgba(108,76,224,.3)}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.45}
+.btn.ikincil{background:#fff;color:var(--ink);border:2px solid var(--cizgi);box-shadow:none}
+.en{display:block;color:var(--muted);font-size:.86rem;font-style:italic;font-weight:600;margin-top:2px}
+.giris{text-align:center}
+.tren{font-size:3rem;margin:6px 0;white-space:nowrap;overflow:hidden}
+.tren span{display:inline-block;animation:git 6s linear infinite}
+@keyframes git{from{transform:translateX(60%)}to{transform:translateX(-60%)}}
+.giris h1{font-size:2.4rem;color:var(--ana)}
+.giris p{margin:12px 0;line-height:1.5}
+.giris label{display:block;text-align:left;font-weight:800;margin:12px 0 6px}
+.giris input{width:100%;font:inherit;font-size:1.1rem;padding:12px;border-radius:12px;border:2px solid var(--cizgi)}
+.brif h2{color:var(--ana);font-size:1.6rem}
+.yuzler{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.yuzler div{background:#faf8ff;border:1px solid var(--cizgi);border-radius:14px;padding:6px 4px 8px;text-align:center;font-weight:900}
+.yuzler svg{width:100%;max-width:90px;height:auto;display:block;margin:0 auto}
+.yuzler i{display:block;color:var(--muted);font-weight:600;font-size:.75rem}
+.not{margin-top:12px;background:#fff8dc;border:2px dashed var(--sari);border-radius:14px;padding:10px 12px;font-weight:700;line-height:1.45}
+.ust{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;font-weight:900}
+.ust span{background:#fff;border:1px solid var(--cizgi);border-radius:99px;padding:6px 12px;font-size:.9rem}
+.hat{display:flex;align-items:center;margin:4px 0 14px}
+.hat i{flex:1;height:5px;background:var(--cizgi)}
+.hat b{width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid var(--cizgi);display:grid;place-items:center;font-size:.85rem;flex:none}
+.hat b.acik{border-color:var(--ok);background:var(--ok);color:#fff}.hat b.simdi{border-color:var(--ana);background:var(--ana);color:#fff}
+.hat i.acik{background:var(--ok)}
+.ist-ad{font-family:'Fredoka';color:var(--ana);font-size:1.35rem}
+.say{color:var(--muted);font-weight:800;font-size:.9rem}
+.cerceve{max-width:200px;margin:8px auto}
+.cerceve svg{width:100%;height:auto;display:block}
+.durum{font-size:3rem;text-align:center;margin:4px 0}
+.cumle{text-align:center;font-weight:800;font-size:1.15rem;line-height:1.5;margin:6px 0}
+.cumle .bos{display:inline-block;min-width:4rem;border-bottom:3px solid var(--ana);color:var(--ana)}
+.soru{text-align:center;font-weight:900;margin-top:6px}
+.secenek{display:grid;gap:8px;margin-top:10px}
+.secenek button{font:inherit;font-weight:900;font-size:1.2rem;padding:12px;border-radius:14px;border:2px solid var(--cizgi);background:#fff;color:var(--ink);cursor:pointer}
+.secenek button small{display:block;font-weight:600;font-size:.78rem;color:var(--muted);font-style:italic}
+.secenek button.d{border-color:var(--ok);background:#e8f7ef;color:var(--ok)}
+.secenek button.y{border-color:var(--bad);background:#fdecee;color:var(--bad);opacity:.7}
+.yazi{display:flex;justify-content:center;gap:4px;margin:10px 0;flex-wrap:nowrap}
+.yazi span{flex:1 1 0;max-width:2.4rem;min-width:0;height:2.8rem;border-radius:10px;border:2px solid var(--cizgi);background:#fff;display:grid;place-items:center;font-size:1.4rem;font-weight:900}
+.yazi span.dolu{border-color:var(--ana)}
+.yazi.dogru span{border-color:var(--ok);color:var(--ok);background:#e8f7ef}
+.fazla{text-align:center;font-weight:800;color:#b7791f;font-size:.95rem}
+.harfler{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px}
+.harfler button{width:3rem;height:3rem;font:inherit;font-weight:900;font-size:1.4rem;border-radius:12px;border:2px solid var(--cizgi);background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 3px 0 var(--cizgi)}
+.harfler button:disabled{opacity:.2;box-shadow:none}
+.iki{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.vagon{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;background:linear-gradient(#e9e2ff,#d9ceff);border-radius:18px;padding:10px;border:3px solid #b9a8f5}
+.yolcu{background:#fff;border:3px solid transparent;border-radius:14px;padding:4px;cursor:pointer;text-align:center;font-weight:900;font-size:.85rem;min-height:2rem}
+.yolcu svg{width:100%;height:auto;display:block}
+.yolcu.sec{border-color:var(--ana);box-shadow:0 0 0 3px rgba(108,76,224,.25)}
+.yolcu.bitti{border-color:var(--ok);cursor:default}
+.yolcu .ad{display:block;min-height:1.2rem;color:var(--ok)}
+.kartlar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.kartlar button{font:inherit;font-weight:900;font-size:1.05rem;padding:10px 14px;border-radius:12px;border:2px solid var(--cizgi);background:#fff;color:var(--ink);cursor:pointer}
+.kartlar button:disabled{opacity:.25}
+.mesaj{min-height:1.4rem;margin-top:10px;text-align:center;font-weight:800;line-height:1.4}
+.mesaj.ok{color:var(--ok)}.mesaj.bad{color:var(--bad)}
+.salla{animation:salla .35s}
+@keyframes salla{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ara{text-align:center}.ara .buyuk{font-size:3.4rem}.ara h2{color:var(--ana);font-size:1.7rem;margin:6px 0}
+.bitis{text-align:center}.bitis .buyuk{font-size:3.4rem}.bitis h2{color:var(--ana);font-size:2rem;margin:6px 0}
+.ist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.ist div{background:#faf8ff;border:1px solid var(--cizgi);border-radius:14px;padding:10px 4px}
+.ist b{display:block;font-family:'Fredoka';font-size:1.5rem;color:var(--ana)}
+.ist small{color:var(--muted);font-weight:700}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+
+<section class="ekran on" id="sGiris">
+  <div class="kutu giris">
+    <div class="tren"><span>🚂🚃🚃🚃</span></div>
+    <h1>Duygu Treni</h1>
+    <span class="en">The Feelings Train</span>
+    <p>Duygu Treni yola çıkıyor! Yolcular bazen mutlu, bazen üzgün, bazen de çok heyecanlı. 4 istasyonda yolcuların <b>nasıl hissettiğini</b> bul.
+      <span class="en">The Feelings Train is leaving! Find out how the passengers feel at 4 stations.</span></p>
+    <label for="ad">Adın · <i>Your name</i></label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="ekran('sBrif')">🎫 Bileti al · Get a ticket</button>
+  </div>
+</section>
+
+<section class="ekran" id="sBrif">
+  <div class="kutu brif">
+    <h2>🎫 Yolcular nasıl?</h2>
+    <span class="en">How are the passengers?</span>
+    <div class="yuzler" id="brifYuz"></div>
+    <div class="not">💬 <b>çok</b> mutlu · <b>biraz</b> yorgun<span class="en">very happy · a bit tired</span>
+      <br>💬 — Nasılsın? — Biraz yorgunum. <span class="en">— How are you? — I'm a bit tired.</span></div>
+  </div>
+  <button class="btn" onclick="baslat()">🚂 Tren kalkıyor! · All aboard!</button>
+</section>
+
+<section class="ekran" id="sAra">
+  <div class="kutu ara" id="ara"></div>
+  <button class="btn" onclick="istBasla()">İstasyona in · Get off ▶</button>
+</section>
+
+<section class="ekran" id="sOyun">
+  <div class="ust"><span id="uIst">İstasyon 1/4</span><span id="uHata">❌ 0</span><span id="uSure">⏱ 00:00</span></div>
+  <div class="hat" id="hat"></div>
+  <div class="kutu" id="kutu"></div>
+</section>
+
+<section class="ekran" id="sBitis">
+  <div class="kutu bitis">
+    <div class="buyuk">🚂🎉</div>
+    <h2>Son durak!</h2>
+    <p id="bAd" style="font-weight:800"></p>
+    <span class="en">“Ben çok mutluyum!” — I'm very happy!</span>
+    <div class="ist">
+      <div><b id="bSure">00:00</b><small>süre</small></div>
+      <div><b id="bIlk">0</b><small>ilk denemede</small></div>
+      <div><b id="bHata">0</b><small>hata</small></div>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikincil" onclick="location.reload()">↻ Tekrar oyna</button>
+  </div>
+</section>
+</div>
+
+<script>
+/* ════════ DUYGULAR ════════
+   g: karışabilecek duygular aynı grupta (çeldirici olarak birlikte sorulmaz) */
+const D=[
+ {s:"mutlu",en:"happy",g:1},{s:"üzgün",en:"sad",g:2},{s:"kızgın",en:"angry",g:3},{s:"korkmuş",en:"scared",g:4},
+ {s:"şaşkın",en:"surprised",g:4},{s:"yorgun",en:"tired",g:5},{s:"heyecanlı",en:"excited",g:6},{s:"sakin",en:"calm",g:7},
+ {s:"endişeli",en:"worried",g:4},{s:"sıkılmış",en:"bored",g:5},{s:"utangaç",en:"shy",g:8},{s:"gururlu",en:"proud",g:9},
+];
+const HIKAYE=[
+ {s:"mutlu",e:"☀️🌳",c:"Hava çok güzel ve Zeynep parkta arkadaşlarıyla oynuyor. Zeynep çok ___."},
+ {s:"üzgün",e:"🍦💧",c:"Ali'nin dondurması yere düştü. Ali çok ___."},
+ {s:"kızgın",e:"🧸💥",c:"Kardeşi Can'ın oyuncağını kırdı. Can çok ___."},
+ {s:"korkmuş",e:"🌙👻",c:"Gece karanlıkta garip bir ses duydu. Elif çok ___."},
+ {s:"şaşkın",e:"🎁❓",c:"Kapıyı açtı ve odada kocaman bir fil gördü! Mert çok ___."},
+ {s:"yorgun",e:"⚽🌇",c:"Deniz bütün gün futbol oynadı. Şimdi çok ___."},
+ {s:"heyecanlı",e:"✈️🏖️",c:"Yarın uçakla tatile gidiyoruz! Ece çok ___."},
+ {s:"sakin",e:"🌊🧘",c:"Annem deniz kenarında oturuyor ve dalgaları dinliyor. Annem çok ___."},
+ {s:"endişeli",e:"📝⏰",c:"Yarın sınav var ama Burak hiç çalışmadı. Burak çok ___."},
+ {s:"sıkılmış",e:"🌧️📺",c:"Yağmur yağıyor, televizyon bozuk, oynayacak oyun yok. Selin çok ___."},
+ {s:"utangaç",e:"🏫🙈",c:"Ada yeni sınıfta kimseyi tanımıyor ve hiç konuşmuyor. Ada biraz ___."},
+ {s:"gururlu",e:"🏆🥇",c:"Kerem yarışmada birinci oldu. Babası çok ___."},
+];
+const TEN=["#f6d3b5","#e9b48f","#c98d63","#9a6542","#f1c9a5"];
+const SAC=["#2a201d","#7b4a28","#f0cd5a","#d3542a","#4a3426"];
+function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+
+/* ════════ YÜZ ÇİZİMİ ════════ */
+function yuz(duygu,kisi){
+  kisi=kisi||{ten:rnd(TEN),sac:rnd(SAC),tip:rnd(["kisa","uzun","kivircik"])};
+  const cx=60,cy=64,R=40,ten=kisi.ten,hc=kisi.sac;
+  const up=duygu==="gururlu"?-4:0, Y=cy+up;
+  let s=`<svg viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">`;
+  if(kisi.tip==="uzun") s+=`<path d="M${cx-R-3},${Y-8} Q${cx-R-6},${Y+50} ${cx-R+6},${Y+58} L${cx+R-6},${Y+58} Q${cx+R+6},${Y+50} ${cx+R+3},${Y-8} Z" fill="${hc}"/>`;
+  if(duygu==="gururlu") s+=`<path d="M48,${Y+R-6} L60,${Y+R+14} L72,${Y+R-6}" stroke="#d9473f" stroke-width="5" fill="none"/><circle cx="60" cy="${Y+R+18}" r="9" fill="#f5c542" stroke="#c9952a" stroke-width="2"/><text x="60" y="${Y+R+22}" font-size="10" font-weight="900" text-anchor="middle" fill="#8a5a00">1</text>`;
+  s+=`<circle cx="${cx-R}" cy="${Y+4}" r="7" fill="${ten}"/><circle cx="${cx+R}" cy="${Y+4}" r="7" fill="${ten}"/>`;
+  s+=`<circle cx="${cx}" cy="${Y}" r="${R}" fill="${ten}"/>`;
+  if(duygu==="korkmuş") s+=`<path d="M${cx-R},${Y} A${R},${R} 0 0 1 ${cx+R},${Y} Z" fill="#7aa7ff" opacity=".28"/>`;
+  if(duygu==="kızgın") s+=`<circle cx="${cx}" cy="${Y}" r="${R}" fill="#ff3b30" opacity=".16"/>`;
+  // saç
+  if(kisi.tip==="kivircik"){ for(let a=180;a<=360;a+=20){ const r=a*Math.PI/180; s+=`<circle cx="${cx+Math.cos(r)*(R-2)}" cy="${Y+Math.sin(r)*(R-2)}" r="12" fill="${hc}"/>`; } }
+  else s+=`<path d="M${cx-R-2},${Y+4} Q${cx-R-6},${Y-R-8} ${cx},${Y-R-6} Q${cx+R+6},${Y-R-8} ${cx+R+2},${Y+4} Q${cx+R-6},${Y-18} ${cx+10},${Y-22} Q${cx-6},${Y-14} ${cx-R+6},${Y-10} Z" fill="${hc}"/>`;
+  const ex=15, ey=Y-2;
+  // kaşlar
+  const kas={
+    normal:[[-8,-13,8,-13]], up:[[-8,-19,8,-19]], sad:[[-8,-12,7,-17]], angry:[[-8,-17,7,-11]], low:[[-8,-11,8,-11]]
+  };
+  const kasTip={mutlu:"normal",üzgün:"sad",kızgın:"angry",korkmuş:"sad",şaşkın:"up",yorgun:"low",heyecanlı:"up",sakin:"normal",endişeli:"sad",sıkılmış:"low",utangaç:"sad",gururlu:"up"}[duygu];
+  for(const d of [-1,1]){ for(const [x1,y1,x2,y2] of kas[kasTip]){ // içten dışa: iç uç (x2) burna yakın
+      const ax=cx+d*(ex+ -x1*-1), bx=cx+d*(ex - x2 + 0);
+      const ix=cx+d*(ex-8), ox=cx+d*(ex+8), iy=ey+y2, oy=ey+y1;
+      s+=`<path d="M${ox},${oy} L${ix},${iy}" stroke="${hc==="#f0cd5a"?"#b8902a":hc}" stroke-width="3.5" stroke-linecap="round"/>`; } }
+  // gözler
+  const goz={mutlu:"normal",üzgün:"down",kızgın:"normal",korkmuş:"wide",şaşkın:"wide",yorgun:"half",heyecanlı:"star",sakin:"closed",endişeli:"side",sıkılmış:"halfUp",utangaç:"down",gururlu:"happy"}[duygu];
+  for(const d of [-1,1]){
+    const x=cx+d*ex;
+    if(goz==="closed") s+=`<path d="M${x-7},${ey} Q${x},${ey+6} ${x+7},${ey}" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    else if(goz==="happy") s+=`<path d="M${x-7},${ey+2} Q${x},${ey-6} ${x+7},${ey+2}" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    else if(goz==="star"){ const p=[];for(let i=0;i<10;i++){const r=i%2?3.5:8.5,a=-Math.PI/2+i*Math.PI/5;p.push((x+Math.cos(a)*r).toFixed(1)+","+(ey+Math.sin(a)*r).toFixed(1));} s+=`<polygon points="${p.join(" ")}" fill="#ffc83d" stroke="#e09a00" stroke-width="1"/>`; }
+    else{
+      const wide=goz==="wide", rx=wide?8:7, ry=wide?9:6.5;
+      s+=`<ellipse cx="${x}" cy="${ey}" rx="${rx}" ry="${ry}" fill="#fff" stroke="rgba(0,0,0,.15)"/>`;
+      let px=x,py=ey,pr=wide?2.6:4;
+      if(goz==="down"){ py=ey+2.5; } if(goz==="side"){ px=x+3.5; } if(goz==="halfUp"){ py=ey-2.5; px=x+2; }
+      s+=`<circle cx="${px}" cy="${py}" r="${pr}" fill="#2b1d14"/><circle cx="${px+1.2}" cy="${py-1.2}" r="1" fill="#fff"/>`;
+      if(goz==="half"||goz==="halfUp") s+=`<path d="M${x-rx-1},${ey} A${rx+1},${ry+1} 0 0 1 ${x+rx+1},${ey} Z" fill="${ten}"/><path d="M${x-rx},${ey} L${x+rx},${ey}" stroke="#333" stroke-width="2" stroke-linecap="round"/>`;
+    }
+  }
+  if(duygu==="yorgun") for(const d of [-1,1]) s+=`<path d="M${cx+d*ex-6},${ey+9} Q${cx+d*ex},${ey+12} ${cx+d*ex+6},${ey+9}" stroke="rgba(90,60,120,.45)" stroke-width="2" fill="none"/>`;
+  // yanaklar
+  if(["mutlu","utangaç","heyecanlı","gururlu"].includes(duygu)){ const op=duygu==="utangaç"?.75:.35, r=duygu==="utangaç"?9:7;
+    for(const d of [-1,1]){ s+=`<ellipse cx="${cx+d*25}" cy="${Y+13}" rx="${r}" ry="${r*.6}" fill="#ff6b8a" opacity="${op}"/>`;
+      if(duygu==="utangaç") s+=`<path d="M${cx+d*25-5},${Y+11} l3,4 M${cx+d*25},${Y+11} l3,4 M${cx+d*25+5},${Y+11} l3,4" stroke="#d9435f" stroke-width="1.2"/>`; } }
+  // ağız
+  const my=Y+20;
+  const agiz={
+    mutlu:`<path d="M${cx-14},${my-3} Q${cx},${my+12} ${cx+14},${my-3}" stroke="#7a2e2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+    üzgün:`<path d="M${cx-12},${my+6} Q${cx},${my-6} ${cx+12},${my+6}" stroke="#7a2e2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+    kızgın:`<rect x="${cx-12}" y="${my}" width="24" height="8" rx="3" fill="#fff" stroke="#7a2e2e" stroke-width="2.5"/><path d="M${cx-12},${my+4} L${cx+12},${my+4}" stroke="#7a2e2e" stroke-width="1.5"/>`,
+    korkmuş:`<path d="M${cx-11},${my+5} q2.75,-5 5.5,0 q2.75,5 5.5,0 q2.75,-5 5.5,0 q2.75,5 5.5,0" stroke="#7a2e2e" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    şaşkın:`<ellipse cx="${cx}" cy="${my+3}" rx="6" ry="8" fill="#5a1f1f"/>`,
+    yorgun:`<ellipse cx="${cx}" cy="${my+3}" rx="8" ry="6" fill="#5a1f1f"/><ellipse cx="${cx}" cy="${my+6}" rx="5" ry="2.5" fill="#e0707a"/>`,
+    heyecanlı:`<path d="M${cx-16},${my-4} Q${cx},${my-2} ${cx+16},${my-4} Q${cx+12},${my+16} ${cx},${my+16} Q${cx-12},${my+16} ${cx-16},${my-4} Z" fill="#5a1f1f"/><path d="M${cx-14},${my-3} Q${cx},${my-1} ${cx+14},${my-3} L${cx+13},${my+1} Q${cx},${my+3} ${cx-13},${my+1} Z" fill="#fff"/><ellipse cx="${cx}" cy="${my+11}" rx="7" ry="3.5" fill="#e0707a"/>`,
+    sakin:`<path d="M${cx-8},${my} Q${cx},${my+6} ${cx+8},${my}" stroke="#7a2e2e" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    endişeli:`<path d="M${cx-11},${my+3} q2.75,-4 5.5,0 q2.75,4 5.5,0 q2.75,-4 5.5,0 q2.75,4 5.5,0" stroke="#7a2e2e" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    sıkılmış:`<path d="M${cx-10},${my+4} L${cx+8},${my+1}" stroke="#7a2e2e" stroke-width="3.5" stroke-linecap="round"/>`,
+    utangaç:`<path d="M${cx-6},${my+1} Q${cx},${my+5} ${cx+6},${my+1}" stroke="#7a2e2e" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    gururlu:`<path d="M${cx-13},${my-2} Q${cx},${my+9} ${cx+13},${my-2}" stroke="#7a2e2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+  }[duygu];
+  s+=agiz;
+  // ekler
+  if(duygu==="üzgün") s+=`<path d="M${cx-ex-3},${ey+8} q-4,8 0,11 q4,-3 0,-11 Z" fill="#59b6ff"/>`;
+  if(duygu==="korkmuş"||duygu==="endişeli") s+=`<path d="M${cx+R-8},${Y-24} q-5,9 0,12 q5,-3 0,-12 Z" fill="#59b6ff"/>`;
+  if(duygu==="korkmuş") s+=`<path d="M8,${Y-6} l6,4 M6,${Y+6} l7,0 M8,${Y+18} l6,-4 M112,${Y-6} l-6,4 M114,${Y+6} l-7,0 M112,${Y+18} l-6,-4" stroke="#6f6a8a" stroke-width="2.2" stroke-linecap="round"/>`;
+  if(duygu==="kızgın") s+=`<g transform="translate(${cx+R-6},${Y-R+4})" stroke="#e0283a" stroke-width="3.5" stroke-linecap="round"><path d="M-6,-2 L-2,-2 L-2,-6 M2,-6 L2,-2 L6,-2 M6,2 L2,2 L2,6 M-2,6 L-2,2 L-6,2"/></g>`;
+  if(duygu==="şaşkın") s+=`<text x="${cx+R+2}" y="${Y-R+8}" font-size="22" font-weight="900" fill="#6c4ce0" font-family="Fredoka,sans-serif">!</text>`;
+  if(duygu==="yorgun") s+=`<text x="${cx+R-8}" y="${Y-R+6}" font-size="13" font-weight="900" fill="#6c4ce0" font-family="Fredoka,sans-serif">Z<tspan dy="-6" font-size="10">z</tspan><tspan dy="-5" font-size="8">z</tspan></text>`;
+  if(duygu==="heyecanlı") for(const [x,y,r] of [[12,Y-30,6],[108,Y-26,5],[106,Y+20,4],[14,Y+18,4]]){ s+=`<path d="M${x},${y-r} L${x+r*.3},${y-r*.3} L${x+r},${y} L${x+r*.3},${y+r*.3} L${x},${y+r} L${x-r*.3},${y+r*.3} L${x-r},${y} L${x-r*.3},${y-r*.3} Z" fill="#ffc83d"/>`; }
+  if(duygu==="sıkılmış") s+=`<g fill="#9a94b8"><circle cx="${cx+R+2}" cy="${Y-R+2}" r="2.6"/><circle cx="${cx+R+10}" cy="${Y-R+2}" r="2.6"/><circle cx="${cx+R+18}" cy="${Y-R+2}" r="2.6"/></g>`;
+  if(duygu==="sakin") s+=`<path d="M10,${Y+30} q5,-5 10,0 t10,0 M90,${Y+30} q5,-5 10,0 t10,0" stroke="#7cc7e8" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  return s+`</svg>`;
+}
+
+/* ════════ OYUN ════════ */
+const $=id=>document.getElementById(id);
+let t0=0,timer=0,hata=0,ilk=0,toplam=0,ist=0,adim=0,denendi=false,liste=[];
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function yanlis(el){ hata++; denendi=true; $("uHata").textContent="❌ "+hata; if(el){ el.classList.remove("salla"); void el.offsetWidth; el.classList.add("salla"); } }
+function dogru(){ toplam++; if(!denendi) ilk++; denendi=false; }
+function mesaj(h,c){ $("mesaj").innerHTML=h; $("mesaj").className="mesaj "+(c||""); }
+function en(s){ return D.find(x=>x.s===s).en; }
+function celdirici(s,n){ const g=D.find(x=>x.s===s).g; return karisik(D.filter(x=>x.g!==g)).slice(0,n).map(x=>x.s); }
+
+$("brifYuz").innerHTML=D.map(d=>`<div>${yuz(d.s)}${d.s}<i>${d.en}</i></div>`).join("");
+
+const IST=[
+ {ad:"1. Yüzler İstasyonu",e:"🙂",en:"Faces Station",acik:"Yolcunun yüzüne bak. Nasıl hissediyor?",acikEn:"Look at the passenger's face. How do they feel?",n:12},
+ {ad:"2. Hikâye İstasyonu",e:"📖",en:"Story Station",acik:"Kısa hikâyeyi oku. Boşluğa hangi duygu gelir?",acikEn:"Read the short story. Which feeling fits the gap?",n:12},
+ {ad:"3. Harf İstasyonu",e:"✏️",en:"Letter Station",acik:"Duyguyu harf harf yaz. Dikkat: fazla harfler var!",acikEn:"Spell the feeling. Careful: extra letters!",n:8},
+ {ad:"4. Son Durak: Vagon",e:"🚃",en:"Last Stop: The Carriage",acik:"Vagondaki yolcuları adlarıyla eşleştir. Önce bir yolcuya, sonra bir sözcüğe dokun.",acikEn:"Match the passengers with the words. Tap a passenger, then a word.",n:6},
+];
+function baslat(){ t0=Date.now(); timer=setInterval(()=>$("uSure").textContent="⏱ "+fmt(Date.now()-t0),500); ist=0; araGoster(); }
+function araGoster(){ const o=IST[ist]; $("ara").innerHTML=`<div class="buyuk">${o.e}</div><h2>${o.ad}</h2><span class="en">${o.en}</span><p style="margin-top:10px;font-weight:700">${o.acik}</p><span class="en">${o.acikEn}</span>`; ekran("sAra"); }
+function hatCiz(){ let h=""; IST.forEach((_,i)=>{ if(i) h+=`<i class="${i<=ist?"acik":""}"></i>`; h+=`<b class="${i<ist?"acik":i===ist?"simdi":""}">${i<ist?"✓":i+1}</b>`; }); $("hat").innerHTML=h; }
+function istBasla(){
+  adim=0; denendi=false; $("uIst").textContent=`İstasyon ${ist+1}/4`; hatCiz(); ekran("sOyun");
+  if(ist===0){ liste=karisik(D.map(d=>d.s)); s1(); }
+  if(ist===1){ liste=karisik(HIKAYE); s2(); }
+  if(ist===2){ liste=karisik(D.map(d=>d.s)).slice(0,8); s3(); }
+  if(ist===3){ s4(); }
+}
+function sonraki(f){ adim++; if(adim<IST[ist].n) f(); else istBitti(); }
+function istBitti(){ $("kutu").innerHTML=`<div class="ara"><div class="buyuk">🚉</div><h2>İstasyon tamam!</h2><span class="en">Station complete!</span></div>`;
+  setTimeout(()=>{ ist++; if(ist<IST.length) araGoster(); else bitis(); },1300); }
+function baslik(){ return `<div class="ist-ad">${IST[ist].ad}</div><div class="say">${adim+1}/${IST[ist].n}</div>`; }
+
+/* 1 · yüz → sözcük */
+function s1(){
+  const s=liste[adim], ops=karisik([s,...celdirici(s,2)]);
+  $("kutu").innerHTML=baslik()+`<div class="cerceve">${yuz(s)}</div><div class="soru">Bu yolcu nasıl?<span class="en">How does this passenger feel?</span></div>
+   <div class="secenek">${ops.map(o=>`<button data-o="${o}" onclick="sec(this,'${s}',s1)">${o}<small>${en(o)}</small></button>`).join("")}</div><div class="mesaj" id="mesaj"></div>`;
+}
+function sec(b,s,f){
+  if(b.dataset.o===s){ b.classList.add("d"); document.querySelectorAll(".secenek button").forEach(x=>x.disabled=true); dogru(); mesaj(`✅ Evet, <b>${s}</b>!`,"ok"); setTimeout(()=>sonraki(f),1100); }
+  else{ b.classList.add("y"); b.disabled=true; yanlis(b); mesaj(`❌ <b>${b.dataset.o}</b> = ${en(b.dataset.o)}. Tekrar dene!`,"bad"); }
+}
+
+/* 2 · hikâye */
+function s2(){
+  const h=liste[adim], ops=karisik([h.s,...celdirici(h.s,2)]);
+  $("kutu").innerHTML=baslik()+`<div class="durum">${h.e}</div><div class="cumle">${h.c.replace("___",'<span class="bos" id="bos">?</span>')}</div>
+   <div class="secenek">${ops.map(o=>`<button data-o="${o}" onclick="sec2(this)">${o}<small>${en(o)}</small></button>`).join("")}</div><div class="mesaj" id="mesaj"></div>`;
+}
+function sec2(b){ const h=liste[adim]; if(b.dataset.o===h.s){ $("bos").textContent=h.s; } sec(b,h.s,s2); }
+
+/* 3 · harf harf */
+const ESI={ı:"i",i:"ı",u:"ü",ü:"u",o:"ö",ö:"o",s:"ş",ş:"s",g:"ğ",ğ:"g",c:"ç",ç:"c",k:"g",e:"a",a:"e",n:"m",l:"r"};
+let yazilan=[],y3=0;
+function s3(){
+  const w=liste[adim]; yazilan=[]; y3=0; denendi=false;
+  let f=[...new Set([...w].map(h=>ESI[h]).filter(Boolean))]; f=karisik(f).slice(0,3);
+  while(f.length<3) f.push(rnd(["e","a","r","n","t"]));
+  const taslar=karisik([...w,...f]);
+  $("kutu").innerHTML=baslik()+`<div class="cerceve" style="max-width:150px">${yuz(w)}</div><div class="soru">${en(w)}</div>
+   <div class="yazi" id="yazi">${[...w].map(()=>"<span></span>").join("")}</div>
+   <div class="fazla">⚠️ Dikkat: 3 fazla harf var! <i style="color:var(--muted)">· 3 extra letters!</i></div>
+   <div class="harfler" id="harfler">${taslar.map(h=>`<button data-h="${h}" onclick="harf(this)">${h}</button>`).join("")}</div>
+   <div class="iki"><button class="btn ikincil" onclick="sil()">⌫ Sil</button><button class="btn" id="kBtn" onclick="kontrol()">✔ Kontrol et</button></div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function yaziGoster(){ const w=liste[adim]; $("yazi").innerHTML=[...w].map((_,i)=>`<span class="${yazilan[i]?"dolu":""}">${yazilan[i]?yazilan[i].h:""}</span>`).join(""); }
+function harf(b){ if(yazilan.length>=liste[adim].length) return; yazilan.push({h:b.dataset.h,b}); b.disabled=true; yaziGoster(); mesaj(""); }
+function sil(){ const x=yazilan.pop(); if(x){ x.b.disabled=false; yaziGoster(); } }
+function kontrol(){
+  const q=liste[adim], w=yazilan.map(x=>x.h).join("");
+  if(w.length<q.length){ mesaj("Bütün kutuları doldur. <span class='en'>Fill all the boxes.</span>","bad"); return; }
+  if(w===q){ $("yazi").classList.add("dogru"); $("kBtn").disabled=true; document.querySelectorAll("#harfler button").forEach(x=>x.disabled=true); dogru(); mesaj(`✅ <b>${q}</b>`,"ok"); setTimeout(()=>sonraki(s3),1200); return; }
+  yanlis($("yazi")); y3++;
+  let i=0; while(i<w.length&&w[i]===q[i]) i++;
+  yazilan.slice(i).forEach(x=>x.b.disabled=false); yazilan=yazilan.slice(0,i); yaziGoster();
+  mesaj(y3>=2?`❌ İpucu: <b>${q.slice(0,Math.ceil(q.length/2))}…</b>`:"❌ Tekrar dene! <span class='en'>Try again!</span>","bad");
+}
+
+/* 4 · vagon eşleştirme */
+let v4=[],v4sec=null,v4kalan=0;
+function s4(){
+  // her gruptan en çok bir duygu
+  const gs=new Set(); v4=[];
+  for(const d of karisik(D)){ if(!gs.has(d.g)){ gs.add(d.g); v4.push(d.s); } if(v4.length===6) break; }
+  v4kalan=6; v4sec=null;
+  $("kutu").innerHTML=`<div class="ist-ad">${IST[3].ad}</div><p style="font-weight:700">Hangi yolcu nasıl? <span class="en">How does each passenger feel?</span></p>
+   <div class="vagon">${v4.map((s,i)=>`<div class="yolcu" id="y${i}" onclick="yolcuSec(${i})">${yuz(s)}<span class="ad" id="ya${i}"></span></div>`).join("")}</div>
+   <div class="kartlar">${karisik(v4).map(s=>`<button data-s="${s}" onclick="kart(this)">${s}</button>`).join("")}</div>
+   <div class="mesaj" id="mesaj"></div>`;
+}
+function yolcuSec(i){ if($("y"+i).classList.contains("bitti")) return; document.querySelectorAll(".yolcu").forEach(x=>x.classList.remove("sec")); $("y"+i).classList.add("sec"); v4sec=i; mesaj(""); }
+function kart(b){
+  if(v4sec===null){ mesaj("Önce bir yolcuya dokun. <span class='en'>Tap a passenger first.</span>","bad"); return; }
+  const i=v4sec;
+  if(v4[i]===b.dataset.s){ $("y"+i).classList.remove("sec"); $("y"+i).classList.add("bitti"); $("ya"+i).textContent="✓ "+b.dataset.s; b.disabled=true; dogru(); v4sec=null; v4kalan--;
+    mesaj(`✅ <b>${b.dataset.s}</b>`,"ok"); if(!v4kalan){ mesaj("🎉 Bütün yolcular yerinde!","ok"); setTimeout(istBitti,1200); } }
+  else{ yanlis($("y"+i)); mesaj(`❌ Bu yolcu <b>${b.dataset.s}</b> değil. <span class='en'>Not “${en(b.dataset.s)}”.</span>`,"bad"); }
+}
+
+function bitis(){
+  clearInterval(timer); const sure=fmt(Date.now()-t0), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Tebrikler ${ad}! Bütün yolcuları tanıdın.`:"Tebrikler! Bütün yolcuları tanıdın.";
+  $("bSure").textContent=sure; $("bIlk").textContent=`${ilk}/${toplam}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Duygu Treni (Duygular)", sure, puan:`${ilk}/${toplam} ilk denemede · ${hata} hata`});
+}
+document.addEventListener("keydown",e=>{
+  if(ist!==2||!$("sOyun").classList.contains("on")) return;
+  if(e.key==="Backspace"){ e.preventDefault(); sil(); return; } if(e.key==="Enter"){ kontrol(); return; }
+  const k=e.key.toLocaleLowerCase("tr"); const b=[...document.querySelectorAll("#harfler button")].find(x=>!x.disabled&&x.dataset.h===k); if(b) harf(b);
+});
+OVT.fill("ad");
+</script>
+</body>
+</html>

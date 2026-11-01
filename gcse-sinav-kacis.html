@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sınav Salonundan Kaçış · Türkçe GCSE Konuşma Sınavı · Özel Orhan Veli Türkçe Okulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1626;--panel:#16223a;--panel2:#1e2d4c;--cizgi:#2e4170;--ana:#3ec7a6;--ana2:#7de3c9;--sari:#ffcf5a;--ok:#46d68b;--bad:#ff6b6b;--ink:#eef3ff;--muted:#9fb0d6}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#21375f 0%,var(--bg) 60%) fixed}
+h1,h2,h3,.sg{font-family:'Space Grotesk',sans-serif;line-height:1.15}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.ekran{display:none}.ekran.on{display:block;animation:gel .35s ease}
+@keyframes gel{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kutu{background:var(--panel);border:1px solid var(--cizgi);border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.btn{display:block;width:100%;font:inherit;font-weight:900;font-size:1.1rem;padding:14px;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--ana),var(--ana2));color:#06231c;margin-top:14px}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.45}
+.btn.ikincil{background:transparent;color:var(--ink);border:2px solid var(--cizgi)}
+.giris{text-align:center}
+.giris .buyuk{font-size:3.2rem;margin:6px 0}
+.giris h1{font-size:2rem;color:var(--ana2)}
+.giris .alt{color:var(--muted);font-weight:800;margin-top:4px}
+.giris p{margin:12px 0;line-height:1.55}
+.giris label{display:block;text-align:left;font-weight:800;margin:12px 0 6px}
+.giris input{width:100%;font:inherit;font-size:1.1rem;padding:12px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink)}
+.ust{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;font-weight:900}
+.ust span{background:var(--panel);border:1px solid var(--cizgi);border-radius:99px;padding:6px 12px;font-size:.9rem}
+.dolaplar{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:12px}
+.dolaplar i{height:30px;border-radius:5px;background:var(--panel2);border:1px solid var(--cizgi);display:grid;place-items:center;font-style:normal;font-size:.8rem}
+.dolaplar i.acik{background:rgba(70,214,139,.18);border-color:var(--ok)}
+.dolaplar i.simdi{border-color:var(--sari);box-shadow:0 0 0 2px rgba(255,207,90,.3)}
+.etiket{display:inline-block;font-weight:900;font-size:.78rem;color:var(--sari);letter-spacing:.06em;margin-bottom:6px}
+.tur{display:inline-block;font-weight:800;font-size:.75rem;padding:3px 9px;border-radius:99px;background:var(--panel2);color:var(--muted);margin-left:6px}
+.soru{font-weight:800;font-size:1.12rem;line-height:1.45;margin:4px 0 12px}
+.ipucu-metin{color:var(--muted);font-size:.9rem;font-weight:700;margin:-6px 0 10px}
+.secenek{display:grid;gap:8px}
+.secenek button{font:inherit;text-align:left;font-weight:800;font-size:1.02rem;padding:12px 14px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer;display:flex;gap:10px;align-items:center;line-height:1.3}
+.secenek button .kare{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--muted);display:grid;place-items:center;font-size:.9rem}
+.secenek.tek button .kare{border-radius:50%}
+.secenek button.sec{border-color:var(--ana)}
+.secenek button.sec .kare{background:var(--ana);border-color:var(--ana);color:#06231c}
+.secenek button.d{border-color:var(--ok);background:rgba(70,214,139,.12)}
+.secenek button.y{border-color:var(--bad);background:rgba(255,107,107,.12)}
+.dy{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dy button{font:inherit;font-weight:900;font-size:1.2rem;padding:18px;border-radius:14px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer}
+.dy button.d{border-color:var(--ok);color:var(--ok)}.dy button.y{border-color:var(--bad);color:var(--bad);opacity:.6}
+.kilit{display:flex;justify-content:center;gap:10px;margin:8px 0 14px}
+.kilit .tekerlek{display:flex;flex-direction:column;align-items:center;gap:4px}
+.kilit button{width:54px;height:34px;font:inherit;font-weight:900;font-size:1.1rem;border-radius:10px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer}
+.kilit .rakam{width:54px;height:62px;border-radius:12px;background:#0a101d;border:2px solid var(--sari);display:grid;place-items:center;font-family:'Space Grotesk';font-size:2rem;color:var(--sari)}
+.kilit .birim{align-self:center;font-weight:900;color:var(--muted)}
+.sirala{display:grid;gap:8px;touch-action:none}
+.sirala .oge{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);font-weight:800;cursor:grab;user-select:none;-webkit-user-select:none;position:relative}
+.sirala .oge .no{flex:none;width:26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-weight:900;color:var(--sari)}
+.sirala .oge .tut{margin-left:auto;color:var(--muted);font-size:1.2rem}
+.sirala .oge.surukle{opacity:.9;border-color:var(--sari);box-shadow:0 10px 24px rgba(0,0,0,.45);z-index:3;cursor:grabbing}
+.sirala .oge.d{border-color:var(--ok)}.sirala .oge.y{border-color:var(--bad)}
+.sirala .oge small{display:block;color:var(--muted);font-weight:700;font-size:.82rem}
+.eslestir{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
+.eslestir .kol{display:grid;gap:8px}
+.eslestir button{font:inherit;font-weight:800;font-size:.98rem;padding:12px 8px;border-radius:12px;border:2px solid var(--cizgi);background:var(--panel2);color:var(--ink);cursor:pointer;min-height:3.4rem;line-height:1.25}
+.eslestir .isaret{font-family:'Space Grotesk';font-size:1.6rem;color:var(--sari)}
+.eslestir button.sec{border-color:var(--sari)}
+.eslestir button.bitti{border-color:var(--ok);opacity:.65}
+.aciklama{margin-top:12px;background:rgba(62,199,166,.1);border:1px solid var(--ana);border-radius:12px;padding:10px 12px;font-weight:700;line-height:1.45;display:none}
+.aciklama.on{display:block}
+.mesaj{min-height:1.4rem;margin-top:10px;text-align:center;font-weight:800;line-height:1.4}
+.mesaj.ok{color:var(--ok)}.mesaj.bad{color:var(--bad)}
+.ceza{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--bad);color:#fff;font-weight:900;padding:6px 14px;border-radius:99px;opacity:0;transition:opacity .2s;z-index:9}
+.ceza.on{opacity:1}
+.salla{animation:salla .35s}
+@keyframes salla{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.bitis{text-align:center}.bitis .buyuk{font-size:3.4rem}.bitis h2{color:var(--ok);font-size:1.8rem;margin:6px 0}
+.ist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.ist div{background:var(--panel2);border-radius:12px;padding:10px 4px}
+.ist b{display:block;font-family:'Space Grotesk';font-size:1.4rem;color:var(--sari)}
+.ist small{color:var(--muted);font-weight:700}
+.ozet{text-align:left;margin-top:10px;background:var(--panel2);border-radius:14px;padding:12px 14px;line-height:1.5;font-weight:700}
+.ozet h3{color:var(--ana2);font-size:1.05rem;margin-bottom:6px}
+.ozet li{margin-left:1.1rem}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  /* Oyunun bitiş ekranına "Sonucu Gönder" düğmesi koyar */
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  /* Ad kutusunu öğrencinin adıyla doldurur */
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="ceza" id="ceza">+10 sn</div>
+<div class="wrap">
+
+<section class="ekran on" id="sGiris">
+  <div class="kutu giris">
+    <div class="buyuk">🎓🔐🚪</div>
+    <h1>Sınav Salonundan Kaçış</h1>
+    <div class="alt">Türkçe GCSE Konuşma Sınavı</div>
+    <p>Sınav salonunda kapı kilitlendi! Çıkmak için 10 dolabın şifresini çözmelisin. Her şifre, <b>Türkçe GCSE konuşma sınavının nasıl yapıldığıyla</b> ilgili bir soru.</p>
+    <p style="color:var(--muted);font-size:.92rem">Bazı sorularda birden çok doğru cevap var. Her yanlış cevap süreye 10 saniye ekler.</p>
+    <label for="ad">Adın</label>
+    <input id="ad" autocomplete="name" placeholder="Adını yaz">
+    <button class="btn" onclick="baslat()">🔑 Salona gir</button>
+  </div>
+</section>
+
+<section class="ekran" id="sOyun">
+  <div class="ust"><span id="uSay">🗄️ 1/10</span><span id="uHata">❌ 0</span><span id="uSure">⏱ 00:00</span></div>
+  <div class="dolaplar" id="dolaplar"></div>
+  <div class="kutu" id="kutu"></div>
+</section>
+
+<section class="ekran" id="sBitis">
+  <div class="kutu bitis">
+    <div class="buyuk">🚪✨🎓</div>
+    <h2>Salondan çıktın!</h2>
+    <p id="bAd" style="font-weight:800"></p>
+    <div class="ist">
+      <div><b id="bSure">00:00</b><small>süre (cezalar dahil)</small></div>
+      <div><b id="bIlk">0</b><small>ilk denemede</small></div>
+      <div><b id="bHata">0</b><small>hata</small></div>
+    </div>
+    <div class="ozet">
+      <h3>📋 Konuşma sınavı özeti</h3>
+      <ul>
+        <li>Sınavdan önce <b>12 dakika</b> hazırlık: Role Play ve Picture Based kâğıtları.</li>
+        <li>Sıra: <b>Role Play → Picture Based → Conversation</b>.</li>
+        <li>Conversation: önce senin seçtiğin tema, sonra öğretmenin seçtiği tema.</li>
+        <li>Konuşmalar beş temanın <b>dördünde</b> yapılır.</li>
+      </ul>
+    </div>
+    <div id="ovtSend"></div>
+    <button class="btn ikincil" onclick="location.reload()">↻ Tekrar oyna</button>
+  </div>
+</section>
+</div>
+
+<script>
+/* ════════ SORULAR ════════
+   t: coklu (birden çok seçim) · tek · kilit (sayı + seçim) · dy (doğru/yanlış) · sirala (sürükle-bırak) · eslestir */
+const SORU=[
+ {t:"coklu", s:"Türkçe GCSE konuşma sınavında aşağıdaki görevlerden hangileri vardır?", i:"Birden çok seçebilirsin.",
+  o:["Serbest Konuşma","Role Play","Picture Based","Hazırlıklı Konuşma","Hazırlıksız Konuşma"], d:[1,2,3,4],
+  a:"Sınavda <b>Role Play</b>, <b>Picture Based</b> ve Conversation bölümündeki <b>hazırlıklı</b> ve <b>hazırlıksız</b> konuşma vardır. Konusu serbest bir konuşma yoktur."},
+ {t:"tek", s:"Konuşma bölümündeki konuşmalar hangi konularda yapılır?",
+  o:["Sınavdaki beş temanın hepsinde","Sınavdaki beş temanın dördünde","Öğrencinin istediği konularda","Öğretmenin istediği konularda"], d:1,
+  a:"Konuşmalar sınavdaki <b>beş temanın dördünde</b> yapılır."},
+ {t:"kilit", s:"Sınavdan önce öğretmen sana hazırlık için biraz süre ve iki kâğıt verir. Şifreyi bul: <b>Kaç dakika?</b> ve <b>hangi kâğıtlar?</b>",
+  sayi:12, o:["Role Play","Picture Based","Hazırlıklı Konuşma","Hazırlıksız Konuşma"], d:[0,1],
+  a:"Öğretmen sınavdan önce <b>12 dakika</b> hazırlık süresiyle <b>Role Play</b> ve <b>Picture Based</b> kâğıtlarını verir."},
+ {t:"dy", s:"Hazırlıklı konuşma için öğrenci, sınavdaki temalardan birini seçerek konuşma hazırlar.", d:true,
+  a:"<b>Doğru.</b> Öğrenci temalardan birini kendisi seçer ve konuşmasını önceden hazırlar."},
+ {t:"sirala", s:"Konuşma sınavında bölümlerin sırası nasıldır? Kartları sürükleyerek doğru sıraya koy.",
+  o:[["Role Play",""],["Picture Based",""],["Conversation 1","Öğrencinin seçtiği tema"],["Conversation 2","Kalan 2 temadan birini öğretmen seçer"]],
+  a:"Sıra: <b>Role Play → Picture Based → Conversation</b>. Conversation'da önce öğrencinin seçtiği tema, sonra öğretmenin seçtiği tema konuşulur."},
+ {t:"tek", s:"Conversation bölümünde ikinci temayı kim seçer?",
+  o:["Öğrenci","Öğretmen, kalan temalardan","Sınav kurulu, sınav günü","Kura ile belirlenir"], d:1,
+  a:"İlk temayı öğrenci seçer. İkinci temayı <b>öğretmen</b>, kalan temalardan seçer."},
+ {t:"eslestir", s:"Role Play kâğıdındaki işaretler ne anlama gelir? Eşleştir.",
+  o:[["?","Öğretmene bir soru sormalısın."],["!","Öğretmen sana önceden bilmediğin bir soru soracak."]],
+  a:"<b>?</b> gördüğün yerde sen soru sorarsın. <b>!</b> gördüğün yerde öğretmen beklenmedik bir soru sorar; dikkatle dinle."},
+ {t:"dy", s:"12 dakikalık hazırlık süresinde sözlük kullanabilirsin.", d:false,
+  a:"<b>Yanlış.</b> Hazırlık süresinde de sınavda da sözlük kullanılmaz."},
+ {t:"coklu", s:"Picture Based görevinde neler yaparsın?", i:"Birden çok seçebilirsin.",
+  o:["Resmi anlatırsın","Öğretmenin resimle ve temayla ilgili sorularını cevaplarsın","Resmi kendin çizersin","Resim hakkında bir mektup yazarsın"], d:[0,1],
+  a:"Picture Based görevinde <b>resmi anlatır</b>, sonra öğretmenin resimle ve temayla ilgili <b>sorularını cevaplarsın</b>."},
+ {t:"coklu", s:"Türkçe GCSE sınavındaki temalar hangileridir?", i:"5 tanesi doğru. Hepsini bul!",
+  o:["Identity and culture","Health and lifestyle","Local area, holiday and travel","School","History and politics","Future aspirations, study and work","Science and technology","International and global dimension"], d:[0,2,3,5,7],
+  a:"Sınavın 5 teması: <b>1. Identity and culture</b> · <b>2. Local area, holiday and travel</b> · <b>3. School</b> · <b>4. Future aspirations, study and work</b> · <b>5. International and global dimension</b>. Konuşma sınavı bu beş temanın dördünde yapılır."},
+];
+
+/* ════════ OYUN ════════ */
+const $=id=>document.getElementById(id);
+let t0=0,ceza=0,timer=0,hata=0,ilk=0,qi=0,denendi=false,secim=new Set(),sayi=10,cevaplandi=false;
+function ekran(id){ document.querySelectorAll(".ekran").forEach(e=>e.classList.toggle("on",e.id===id)); window.scrollTo(0,0); }
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function gecen(){ return Date.now()-t0+ceza*1000; }
+function karisik(a){ return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]); }
+function mesaj(h,c){ $("mesaj").innerHTML=h; $("mesaj").className="mesaj "+(c||""); }
+function yanlis(el,m){ hata++; ceza+=10; denendi=true; $("uHata").textContent="❌ "+hata;
+  const c=$("ceza"); c.classList.add("on"); setTimeout(()=>c.classList.remove("on"),900);
+  const k=el||$("kutu"); k.classList.remove("salla"); void k.offsetWidth; k.classList.add("salla");
+  mesaj("❌ "+(m||"Şifre yanlış. Tekrar dene!")+" (+10 sn)","bad"); }
+function dogru(){
+  if(!denendi) ilk++; cevaplandi=true;
+  mesaj("🔓 Dolap açıldı!","ok");
+  $("aciklama").classList.add("on");
+  $("ileri").hidden=false; $("kontrolBtn")&&($("kontrolBtn").hidden=true);
+}
+function baslat(){ t0=Date.now(); timer=setInterval(()=>$("uSure").textContent="⏱ "+fmt(gecen()),500); qi=0; ekran("sOyun"); kur(); }
+const TUR={coklu:"birden çok seçim",tek:"tek seçim",kilit:"şifreli kilit",dy:"doğru / yanlış",sirala:"sürükle-bırak",eslestir:"eşleştirme"};
+function kur(){
+  const q=SORU[qi]; denendi=false; cevaplandi=false; secim=new Set(); eslSec=null; eslKalan=0;
+  $("dolaplar").innerHTML=SORU.map((_,i)=>`<i class="${i<qi?"acik":i===qi?"simdi":""}">${i<qi?"🔓":"🔒"}</i>`).join("");
+  $("uSay").textContent=`🗄️ ${qi+1}/${SORU.length}`;
+  let govde="";
+  if(q.t==="coklu"||q.t==="tek"){
+    q.sira=q.o.map((_,i)=>i);
+    govde=`<div class="secenek ${q.t==="tek"?"tek":""}" id="sec">${q.o.map((o,i)=>`<button data-i="${i}" onclick="isaretle(this)"><span class="kare"></span>${o}</button>`).join("")}</div>`;
+  }
+  if(q.t==="kilit"){ sayi=10;
+    govde=`<div class="kilit"><div class="tekerlek"><button onclick="cevir(1)">▲</button><div class="rakam" id="rakam">${sayi}</div><button onclick="cevir(-1)">▼</button></div><span class="birim">dakika</span></div>
+     <div class="ipucu-metin">Hangi iki kâğıt? 👇</div>
+     <div class="secenek" id="sec">${q.o.map((o,i)=>`<button data-i="${i}" onclick="isaretle(this)"><span class="kare"></span>📄 ${o}</button>`).join("")}</div>`;
+  }
+  if(q.t==="dy") govde=`<div class="dy"><button onclick="dy(this,true)">✅ Doğru</button><button onclick="dy(this,false)">❌ Yanlış</button></div>`;
+  if(q.t==="sirala"){
+    let s=karisik(q.o.map((_,i)=>i)); while(s.every((v,i)=>v===i)) s=karisik(s);
+    govde=`<div class="sirala" id="liste">${s.map(i=>`<div class="oge" data-i="${i}"><span class="no"></span><div>${q.o[i][0]}${q.o[i][1]?`<small>${q.o[i][1]}</small>`:""}</div><span class="tut">⠿</span></div>`).join("")}</div>`;
+  }
+  if(q.t==="eslestir"){
+    govde=`<div class="eslestir"><div class="kol">${q.o.map((o,i)=>`<button data-i="${i}" data-k="sol" onclick="esle(this)"><span class="isaret">${o[0]}</span></button>`).join("")}</div>
+     <div class="kol">${karisik(q.o.map((o,i)=>[o[1],i])).map(([t,i])=>`<button data-i="${i}" data-k="sag" onclick="esle(this)">${t}</button>`).join("")}</div></div>`;
+  }
+  const kontrolGerek=["coklu","tek","kilit","sirala"].includes(q.t);
+  $("kutu").innerHTML=`<span class="etiket">DOLAP ${qi+1}</span><span class="tur">${TUR[q.t]}</span>
+    <div class="soru">${q.s}</div>${q.i?`<div class="ipucu-metin">${q.i}</div>`:""}${govde}
+    ${kontrolGerek?`<button class="btn" id="kontrolBtn" onclick="kontrol()">🔑 Şifreyi dene</button>`:""}
+    <div class="mesaj" id="mesaj"></div><div class="aciklama" id="aciklama">💡 ${q.a}</div>
+    <button class="btn" id="ileri" hidden onclick="sonraki()">${qi<SORU.length-1?"Sonraki dolap ▶":"Kapıyı aç 🚪"}</button>`;
+  if(q.t==="sirala") siralaKur();
+}
+function sonraki(){ qi++; if(qi<SORU.length) kur(); else bitis(); }
+function isaretle(b){
+  if(cevaplandi) return;
+  const q=SORU[qi], i=+b.dataset.i;
+  if(q.t==="tek"){ secim=new Set([i]); document.querySelectorAll("#sec button").forEach(x=>{x.classList.toggle("sec",x===b); x.querySelector(".kare").textContent=x===b?"●":"";}); }
+  else{ secim.has(i)?secim.delete(i):secim.add(i); b.classList.toggle("sec"); b.querySelector(".kare").textContent=secim.has(i)?"✓":""; }
+  document.querySelectorAll("#sec button").forEach(x=>x.classList.remove("y")); mesaj("");
+}
+function cevir(d){ if(cevaplandi) return; sayi=Math.max(1,Math.min(30,sayi+d)); $("rakam").textContent=sayi; }
+function kontrol(){
+  if(cevaplandi) return;
+  const q=SORU[qi];
+  if(q.t==="tek"){
+    if(!secim.size){ mesaj("Önce bir seçenek seç.","bad"); return; }
+    const i=[...secim][0], b=document.querySelector(`#sec button[data-i="${i}"]`);
+    if(i===q.d){ b.classList.add("d"); dogru(); } else { b.classList.add("y"); yanlis(b); }
+  }
+  if(q.t==="coklu"||q.t==="kilit"){
+    if(!secim.size){ mesaj("Önce seçim yap.","bad"); return; }
+    const d=new Set(q.d), tamam=secim.size===d.size&&[...secim].every(i=>d.has(i));
+    const sayiOk=q.t!=="kilit"||sayi===q.sayi;
+    if(tamam&&sayiOk){ document.querySelectorAll("#sec button").forEach(x=>{ if(d.has(+x.dataset.i)) x.classList.add("d"); }); dogru(); }
+    else{
+      let m;
+      if(q.t==="kilit"&&!sayiOk&&tamam) m="Kâğıtlar doğru ama süre yanlış.";
+      else if(q.t==="kilit"&&sayiOk&&!tamam) m="Süre doğru ama kâğıtlar yanlış.";
+      else{ const eksik=[...d].filter(i=>!secim.has(i)).length, fazla=[...secim].filter(i=>!d.has(i)).length;
+        m = fazla&&eksik?"Bazı seçimler yanlış, bazı doğrular eksik.":fazla?"Seçtiklerinden en az biri yanlış.":"Doğru cevapların hepsini seçmedin."; }
+      yanlis(null,m);
+    }
+  }
+  if(q.t==="sirala"){
+    const s=[...document.querySelectorAll("#liste .oge")].map(x=>+x.dataset.i);
+    const items=[...document.querySelectorAll("#liste .oge")];
+    if(s.every((v,i)=>v===i)){ items.forEach(x=>x.classList.add("d")); dogru(); }
+    else{ items.forEach((x,i)=>x.classList.toggle("y",+x.dataset.i!==i)); yanlis(null,"Sıra yanlış. Kırmızı kartların yerini değiştir."); }
+  }
+}
+function dy(b,v){
+  if(cevaplandi) return; const q=SORU[qi];
+  if(v===q.d){ b.classList.add("d"); dogru(); } else { b.classList.add("y"); b.disabled=true; yanlis(b); }
+}
+let eslSec=null, eslKalan=0;
+function esle(b){
+  if(cevaplandi||b.classList.contains("bitti")) return;
+  if(!eslKalan) eslKalan=SORU[qi].o.length;
+  if(b.dataset.k==="sol"){ document.querySelectorAll('[data-k="sol"]').forEach(x=>x.classList.remove("sec")); b.classList.add("sec"); eslSec=b; mesaj(""); return; }
+  if(!eslSec){ mesaj("Önce soldan bir işaret seç.","bad"); return; }
+  if(eslSec.dataset.i===b.dataset.i){ [eslSec,b].forEach(x=>{x.classList.remove("sec");x.classList.add("bitti");}); eslSec=null; eslKalan--; mesaj("✅ Doğru eşleşme!","ok"); if(!eslKalan) dogru(); }
+  else yanlis(b,"Bu eşleşme yanlış.");
+}
+/* sürükle-bırak */
+function numarala(){ document.querySelectorAll("#liste .oge").forEach((x,i)=>x.querySelector(".no").textContent=i+1); }
+function siralaKur(){
+  numarala();
+  const liste=$("liste");
+  liste.querySelectorAll(".oge").forEach(el=>{
+    el.addEventListener("pointerdown",e=>{
+      if(cevaplandi) return;
+      e.preventDefault(); el.setPointerCapture(e.pointerId);
+      liste.querySelectorAll(".oge").forEach(x=>x.classList.remove("y")); mesaj("");
+      let baslaY=e.clientY; el.classList.add("surukle");
+      const hareket=ev=>{
+        el.style.transform=`translateY(${ev.clientY-baslaY}px)`;
+        const kardes=[...liste.querySelectorAll(".oge")].filter(x=>x!==el);
+        for(const k of kardes){
+          const r=k.getBoundingClientRect(), orta=r.top+r.height/2, er=el.getBoundingClientRect(), eorta=er.top+er.height/2;
+          const once=el.compareDocumentPosition(k)&Node.DOCUMENT_POSITION_PRECEDING;
+          if(once&&eorta<orta){ const eskiTop=el.getBoundingClientRect().top-(ev.clientY-baslaY); liste.insertBefore(el,k); const yeniTop=el.getBoundingClientRect().top-(ev.clientY-baslaY); baslaY+=yeniTop-eskiTop; el.style.transform=`translateY(${ev.clientY-baslaY}px)`; numarala(); break; }
+          if(!once&&eorta>orta){ const eskiTop=el.getBoundingClientRect().top-(ev.clientY-baslaY); liste.insertBefore(el,k.nextSibling); const yeniTop=el.getBoundingClientRect().top-(ev.clientY-baslaY); baslaY+=yeniTop-eskiTop; el.style.transform=`translateY(${ev.clientY-baslaY}px)`; numarala(); }
+        }
+      };
+      const birak=()=>{ el.classList.remove("surukle"); el.style.transform=""; el.removeEventListener("pointermove",hareket); el.removeEventListener("pointerup",birak); el.removeEventListener("pointercancel",birak); numarala(); };
+      el.addEventListener("pointermove",hareket); el.addEventListener("pointerup",birak); el.addEventListener("pointercancel",birak);
+    });
+  });
+}
+function bitis(){
+  clearInterval(timer); const sure=fmt(gecen()), ad=$("ad").value.trim();
+  ekran("sBitis");
+  $("bAd").textContent=ad?`Tebrikler ${ad}! Konuşma sınavına hazırsın.`:"Tebrikler! Konuşma sınavına hazırsın.";
+  $("bSure").textContent=sure; $("bIlk").textContent=`${ilk}/${SORU.length}`; $("bHata").textContent=hata;
+  OVT.renderSend("ovtSend",{oyun:"Sınav Salonundan Kaçış (GCSE Konuşma Sınavı)", sure, puan:`${ilk}/${SORU.length} ilk denemede · ${hata} hata`});
+}
+OVT.fill("ad");
+</script>
+</body>
+</html>

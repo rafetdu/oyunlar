@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evde Kaçış — Romeo'yu Bul</title>
+<meta name="description" content="Ev ve eşyalar escape room — cevapları harf harf yaz">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    color-scheme: dark;
+    --night:#160b26; --stone:#241433; --stone-lt:#34204a;
+    --gold:#f4c430; --gold-dim:#c99a1f; --ink:#f3ecff; --ink-soft:#c3b3e0;
+    --good:#3ecf8e; --good-deep:#1f9d68; --bad:#e2536b; --bad-deep:#b03650;
+    --rose:#e268a6; --teal:#49c6e5; --line:#4a2f73; --shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:
+      radial-gradient(1200px 600px at 50% -10%, #3a1a63 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 110%, #2a1250 0%, transparent 55%),
+      var(--night);
+    color:var(--ink); font-family:"Fredoka",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:680px; margin:0 auto; padding:22px 16px 34px; min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+  .brand{font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--gold); font-weight:600;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .locks{display:flex; gap:5px; font-size:18px; margin-top:8px; justify-content:center; flex-wrap:wrap;}
+  .locks span{filter:grayscale(1) opacity(.35); transition:.4s;}
+  .locks span.open{filter:none; transform:scale(1.14);}
+
+  .stage{background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 40%), var(--stone);
+    border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+    padding:24px 20px 28px; position:relative; overflow:hidden; flex:1;}
+  .stage::before{content:""; position:absolute; inset:0; border-radius:24px; pointer-events:none; box-shadow:inset 0 0 90px rgba(0,0,0,.4);}
+  .torch{position:absolute; top:14px; font-size:22px; opacity:.9; animation:flick 1.6s infinite alternate; z-index:0;}
+  .torch.l{left:14px} .torch.r{right:14px}
+  @keyframes flick{from{opacity:.6; transform:translateY(0)} to{opacity:1; transform:translateY(-2px)}}
+  #screen{position:relative; z-index:1;}
+
+  h1{font-family:"Cinzel",serif; font-weight:900; text-align:center; text-wrap:balance;
+    font-size:clamp(25px,6.4vw,38px); margin:.1em 0; color:var(--gold);
+    text-shadow:0 2px 0 #000, 0 0 26px rgba(244,196,48,.28);}
+  .cat{text-align:center; font-size:clamp(44px,12vw,70px); line-height:1; margin:4px 0; filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));}
+  .lead{text-align:center; font-size:clamp(15px,3.6vw,18px); color:var(--ink); line-height:1.55; max-width:42ch; margin:6px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.84em; margin-top:4px;}
+  .step-label{text-align:center; font-family:"Cinzel",serif; letter-spacing:.1em; text-transform:uppercase; font-size:12px; color:var(--gold-dim); margin-bottom:2px;}
+  .room{text-align:center; font-size:46px; margin:2px 0;}
+  .clue{background:linear-gradient(180deg,#1d1030,#160b2680); border:1px solid var(--line); border-left:4px solid var(--rose);
+    border-radius:14px; padding:13px 15px; margin:10px auto 6px; max-width:520px; font-size:clamp(15px,3.6vw,17px); line-height:1.6;}
+  .clue b{color:var(--gold);}
+  .ask{text-align:center; font-weight:600; font-size:clamp(16px,4.2vw,20px); margin:10px auto 2px;}
+  .ask .en{display:block; color:var(--ink-soft); font-weight:400; font-size:.78em; margin-top:3px;}
+
+  /* letter boxes */
+  .boxes{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:16px auto 6px; max-width:560px;}
+  .lb{width:38px; height:46px; border:2px solid var(--line); border-radius:10px; background:#1a0f2c; color:var(--ink);
+    font-family:"Cinzel",serif; font-weight:700; font-size:24px; text-align:center; text-transform:none;
+    caret-color:var(--gold); transition:.12s; padding:0;}
+  .lb:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(244,196,48,.18);}
+  .lb.hintfix{background:#2a1d14; border-color:var(--gold-dim); color:var(--gold);}
+  .lb.good{border-color:var(--good); background:rgba(62,207,142,.15); color:var(--good);}
+  .lb.wrong{border-color:var(--bad); background:rgba(226,83,107,.15); color:var(--bad);}
+  .gap{width:14px; height:46px;}
+
+  .feedback{text-align:center; min-height:22px; margin-top:12px; font-size:15px; font-weight:500;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+
+  .btn{display:block; margin:16px auto 0; appearance:none; border:none; cursor:pointer; font-family:"Cinzel",serif; font-weight:700; letter-spacing:.05em;
+    font-size:16px; padding:13px 30px; border-radius:40px; color:#1a1300; background:linear-gradient(180deg,#ffdc5e,var(--gold-dim));
+    box-shadow:0 8px 22px rgba(244,196,48,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.4; cursor:default; transform:none;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+  .field{display:block; width:100%; max-width:340px; margin:14px auto 0; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#1a0f2c; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--gold-dim);}
+  .mini{text-align:center; font-size:12.5px; color:var(--gold-dim); margin-top:8px;}
+  .shake{animation:shake .4s;} @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+  .pop{animation:pop .4s;} @keyframes pop{0%{transform:scale(.95)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .result-stats{display:flex; gap:22px; justify-content:center; margin:14px 0 4px;}
+  .result-stats .n{font-family:"Cinzel",serif; font-size:30px; color:var(--gold); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Evde Kaçış</div>
+    <div class="meta"><span>⏱ <b id="timer">0:00</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="stage" id="stage">
+    <div class="torch l">🔥</div><div class="torch r">🔥</div>
+    <div id="screen"></div>
+    <div class="locks" id="locks"></div>
+  </div>
+</div>
+
+<script>
+var screenEl=document.getElementById('screen'), locksEl=document.getElementById('locks');
+var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs');
+var errors=0, startTime=null, timerInt=null, elapsed=0, penalty=0, current=0, playerName="";
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function tick(){ elapsed=Math.floor((Date.now()-startTime)/1000)+penalty; timerEl.textContent=fmt(elapsed); }
+function startTimer(){ startTime=Date.now(); timerInt=setInterval(tick,1000); tick(); }
+function stopTimer(){ clearInterval(timerInt); }
+function addErr(sec){ errors++; errsEl.textContent=errors; penalty+=(sec||8); tick(); }
+
+// Karşılaştırma: küçük harfe indir + Türkçe harfleri sade karşılığıyla eşle.
+// Böylece klavyede ı/ö/ü/ç/ğ/ş olmayan öğrenci i/o/u/c/g/s yazsa da doğru sayılır.
+var FOLD={ "ı":"i","İ":"i","i":"i", "ö":"o","Ö":"o","o":"o",
+           "ü":"u","Ü":"u","u":"u", "ç":"c","Ç":"c","c":"c",
+           "ğ":"g","Ğ":"g","g":"g", "ş":"s","Ş":"s","s":"s" };
+function norm(ch){
+  ch=(ch||"").trim();
+  if(ch==="") return "";
+  var low=ch.toLocaleLowerCase("tr-TR");
+  return FOLD[low] || FOLD[ch] || low;
+}
+
+// ─── 8 DOORS ─── answer in lowercase Turkish; hints = indices shown pre-filled (locked)
+var ROOMS=[
+  { emoji:"🚪", label:"1. Kapı — Giriş", room:"🚪",
+    clue:"Eve giriyorsun. İlk oda: elbiselerin durduğu büyük mobilya. Kapıları var.",
+    ask:"Bu eşya ne?", en:"What is this furniture? (wardrobe)",
+    answer:"dolap", hints:[0,2] },               // d_l_p... actually d,l shown
+
+  { emoji:"🪞", label:"2. Kapı — Duvar", room:"🪞",
+    clue:"Duvarda bir eşya var. İçine bakınca kendini görürsün!",
+    ask:"Bu eşya ne?", en:"What is this? (mirror)",
+    answer:"ayna", hints:[0] },
+
+  { emoji:"🪑", label:"3. Kapı — Salon", room:"🛋️",
+    clue:"Romeo salonda saklandı. Masanın gölgesine girdi, yere eğil!",
+    ask:"Romeo nerede? (yaz)", en:"Where is Romeo? (under the table)",
+    answer:"masanın altında", hints:[0,1,2,3] },
+
+  { emoji:"💡", label:"4. Kapı — Masa", room:"💡",
+    clue:"Masanın üstünde duran, geceleri odanı aydınlatan eşya.",
+    ask:"Bu eşya ne?", en:"What is this? (lamp)",
+    answer:"lamba", hints:[0] },
+
+  { emoji:"📦", label:"5. Kapı — Köşe", room:"📦",
+    clue:"Miyav! Ses bir kartondan geliyor. Romeo yine oraya girdi.",
+    ask:"Romeo nerede?", en:"Where is Romeo? (in the box)",
+    answer:"kutunun içinde", hints:[0,1,2] },
+
+  { emoji:"🪟", label:"6. Kapı — Işık", room:"🪟",
+    clue:"Odaya ışık giren, dışarıyı gördüğün eşya. Önünde perde var.",
+    ask:"Bu eşya ne?", en:"What is this? (window)",
+    answer:"pencere", hints:[0,3] },
+
+  { emoji:"📚", label:"7. Kapı — Raf", room:"📚",
+    clue:"Kitapların dizildiği raf. Üstünde küçük bir kutu duruyor.",
+    ask:"Kutu nerede?", en:"Where is the box? (on the shelf)",
+    answer:"rafın üstünde", hints:[0,1] },
+
+  { emoji:"🗝️", label:"8. Kapı — Son oda", room:"🛋️",
+    clue:"Son kapı! İki koltuk yan yana. Romeo tam ortalarında oturuyor. Onu buldun! 🐈",
+    ask:"Romeo nerede?", en:"Where is Romeo? (between the two sofas)",
+    answer:"iki koltuğun arasında", hints:[0,1,2] },
+];
+
+function renderLocks(){
+  locksEl.innerHTML="";
+  for(var i=0;i<ROOMS.length;i++){
+    var s=document.createElement('span'); s.textContent=i<current?"🔓":"🔒"; if(i<current)s.className="open"; locksEl.appendChild(s);
+  }
+}
+
+function renderIntro(){
+  screenEl.innerHTML=
+    '<div class="cat">🏠🐈</div>'+
+    '<h1>Evde Kaçış</h1>'+
+    '<p class="lead">Kedi Romeo evde saklandı! 8 odayı gez. Her kapıda cevabı <b>harf harf yaz</b> — '+
+    'eşyanın adını ya da Romeo\'nun yerini. Bazı harfler ipucu olarak hazır! '+
+    '<span class="tr">Type the answer letter by letter to open each door.</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go">Başla ▶</button>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; errors=0; errsEl.textContent=0; penalty=0; elapsed=0; timerEl.textContent="0:00";
+    startTimer(); renderRoom();
+  };
+  renderLocks();
+}
+
+function renderRoom(){
+  renderLocks();
+  var r=ROOMS[current];
+  var ans=r.answer;
+  var hintSet={}; (r.hints||[]).forEach(function(i){hintSet[i]=true;});
+  // build letter-box HTML
+  var boxesHtml="";
+  var inputIdx=[];  // positions that are typeable
+  for(var i=0;i<ans.length;i++){
+    var ch=ans[i];
+    if(ch===" "){ boxesHtml+='<span class="gap"></span>'; continue; }
+    if(hintSet[i]){
+      boxesHtml+='<input class="lb hintfix" value="'+ch.toLocaleUpperCase("tr-TR")+'" disabled>';
+    }else{
+      boxesHtml+='<input class="lb" data-i="'+i+'" maxlength="1" autocomplete="off" autocapitalize="characters" inputmode="text">';
+      inputIdx.push(i);
+    }
+  }
+  screenEl.innerHTML=
+    '<div class="step-label">'+r.label+'</div>'+
+    '<div class="room">'+r.room+'</div>'+
+    '<div class="clue">🔎 '+r.clue+'</div>'+
+    '<div class="ask">'+r.ask+'<span class="en">'+r.en+'</span></div>'+
+    '<div class="boxes" id="boxes">'+boxesHtml+'</div>'+
+    '<button class="btn" id="check">Kapıyı aç 🔓</button>'+
+    '<div class="mini">İpucu harfleri sarı kutularda hazır. / Hint letters are ready in the gold boxes.</div>'+
+    '<div class="feedback" id="fb"></div>';
+  var inputs=Array.prototype.slice.call(document.querySelectorAll('.lb:not([disabled])'));
+  // auto-advance focus
+  inputs.forEach(function(inp,k){
+    inp.addEventListener('input',function(){
+      inp.classList.remove('wrong');
+      if(inp.value && k<inputs.length-1){ inputs[k+1].focus(); }
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Backspace' && !inp.value && k>0){ inputs[k-1].focus(); }
+      if(e.key==='Enter'){ document.getElementById('check').click(); }
+    });
+  });
+  if(inputs[0]) inputs[0].focus();
+
+  document.getElementById('check').onclick=function(){
+    var allFilled=inputs.every(function(inp){return inp.value.trim().length>0;});
+    if(!allFilled){ bad("Bütün kutuları doldur 🙂"); shake(); return; }
+    var ok=true;
+    inputs.forEach(function(inp){
+      var i=+inp.dataset.i;
+      if(norm(inp.value)===norm(ans[i])){ inp.classList.add('good'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('good'); ok=false; }
+    });
+    if(ok){
+      // also mark hint boxes green
+      document.querySelectorAll('.lb.hintfix').forEach(function(b){b.classList.add('good');});
+      good("Doğru! Kapı açıldı 🔓"); pop();
+      document.getElementById('check').disabled=true;
+      inputs.forEach(function(inp){inp.disabled=true;});
+      setTimeout(advance,1150);
+    }else{
+      addErr(8); bad("Kırmızı harfleri düzelt 🔁"); shake();
+    }
+  };
+}
+
+function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.textContent=m;}}
+function bad(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.textContent=m;}}
+function pop(){screenEl.classList.add('pop'); setTimeout(function(){screenEl.classList.remove('pop');},400);}
+function shake(){screenEl.classList.add('shake'); setTimeout(function(){screenEl.classList.remove('shake');},400);}
+function advance(){ current++; if(current>=ROOMS.length) renderWin(); else renderRoom(); }
+
+function renderWin(){
+  stopTimer(); renderLocks();
+  screenEl.innerHTML=
+    '<div class="cat pop">🏆🐈</div><h1>Romeo\'yu buldun!</h1>'+
+    '<p class="lead">Bütün odaları açtın, '+playerName.replace(/</g,'&lt;')+'! 👏 <span class="tr">You opened every room!</span></p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn ghost" id="again">↺ Baştan oyna</button>';
+  OVT.renderSend("ovtSend", { oyun:"Evde Harf Kaçışı", sure:fmt(elapsed), puan:errors+" hata" });
+  document.getElementById('again').onclick=function(){ renderIntro(); };
+}
+
+renderIntro();
+</script>
+</body>
+</html>

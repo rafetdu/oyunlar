@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geniş Zaman Eki Oyunu</title>
+<meta name="description" content="Geniş zaman çekim ekini harf harf yaz — 15 soru">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#1a1030; --card:#271748; --card-lt:#352058;
+    --purple:#b36bff; --purple-dim:#8a4fd0; --gold:#ffcf4a;
+    --ink:#f3ecff; --ink-soft:#c3b3e0;
+    --good:#43d191; --bad:#ff6b85; --teal:#49c6e5; --rose:#ff7ac0;
+    --line:#4a2f73; --shadow:0 18px 50px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:
+      radial-gradient(1100px 560px at 50% -12%, #3a1f6e 0%, transparent 62%),
+      radial-gradient(900px 500px at 100% 115%, #2a1458 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink); font-family:"Fredoka",system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:680px; margin:0 auto; padding:22px 16px 34px; min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
+  .brand{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--purple); font-weight:700;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .progress-wrap{height:10px; background:#1a0f2c; border-radius:20px; overflow:hidden; margin-bottom:14px; border:1px solid var(--line);}
+  .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--gold)); transition:width .4s;}
+
+  .stage{background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 42%), var(--card);
+    border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+    padding:26px 20px 30px; position:relative; overflow:hidden; flex:1;}
+  #screen{position:relative; z-index:1;}
+
+  h1{font-family:"Baloo 2",cursive; font-weight:800; text-align:center; text-wrap:balance;
+    font-size:clamp(26px,6.6vw,40px); margin:.1em 0; color:var(--gold);
+    text-shadow:0 2px 0 rgba(0,0,0,.4);}
+  .hero{text-align:center; font-size:clamp(46px,13vw,74px); line-height:1; margin:6px 0;}
+  .lead{text-align:center; font-size:clamp(15px,3.6vw,18px); color:var(--ink); line-height:1.55; max-width:44ch; margin:8px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.84em; margin-top:4px;}
+
+  .counter{text-align:center; font-family:"Baloo 2",cursive; letter-spacing:.04em; font-size:14px; color:var(--purple); margin-bottom:4px; font-weight:700;}
+  .person{display:inline-block; background:rgba(179,107,255,.18); border:1px solid var(--purple-dim); color:var(--purple);
+    font-weight:700; font-size:14px; padding:3px 12px; border-radius:20px; margin:0 auto 10px; }
+  .person-wrap{text-align:center;}
+  .sentence{background:linear-gradient(180deg,#201340,#1a0f2c80); border:1px solid var(--line); border-left:4px solid var(--purple);
+    border-radius:14px; padding:16px 16px; margin:8px auto 4px; max-width:540px; font-size:clamp(17px,4.4vw,21px); line-height:1.7; text-align:center;}
+  .sentence .en{display:block; color:var(--ink-soft); font-size:.72em; margin-top:6px; font-weight:400;}
+  .stem{color:var(--gold); font-weight:700;}
+
+  /* letter boxes for the suffix */
+  .boxes{display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin:18px auto 4px; max-width:560px; align-items:flex-end;}
+  .stemtag{font-family:"Baloo 2",cursive; font-weight:700; font-size:26px; color:var(--gold); padding-bottom:8px; white-space:nowrap;}
+  .lb{width:40px; height:50px; border:2px solid var(--line); border-radius:11px; background:#1a0f2c; color:var(--ink);
+    font-family:"Baloo 2",cursive; font-weight:700; font-size:26px; text-align:center; text-transform:none;
+    caret-color:var(--gold); transition:.12s; padding:0;}
+  .lb:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(255,207,74,.2);}
+  .lb.good{border-color:var(--good); background:rgba(67,209,145,.16); color:var(--good);}
+  .lb.wrong{border-color:var(--bad); background:rgba(255,107,133,.16); color:var(--bad);}
+
+  .feedback{text-align:center; min-height:24px; margin-top:14px; font-size:15px; font-weight:600;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+  .feedback .sol{color:var(--gold);}
+
+  .btn{display:block; margin:16px auto 0; appearance:none; border:none; cursor:pointer; font-family:"Baloo 2",cursive; font-weight:700; letter-spacing:.02em;
+    font-size:17px; padding:13px 34px; border-radius:40px; color:#2a1400; background:linear-gradient(180deg,#ffe07a,var(--gold));
+    box-shadow:0 8px 22px rgba(255,207,74,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.45; cursor:default; transform:none;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+  .field{display:block; width:100%; max-width:340px; margin:14px auto 0; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#1a0f2c; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--purple-dim);}
+  .mini{text-align:center; font-size:12.5px; color:var(--purple-dim); margin-top:10px;}
+  .hintline{text-align:center; font-size:13.5px; color:var(--ink-soft); margin-top:8px;}
+  .hintline b{color:var(--gold);}
+  .shake{animation:shake .4s;} @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+  .pop{animation:pop .4s;} @keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .result-stats{display:flex; gap:24px; justify-content:center; margin:16px 0 4px;}
+  .result-stats .n{font-family:"Baloo 2",cursive; font-size:30px; color:var(--gold); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.07em;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Geniş Zaman</div>
+    <div class="meta"><span>⏱ <b id="timer">0:00</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+  <div class="stage">
+    <div id="screen"></div>
+  </div>
+</div>
+
+<script>
+var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs'), pbar=document.getElementById('pbar');
+var errors=0, startTime=null, timerInt=null, elapsed=0, penalty=0, current=0, playerName="";
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function tick(){ elapsed=Math.floor((Date.now()-startTime)/1000)+penalty; timerEl.textContent=fmt(elapsed); }
+function startTimer(){ startTime=Date.now(); timerInt=setInterval(tick,1000); tick(); }
+function stopTimer(){ clearInterval(timerInt); }
+function addErr(sec){ errors++; errsEl.textContent=errors; penalty+=(sec||6); tick(); }
+
+// Turkish-aware letter folding (klavyede ı/ö/ü/ç/ğ/ş yoksa i/o/u/c/g/s kabul)
+var FOLD={ "ı":"i","İ":"i","i":"i", "ö":"o","Ö":"o","o":"o",
+           "ü":"u","Ü":"u","u":"u", "ç":"c","Ç":"c","c":"c",
+           "ğ":"g","Ğ":"g","g":"g", "ş":"s","Ş":"s","s":"s" };
+function norm(ch){ ch=(ch||"").trim(); if(ch==="") return ""; var low=ch.toLocaleLowerCase("tr-TR"); return FOLD[low]||FOLD[ch]||low; }
+
+// 15 QUESTIONS — hepsi OLUMLU. before = cümlenin başı, stem = kök (ekranda altın), suffix = Derin'in yazacağı ek+kişi eki, en = İngilizce
+var Q=[
+  { before:"Ben her sabah okula ", stem:"gid", suffix:"erim", after:".", person:"ben", en:"I go to school every morning." },
+  { before:"Sen her gün kitap ", stem:"oku", suffix:"rsun", after:".", person:"sen", en:"You read a book every day." },
+  { before:"O akşam televizyon ", stem:"izle", suffix:"r", after:".", person:"o", en:"He/She watches TV in the evening." },
+  { before:"Biz hafta sonu parka ", stem:"gid", suffix:"eriz", after:".", person:"biz", en:"We go to the park at the weekend." },
+  { before:"Onlar sabah erken ", stem:"kalk", suffix:"arlar", after:".", person:"onlar", en:"They get up early in the morning." },
+  { before:"Ben kahvaltıda süt ", stem:"iç", suffix:"erim", after:".", person:"ben", en:"I drink milk at breakfast." },
+  { before:"Sen çok güzel ", stem:"yüz", suffix:"ersin", after:".", person:"sen", en:"You swim very well." },
+  { before:"O her gün spor ", stem:"yap", suffix:"ar", after:".", person:"o", en:"He/She does sport every day." },
+  { before:"Biz birlikte film ", stem:"izle", suffix:"riz", after:".", person:"biz", en:"We watch a film together." },
+  { before:"Siz çok iyi Türkçe ", stem:"konuş", suffix:"ursunuz", after:".", person:"siz", en:"You (pl.) speak Turkish very well." },
+  { before:"Ben gece saat onda ", stem:"yat", suffix:"arım", after:".", person:"ben", en:"I go to bed at ten at night." },
+  { before:"O bahçede hızlı ", stem:"koş", suffix:"ar", after:".", person:"o", en:"He/She runs fast in the garden." },
+  { before:"Onlar akşam birlikte ", stem:"oyna", suffix:"rlar", after:".", person:"onlar", en:"They play together in the evening." },
+  { before:"Sen her sabah yüzünü ", stem:"yıka", suffix:"rsın", after:".", person:"sen", en:"You wash your face every morning." },
+  { before:"Biz okulda yeni şeyler ", stem:"öğren", suffix:"iriz", after:".", person:"biz", en:"We learn new things at school." },
+];
+
+function renderIntro(){
+  document.getElementById('screen').innerHTML=
+    '<div class="hero">✏️📚</div>'+
+    '<h1>Geniş Zaman Eki</h1>'+
+    '<p class="lead">15 cümle var. Her cümlede fiilin <b>kökü</b> hazır (altın renkli). '+
+    'Sen sadece <b>geniş zaman ekini</b> harf harf yaz! '+
+    '<span class="tr">Örnek: Ben okula <b>gid</b> + <b>erim</b> → yaz: e-r-i-m</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go">Başla ▶</button>'+
+    '<div class="mini">Doğru ekle cümle tamamlanır. Hepsi olumlu cümle. 💪</div>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; errors=0; errsEl.textContent=0; penalty=0; elapsed=0; timerEl.textContent="0:00";
+    startTimer(); renderQ();
+  };
+  pbar.style.width="0%";
+}
+
+var PERSON_LABEL={ben:"ben (I)",sen:"sen (you)",o:"o (he/she)",biz:"biz (we)",siz:"siz (you ⁺)",onlar:"onlar (they)"};
+
+function renderQ(){
+  var q=Q[current];
+  pbar.style.width=((current)/Q.length*100)+"%";
+  var boxes="";
+  for(var i=0;i<q.suffix.length;i++){
+    boxes+='<input class="lb" data-i="'+i+'" maxlength="1" autocomplete="off" autocapitalize="off" inputmode="text">';
+  }
+  document.getElementById('screen').innerHTML=
+    '<div class="counter">Soru '+(current+1)+' / '+Q.length+'</div>'+
+    '<div class="person-wrap"><span class="person">👤 '+PERSON_LABEL[q.person]+'</span></div>'+
+    '<div class="sentence">'+q.before+'<span class="stem">'+q.stem+'</span>___'+q.after+
+      '<span class="en">'+q.en+'</span></div>'+
+    '<div class="boxes"><span class="stemtag">'+q.stem+' +</span>'+boxes+'</div>'+
+    '<button class="btn" id="check">Tamamla ✓</button>'+
+    '<div class="hintline">İpucu: <b>'+PERSON_LABEL[q.person]+'</b> için geniş zaman eki. Kökü değiştirme, sadece eki yaz.</div>'+
+    '<div class="feedback" id="fb"></div>';
+  var inputs=Array.prototype.slice.call(document.querySelectorAll('.lb'));
+  inputs.forEach(function(inp,k){
+    inp.addEventListener('input',function(){
+      inp.classList.remove('wrong');
+      if(inp.value && k<inputs.length-1){ inputs[k+1].focus(); }
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Backspace' && !inp.value && k>0){ inputs[k-1].focus(); }
+      if(e.key==='Enter'){ document.getElementById('check').click(); }
+    });
+  });
+  if(inputs[0]) inputs[0].focus();
+
+  document.getElementById('check').onclick=function(){
+    var filled=inputs.every(function(inp){return inp.value.trim().length>0;});
+    if(!filled){ bad("Bütün kutuları doldur 🙂"); shake(); return; }
+    var ok=true;
+    inputs.forEach(function(inp){
+      var i=+inp.dataset.i;
+      if(norm(inp.value)===norm(q.suffix[i])){ inp.classList.add('good'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('good'); ok=false; }
+    });
+    if(ok){
+      good("Doğru! "+q.stem+q.suffix+" 🎉"); pop();
+      document.getElementById('check').disabled=true;
+      inputs.forEach(function(x){x.disabled=true;});
+      pbar.style.width=((current+1)/Q.length*100)+"%";
+      setTimeout(advance,1050);
+    }else{
+      addErr(6);
+      bad('Tekrar dene. Doğrusu: <span class="sol">'+q.stem+q.suffix+'</span>');
+      shake();
+    }
+  };
+}
+
+function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.innerHTML=m;}}
+function bad(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.innerHTML=m;}}
+function pop(){var s=document.getElementById('screen'); s.classList.add('pop'); setTimeout(function(){s.classList.remove('pop');},400);}
+function shake(){var s=document.getElementById('screen'); s.classList.add('shake'); setTimeout(function(){s.classList.remove('shake');},400);}
+function advance(){ current++; if(current>=Q.length) renderWin(); else renderQ(); }
+
+function renderWin(){
+  stopTimer(); pbar.style.width="100%";
+  var dogru=Q.length; // all completed
+  document.getElementById('screen').innerHTML=
+    '<div class="hero pop">🏆⭐</div><h1>Tebrikler '+playerName.replace(/</g,'&lt;')+'!</h1>'+
+    '<p class="lead">15 cümlenin hepsini tamamladın! Geniş zaman ekini çok iyi yazıyorsun. 👏 '+
+    '<span class="tr">You completed all 15 sentences!</span></p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn ghost" id="again">↺ Baştan oyna</button>';
+  OVT.renderSend("ovtSend", { oyun:"Geniş Zaman Eki (Derin)", sure:fmt(elapsed), puan:errors+" hata" });
+  document.getElementById('again').onclick=function(){ renderIntro(); };
+}
+
+renderIntro();
+</script>
+</body>
+</html>

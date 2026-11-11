@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luna · Fiiller Çalışması</title>
+<meta name="description" content="Günlük fiiller — 6 bölümlü interaktif çalışma">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f6f1ff; --card:#ffffff; --ink:#2a2140; --ink-soft:#6b5e86;
+    --purple:#9b30d9; --purple-dk:#6a1b9a; --purple-lt:#f2e6fb;
+    --teal:#0e7c86; --teal-lt:#e1f2f3; --green:#1e8a4c; --green-lt:#e4f5ec;
+    --gold:#c9972a; --gold-lt:#fbf1df; --rose:#b5397a; --rose-lt:#fbe9f2;
+    --good:#1e8a4c; --bad:#d8456b; --line:#e4d6f5;
+    --shadow:0 10px 30px rgba(107,30,154,.12);
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:
+      radial-gradient(1000px 500px at 50% -10%, #efe0ff 0%, transparent 60%), var(--bg);
+    color:var(--ink); font-family:"Fredoka",system-ui,sans-serif; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px; margin:0 auto; padding:20px 15px 60px;}
+  header{text-align:center; margin-bottom:10px;}
+  .brand{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--purple); font-weight:700;}
+  h1{font-family:"Baloo 2",cursive; font-weight:800; font-size:clamp(24px,6vw,34px); margin:.15em 0; color:var(--purple-dk);}
+  .sub{color:var(--ink-soft); font-size:15px; margin-bottom:4px;}
+  .scorebar{position:sticky; top:0; z-index:30; background:rgba(246,241,255,.95); backdrop-filter:blur(6px);
+    display:flex; justify-content:center; gap:18px; padding:9px 0; margin-bottom:8px; border-bottom:1px solid var(--line); font-weight:600; font-size:15px;}
+  .scorebar b{color:var(--purple-dk); font-variant-numeric:tabular-nums;}
+
+  .section{background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); padding:20px 18px; margin:16px 0;}
+  .sec-head{display:flex; align-items:center; gap:10px; margin-bottom:4px;}
+  .sec-num{flex:none; width:34px; height:34px; border-radius:50%; background:var(--purple); color:#fff; font-family:"Baloo 2",cursive; font-weight:700; font-size:18px; display:flex; align-items:center; justify-content:center;}
+  .sec-title{font-family:"Baloo 2",cursive; font-weight:700; font-size:19px; color:var(--ink);}
+  .sec-dir{font-size:14px; color:var(--ink-soft); margin:2px 0 14px; line-height:1.5;}
+  .sec-dir .en{color:var(--purple-dk); font-style:italic;}
+
+  /* chips / draggables */
+  .pool{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:12px 0; padding:12px; background:var(--purple-lt); border-radius:14px; min-height:54px;}
+  .chip{display:inline-flex; align-items:center; gap:5px; padding:8px 13px; background:#fff; border:2px solid var(--purple); border-radius:30px;
+    font-weight:600; font-size:16px; color:var(--purple-dk); cursor:grab; user-select:none; touch-action:none; transition:transform .1s, box-shadow .1s;}
+  .chip.emoji{font-size:26px; padding:6px 12px;}
+  .chip:active{cursor:grabbing;}
+  .chip.dragging{opacity:.5;}
+  .chip.placed{display:none;}
+  .chip.used{opacity:.35; pointer-events:none;}
+
+  /* drop targets */
+  .drop{display:inline-flex; align-items:center; justify-content:center; min-width:64px; min-height:44px; padding:4px 10px;
+    border:2px dashed var(--purple); border-radius:12px; background:var(--purple-lt); vertical-align:middle; margin:0 3px; font-size:24px; transition:.12s;}
+  .drop.over{background:#e9d2fb; border-style:solid; transform:scale(1.05);}
+  .drop.filled{border-style:solid; background:#fff;}
+  .drop.ok{border-color:var(--good); background:var(--green-lt);}
+  .drop.no{border-color:var(--bad); background:var(--rose-lt); animation:shake .4s;}
+
+  /* section 1 side-by-side layout: sentences left, emoji pool right */
+  .s1-layout{display:flex; gap:12px; align-items:flex-start;}
+  .s1-left{flex:1; min-width:0;}
+  .s1-pool{flex:none; width:76px; position:sticky; top:58px; display:flex; flex-direction:column; gap:9px;
+    background:var(--purple-lt); border-radius:14px; padding:10px 8px; align-items:center;}
+  .s1-pool .chip.emoji{font-size:28px; padding:6px 8px; width:56px; justify-content:center;}
+  .s1-left .learncard{margin:0 0 9px;}
+  .s1-left .slot-line{margin-top:6px; font-size:13px; color:var(--ink-soft);}
+  /* learn cards (section 1) — emoji on the side */
+  .learnrow{display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin:9px 0; background:#fff;}
+  .learnrow .lr-emoji{flex:none; width:58px; height:58px; display:flex; align-items:center; justify-content:center; font-size:36px; background:var(--purple-lt); border-radius:12px;}
+  .learnrow .lr-text{flex:1;}
+  .learnrow .tr{font-weight:700; font-size:19px; color:var(--ink);}
+  .learnrow .tr b{color:var(--purple-dk);}
+  .learnrow .en-inline{font-size:14px; color:var(--ink-soft); font-weight:500; font-style:italic;}
+  .learnrow .en{font-size:14px; color:var(--ink); margin-top:3px;}
+  .learnrow .en-tr{color:var(--ink-soft); font-style:italic;}
+  .learncard{border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:10px 0; background:#fff;}
+  .learncard .tr{font-weight:600; font-size:17px; color:var(--ink);}
+  .learncard .tr b{color:var(--purple-dk);}
+  .learncard .en{font-size:14px; color:var(--ink-soft); font-style:italic; margin:2px 0 8px;}
+  .learncard .slot-line{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .learncard .slot-line span.lbl{font-size:13px; color:var(--ink-soft);}
+
+  /* match (section 2 & 6) */
+  .matchgrid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .col{display:flex; flex-direction:column; gap:9px;}
+  .col-h{font-weight:700; font-size:13px; color:var(--purple-dk); text-transform:uppercase; letter-spacing:.05em; text-align:center;}
+  .mitem{padding:11px 10px; border:2px solid var(--line); border-radius:12px; background:#fff; font-weight:600; font-size:16px; text-align:center; cursor:pointer; transition:.12s;}
+  .mitem.emoji{font-size:30px;}
+  .mitem.sel{border-color:var(--purple); background:var(--purple-lt);}
+  .mitem.done{border-color:var(--good); background:var(--green-lt); color:var(--good); cursor:default;}
+  .mitem.wrongflash{border-color:var(--bad); background:var(--rose-lt); animation:shake .4s;}
+
+  /* write inputs (3 & 5) */
+  .writerow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:11px 0; padding-bottom:11px; border-bottom:1px dashed var(--line);}
+  .writerow:last-child{border-bottom:none;}
+  .writerow .q{font-weight:600; font-size:16px; min-width:150px;}
+  .writerow .q .emoji{font-size:22px;}
+  .writerow .hint{font-size:13px; color:var(--gold); background:var(--gold-lt); padding:2px 9px; border-radius:20px;}
+  .writerow input{flex:1; min-width:120px; padding:9px 12px; border:2px solid var(--line); border-radius:10px; font-family:inherit; font-size:16px; color:var(--ink);}
+  .writerow input:focus{outline:none; border-color:var(--purple);}
+  .writerow input.ok{border-color:var(--good); background:var(--green-lt); color:var(--good);}
+  .writerow input.no{border-color:var(--bad); background:var(--rose-lt);}
+  .writerow .sol{font-size:14px; color:var(--good); font-weight:700;}
+
+  .checkbtn{display:block; margin:16px auto 2px; border:none; cursor:pointer; font-family:"Baloo 2",cursive; font-weight:700;
+    font-size:16px; padding:11px 28px; border-radius:30px; color:#fff; background:var(--purple); box-shadow:0 6px 16px rgba(155,48,217,.3); transition:.15s;}
+  .checkbtn:hover{transform:translateY(-2px);}
+  .sec-fb{text-align:center; font-weight:700; font-size:15px; margin-top:10px; min-height:20px;}
+  .sec-fb.ok{color:var(--good);} .sec-fb.part{color:var(--gold);}
+
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .pop{animation:pop .35s;}
+
+  .done-banner{display:none; text-align:center; background:linear-gradient(135deg,#9b30d9,#b5397a); color:#fff; border-radius:20px; padding:22px; margin:18px 0; box-shadow:var(--shadow);}
+  .done-banner.show{display:block; animation:pop .4s;}
+  .done-banner h2{font-family:"Baloo 2",cursive; margin:.2em 0; font-size:26px;}
+  .foot{text-align:center; font-size:12px; color:var(--ink-soft); margin-top:26px; border-top:1px solid var(--line); padding-top:12px;}
+  /* giriş ekranı */
+  .gate{position:fixed; inset:0; z-index:100; background:linear-gradient(160deg,#f6f1ff,#efe0ff); display:flex; align-items:center; justify-content:center; padding:24px;}
+  .gate.hide{display:none;}
+  .gate-card{background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:30px 24px; max-width:380px; text-align:center;}
+  .gate-card .em{font-size:54px;}
+  .gate-card h2{font-family:"Baloo 2",cursive; color:var(--purple-dk); margin:.3em 0 .1em; font-size:26px;}
+  .gate-card p{color:var(--ink-soft); font-size:15px; margin:.4em 0 1em;}
+  .gate-card input{width:100%; padding:12px 14px; border:2px solid var(--line); border-radius:12px; font-family:inherit; font-size:17px; text-align:center; color:var(--ink);}
+  .gate-card input:focus{outline:none; border-color:var(--purple);}
+  .gate-card button{margin-top:14px; width:100%; border:none; cursor:pointer; font-family:"Baloo 2",cursive; font-weight:700; font-size:18px; padding:13px; border-radius:14px; color:#fff; background:var(--purple); box-shadow:0 6px 16px rgba(155,48,217,.3);}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="em">🎯📚</div>
+    <h2>Günlük Fiiller</h2>
+    <p>12 fiili 6 bölümde öğrenelim! Adını yaz ve başla.<br><span style="font-size:13px">Learn 12 verbs in 6 sections.</span></p>
+    <input type="text" id="who" placeholder="Adını yaz / Your name" autocomplete="name">
+    <button id="startBtn">Başla ▶</button>
+  </div>
+</div>
+<div class="wrap">
+  <header>
+    <div class="brand">Orhan Veli · Luna</div>
+    <h1>Günlük Fiiller 🎯</h1>
+    <div class="sub">Eylemleri öğrenelim — Learn the verbs · 6 bölüm</div>
+  </header>
+  <div class="scorebar">⭐ Puan: <b id="score">0</b> <span>·</span> ✅ Doğru: <b id="correct">0</b></div>
+
+  <div id="app"></div>
+
+  <div class="done-banner" id="doneBanner">
+    <div style="font-size:46px">🏆</div>
+    <h2>Harikasın!</h2>
+    <div id="doneText">Bütün bölümleri bitirdin!</div>
+    <div id="ovtSend"></div>
+  </div>
+
+  <div class="foot">Özel Orhan Veli Türkçe Okulu – Türkçe Adresiniz · Luna · Günlük Fiiller</div>
+</div>
+
+<script>
+// ---- 12 VERBS ----
+// tr = ÖĞRETİLEN KÖK (gel-), en = İngilizce. Fiili kökle öğretiyoruz, mastar eki yok.
+var V=[
+  {tr:"gel", en:"to come",  emoji:"📥"},
+  {tr:"git", en:"to go",    emoji:"🚪"},
+  {tr:"oku", en:"to read",  emoji:"📖"},
+  {tr:"oyna",en:"to play",  emoji:"⚽"},
+  {tr:"uyu", en:"to sleep", emoji:"😴"},
+  {tr:"yaz", en:"to write", emoji:"✏️"},
+  {tr:"koş", en:"to run",   emoji:"🏃"},
+  {tr:"ye",  en:"to eat",   emoji:"🍽️"},
+  {tr:"iç",  en:"to drink", emoji:"🥤"},
+  {tr:"gül", en:"to laugh", emoji:"😄"},
+  {tr:"yürü",en:"to walk",  emoji:"🚶"},
+  {tr:"izle",en:"to watch", emoji:"📺"},
+];
+var byTr={}; V.forEach(function(v){byTr[v.tr]=v;});
+
+// Turkish-aware fold (klavyede ı/ö/ü/ç/ğ/ş yoksa i/o/u/c/g/s de kabul)
+var FOLD={"ı":"i","İ":"i","i":"i","ö":"o","Ö":"o","o":"o","ü":"u","Ü":"u","u":"u","ç":"c","Ç":"c","c":"c","ğ":"g","Ğ":"g","g":"g","ş":"s","Ş":"s","s":"s"};
+function foldWord(w){ return (w||"").trim().toLocaleLowerCase("tr-TR").split("").map(function(c){return FOLD[c]||c;}).join(""); }
+// kökü sadeleştir: tireyi at, yazılmışsa -mek/-mak mastar ekini at
+function rootOf(w){ var f=foldWord(w).replace(/-+$/,"").replace(/[-\s]/g,""); f=f.replace(/(mek|mak)$/,""); return f; }
+function sameWord(a,b){ return rootOf(a)===rootOf(b); }
+
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+var score=0, correctCount=0, sectionsDone={};
+function addScore(n){ score+=n; document.getElementById('score').textContent=score; }
+function addCorrect(n){ correctCount+=n; document.getElementById('correct').textContent=correctCount; }
+var startedAt=Date.now();
+// Giriş ekranı: ad kutusunu doldur, Başla'da gate'i kapat ve süreyi başlat
+(function(){
+  OVT.fill("who");
+  var gate=document.getElementById('gate'), inp=document.getElementById('who'), btn=document.getElementById('startBtn');
+  function start(){ var n=(inp.value||"").trim(); if(!n){ inp.focus(); inp.style.borderColor="var(--bad)"; return; } gate.classList.add('hide'); startedAt=Date.now(); }
+  btn.addEventListener('click', start);
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') start(); });
+})();
+function fmtTime(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function markDone(id){
+  sectionsDone[id]=true;
+  if(Object.keys(sectionsDone).length>=6){
+    var db=document.getElementById('doneBanner'); db.classList.add('show');
+    document.getElementById('doneText').textContent="6 bölümün hepsini bitirdin! Toplam "+score+" puan · "+correctCount+"/36 doğru. 🎉";
+    var sure=fmtTime(Math.floor((Date.now()-startedAt)/1000));
+    OVT.renderSend("ovtSend", { oyun:"Günlük Fiiller (Luna)", sure:sure, puan:correctCount+"/36 doğru · "+score+" puan" });
+    db.scrollIntoView({behavior:"smooth"});
+  }
+}
+
+// ============ DRAG & DROP (pointer-based, works on touch) ============
+var dragEl=null, dragData=null, ghost=null;
+function makeDraggable(el, data){
+  el.addEventListener('pointerdown', function(e){
+    if(el.classList.contains('used')||el.classList.contains('placed')) return;
+    e.preventDefault();
+    dragEl=el; dragData=data;
+    ghost=el.cloneNode(true); ghost.style.position='fixed'; ghost.style.pointerEvents='none'; ghost.style.zIndex=999;
+    ghost.style.opacity='.92'; ghost.style.margin=0; ghost.classList.add('pop');
+    document.body.appendChild(ghost);
+    el.classList.add('dragging');
+    moveGhost(e);
+    document.addEventListener('pointermove', moveGhost);
+    document.addEventListener('pointerup', dropGhost);
+  });
+}
+function moveGhost(e){
+  if(!ghost) return;
+  ghost.style.left=(e.clientX-ghost.offsetWidth/2)+'px';
+  ghost.style.top=(e.clientY-ghost.offsetHeight/2)+'px';
+  // highlight target under pointer
+  var t=document.elementFromPoint(e.clientX,e.clientY);
+  document.querySelectorAll('.drop.over').forEach(function(d){d.classList.remove('over');});
+  var dz=t&&t.closest?t.closest('.drop'):null;
+  if(dz && !dz.classList.contains('filled')) dz.classList.add('over');
+}
+function dropGhost(e){
+  document.removeEventListener('pointermove', moveGhost);
+  document.removeEventListener('pointerup', dropGhost);
+  if(ghost){ ghost.remove(); ghost=null; }
+  if(dragEl) dragEl.classList.remove('dragging');
+  var t=document.elementFromPoint(e.clientX,e.clientY);
+  var dz=t&&t.closest?t.closest('.drop'):null;
+  document.querySelectorAll('.drop.over').forEach(function(d){d.classList.remove('over');});
+  if(dz && !dz.classList.contains('filled') && dragEl){
+    var onDrop=dz._onDrop;
+    if(onDrop) onDrop(dz, dragEl, dragData);
+  }
+  dragEl=null; dragData=null;
+}
+
+// ============ BUILD SECTIONS ============
+var app=document.getElementById('app');
+function sectionShell(num,title,dir){
+  var s=document.createElement('div'); s.className='section';
+  s.innerHTML='<div class="sec-head"><div class="sec-num">'+num+'</div><div class="sec-title">'+title+'</div></div>'+
+    '<div class="sec-dir">'+dir+'</div>';
+  app.appendChild(s); return s;
+}
+
+// örnek cümleler (şimdiki zaman) — tüm bölümler kullanabilir
+var SENT={
+  gel:["Ben şimdi okula geliyorum.","I am coming to school now."],
+  git:["Ben parka gidiyorum.","I am going to the park."],
+  oku:["Ben kitap okuyorum.","I am reading a book."],
+  oyna:["Ben top oynuyorum.","I am playing with a ball."],
+  uyu:["Ben şimdi uyuyorum.","I am sleeping now."],
+  yaz:["Ben defterime yazıyorum.","I am writing in my notebook."],
+  koş:["Ben bahçede koşuyorum.","I am running in the garden."],
+  ye:["Ben elma yiyorum.","I am eating an apple."],
+  iç:["Ben su içiyorum.","I am drinking water."],
+  gül:["Ben çok gülüyorum.","I am laughing a lot."],
+  yürü:["Ben yavaş yürüyorum.","I am walking slowly."],
+  izle:["Ben film izliyorum.","I am watching a film."]
+};
+
+// ---- SECTION 1: learn — drag emoji from a SIDE pool into each verb's slot ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(1,"Öğren ve sürükle","Cümleyi oku. <b>Yandaki</b> doğru resmi (emoji) kutuya sürükle. <span class=\"en\">Drag the correct picture from the side into the box.</span>");
+  var layout=document.createElement('div'); layout.className='s1-layout';
+  var left=document.createElement('div'); left.className='s1-left';
+  var right=document.createElement('div'); right.className='s1-pool';
+  set.forEach(function(v){
+    var c=document.createElement('div'); c.className='learncard';
+    c.innerHTML='<div class="tr"><b>'+v.tr+'-</b> <span class="en-inline">('+v.en+')</span></div>'+
+      '<div class="en">'+SENT[v.tr][0]+'</div>';
+    var line=document.createElement('div'); line.className='slot-line';
+    var dz=document.createElement('span'); dz.className='drop'; dz.dataset.answer=v.tr;
+    dz._onDrop=function(zone,chip,data){
+      if(data===zone.dataset.answer){ zone.textContent=byTr[data].emoji; zone.classList.add('filled','ok'); chip.classList.add('used'); addScore(2); addCorrect(1); checkDone(); }
+      else { zone.classList.add('no'); setTimeout(function(){zone.classList.remove('no');},400); }
+    };
+    line.appendChild(document.createTextNode('Resim: ')); line.appendChild(dz);
+    c.appendChild(line); left.appendChild(c);
+  });
+  shuffle(set).forEach(function(v){
+    var ch=document.createElement('div'); ch.className='chip emoji'; ch.textContent=v.emoji; makeDraggable(ch,v.tr); right.appendChild(ch);
+  });
+  layout.appendChild(left); layout.appendChild(right); s.appendChild(layout);
+  var fb=document.createElement('div'); fb.className='sec-fb'; s.appendChild(fb);
+  var total=set.length, got=0;
+  function checkDone(){ got++; if(got>=total){ fb.className='sec-fb ok'; fb.textContent='👏 Hepsi doğru! +'+(total*2)+' puan'; markDone('s1'); } }
+})();
+
+// ---- SECTION 2: match EN <-> TR ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(2,"İngilizce – Türkçe eşleştir","Önce İngilizce sözcüğe, sonra Türkçe karşılığına dokun. <span class=\"en\">Tap the English word, then its Turkish match.</span>");
+  var grid=document.createElement('div'); grid.className='matchgrid';
+  var colL=document.createElement('div'); colL.className='col'; colL.innerHTML='<div class="col-h">English</div>';
+  var colR=document.createElement('div'); colR.className='col'; colR.innerHTML='<div class="col-h">Türkçe</div>';
+  shuffle(set).forEach(function(v){ var m=document.createElement('div'); m.className='mitem'; m.textContent=v.en; m.dataset.key=v.tr; m.dataset.side='en'; colL.appendChild(m); });
+  shuffle(set).forEach(function(v){ var m=document.createElement('div'); m.className='mitem'; m.textContent=v.tr+'-'; m.dataset.key=v.tr; m.dataset.side='tr'; colR.appendChild(m); });
+  grid.appendChild(colL); grid.appendChild(colR); s.appendChild(grid);
+  var fb=document.createElement('div'); fb.className='sec-fb'; s.appendChild(fb);
+  var sel=null, done=0, total=set.length;
+  s.querySelectorAll('.mitem').forEach(function(m){
+    m.addEventListener('click',function(){
+      if(m.classList.contains('done')) return;
+      if(!sel){ if(m.dataset.side!=='en') return; sel=m; m.classList.add('sel'); return; }
+      if(m===sel){ m.classList.remove('sel'); sel=null; return; }
+      if(m.dataset.side!=='tr'){ sel.classList.remove('sel'); sel=m; m.classList.add('sel'); return; }
+      if(m.dataset.key===sel.dataset.key){
+        m.classList.add('done'); sel.classList.add('done'); sel.classList.remove('sel'); sel=null; addScore(2); addCorrect(1);
+        done++; if(done>=total){ fb.className='sec-fb ok'; fb.textContent='👏 Hepsini eşleştirdin! +'+(total*2)+' puan'; markDone('s2'); }
+      } else {
+        var bad=m, badsel=sel; bad.classList.add('wrongflash'); badsel.classList.add('wrongflash');
+        setTimeout(function(){bad.classList.remove('wrongflash'); badsel.classList.remove('wrongflash','sel');},450); sel=null;
+      }
+    });
+  });
+})();
+
+// ---- SECTION 3: write TR (with hint) ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(3,"Türkçe kökünü yaz (ipuçlu)","İngilizce fiilin Türkçe <b>kökünü</b> yaz (gel-, koş-…). İpucu: ilk harf ve resim. <span class=\"en\">Write the Turkish verb root. Hint: first letter + picture.</span>");
+  set.forEach(function(v){
+    var row=document.createElement('div'); row.className='writerow';
+    var first=v.tr.charAt(0);
+    row.innerHTML='<span class="q"><span class="emoji">'+v.emoji+'</span> '+v.en+'</span>'+
+      '<span class="hint">ipucu: '+first+'…</span>'+
+      '<input type="text" autocomplete="off" autocapitalize="off" data-ans="'+v.tr+'">'+
+      '<span class="sol"></span>';
+    s.appendChild(row);
+  });
+  addCheck(s,'s3');
+})();
+
+// ---- SECTION 4: fill the gap — drag word ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(4,"Boşluğu doldur (sürükle)","Cümleyi oku. Doğru fiili boşluğa sürükle. <span class=\"en\">Drag the correct verb into the gap.</span>");
+  // before = cümle başı, suf = şimdiki zaman eki (cümlede hazır, kök DEĞİŞMEYEN fiiller)
+  // Sadece kökü sabit kalan fiiller: gel-geliyor, koş-koşuyor, yaz-yazıyor, gül-gülüyor, iç-içiyor, yürü-yürüyor
+  var gaps={
+    gel:["Ben şimdi okula ","iyorum.","I am coming to school now."],
+    koş:["Ben parkta ","uyorum.","I am running in the park."],
+    yaz:["Ben defterime ","ıyorum.","I am writing in my notebook."],
+    gül:["Ben çok ","üyorum.","I am laughing a lot."],
+    iç:["Ben su ","iyorum.","I am drinking water."],
+    yürü:["Ben yavaş ","yorum.","I am walking slowly."]
+  };
+  var chosen=V.filter(function(v){return gaps[v.tr];});
+  chosen.forEach(function(v){
+    var c=document.createElement('div'); c.className='learncard';
+    var g=gaps[v.tr];
+    var line=document.createElement('div'); line.className='slot-line'; line.style.fontSize='17px';
+    var txt=document.createElement('span'); txt.className='tr'; txt.textContent=g[0];
+    var dz=document.createElement('span'); dz.className='drop'; dz.style.fontSize='17px'; dz.style.minWidth='52px'; dz.dataset.answer=v.tr;
+    var rest=document.createElement('span'); rest.className='tr'; rest.innerHTML='<b style="color:var(--teal)">'+g[1]+'</b>';
+    dz._onDrop=function(zone,chip,data){
+      if(data===zone.dataset.answer){ zone.textContent=data; zone.classList.add('filled','ok'); chip.classList.add('used'); addScore(2); addCorrect(1); checkDone(); }
+      else { zone.classList.add('no'); setTimeout(function(){zone.classList.remove('no');},400); }
+    };
+    line.appendChild(txt); line.appendChild(dz); line.appendChild(rest);
+    var en=document.createElement('div'); en.className='en'; en.textContent=g[2];
+    c.appendChild(line); c.appendChild(en); s.appendChild(c);
+  });
+  var pool=document.createElement('div'); pool.className='pool';
+  shuffle(chosen).forEach(function(v){ var ch=document.createElement('div'); ch.className='chip'; ch.textContent=v.tr+'-'; makeDraggable(ch,v.tr); pool.appendChild(ch); });
+  s.appendChild(pool);
+  var fb=document.createElement('div'); fb.className='sec-fb'; s.appendChild(fb);
+  var got=0, total=chosen.length;
+  function checkDone(){ got++; if(got>=total){ fb.className='sec-fb ok'; fb.textContent='👏 Bütün boşluklar doğru! +'+(total*2)+' puan'; markDone('s4'); } }
+})();
+
+// ---- SECTION 5: write TR (no hint) ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(5,"Türkçe kökünü yaz (ipuçsuz)","İngilizce fiilin Türkçe <b>kökünü</b> yaz. Bu sefer ipucu yok! <span class=\"en\">Write the Turkish verb root. No hint this time!</span>");
+  set.forEach(function(v){
+    var row=document.createElement('div'); row.className='writerow';
+    row.innerHTML='<span class="q">'+v.en+'</span>'+
+      '<input type="text" autocomplete="off" autocapitalize="off" data-ans="'+v.tr+'">'+
+      '<span class="sol"></span>';
+    s.appendChild(row);
+  });
+  addCheck(s,'s5');
+})();
+
+// ---- SECTION 6: match small photo (emoji) <-> TR ----
+(function(){
+  var set=shuffle(V).slice(0,6);
+  var s=sectionShell(6,"Resim – Türkçe eşleştir","Önce resme (emoji), sonra Türkçe fiile dokun. <span class=\"en\">Tap the picture, then the Turkish verb.</span>");
+  var grid=document.createElement('div'); grid.className='matchgrid';
+  var colL=document.createElement('div'); colL.className='col'; colL.innerHTML='<div class="col-h">Resim</div>';
+  var colR=document.createElement('div'); colR.className='col'; colR.innerHTML='<div class="col-h">Türkçe</div>';
+  shuffle(set).forEach(function(v){ var m=document.createElement('div'); m.className='mitem emoji'; m.textContent=v.emoji; m.dataset.key=v.tr; m.dataset.side='em'; colL.appendChild(m); });
+  shuffle(set).forEach(function(v){ var m=document.createElement('div'); m.className='mitem'; m.textContent=v.tr+'-'; m.dataset.key=v.tr; m.dataset.side='tr'; colR.appendChild(m); });
+  grid.appendChild(colL); grid.appendChild(colR); s.appendChild(grid);
+  var fb=document.createElement('div'); fb.className='sec-fb'; s.appendChild(fb);
+  var sel=null, done=0, total=set.length;
+  s.querySelectorAll('.mitem').forEach(function(m){
+    m.addEventListener('click',function(){
+      if(m.classList.contains('done')) return;
+      if(!sel){ if(m.dataset.side!=='em') return; sel=m; m.classList.add('sel'); return; }
+      if(m===sel){ m.classList.remove('sel'); sel=null; return; }
+      if(m.dataset.side!=='tr'){ sel.classList.remove('sel'); sel=m; m.classList.add('sel'); return; }
+      if(m.dataset.key===sel.dataset.key){
+        m.classList.add('done'); sel.classList.add('done'); sel.classList.remove('sel'); sel=null; addScore(2); addCorrect(1);
+        done++; if(done>=total){ fb.className='sec-fb ok'; fb.textContent='👏 Hepsini eşleştirdin! +'+(total*2)+' puan'; markDone('s6'); }
+      } else {
+        var bad=m, badsel=sel; bad.classList.add('wrongflash'); badsel.classList.add('wrongflash');
+        setTimeout(function(){bad.classList.remove('wrongflash'); badsel.classList.remove('wrongflash','sel');},450); sel=null;
+      }
+    });
+  });
+})();
+
+// shared "check" button for write sections
+function addCheck(s,id){
+  var btn=document.createElement('button'); btn.className='checkbtn'; btn.textContent='Kontrol et ✓';
+  var fb=document.createElement('div'); fb.className='sec-fb';
+  s.appendChild(btn); s.appendChild(fb);
+  btn.addEventListener('click',function(){
+    var rows=s.querySelectorAll('.writerow'); var ok=0, total=rows.length;
+    rows.forEach(function(r){
+      var inp=r.querySelector('input'); var sol=r.querySelector('.sol'); var ans=inp.dataset.ans;
+      if(sameWord(inp.value,ans)){ inp.classList.add('ok'); inp.classList.remove('no'); sol.textContent='✓'; ok++; }
+      else { inp.classList.add('no'); inp.classList.remove('ok'); sol.textContent='→ '+ans+'-'; }
+    });
+    addScore(ok*2); addCorrect(ok);
+    if(ok===total){ fb.className='sec-fb ok'; fb.textContent='👏 Hepsi doğru! +'+(ok*2)+' puan'; }
+    else { fb.className='sec-fb part'; fb.textContent=ok+'/'+total+' doğru. Kırmızıları düzelt, tekrar dene. (+'+(ok*2)+' puan)'; }
+    markDone(id);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yiyecek Eşleştirme</title>
+<meta name="description" content="Yiyecek-içecek kelime ve kalıp eşleştirme oyunu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#fff6ee; --card:#ffffff; --ink:#3a2b1e; --ink-soft:#8a7560;
+    --orange:#f08a3c; --orange-dk:#d26c1e; --orange-lt:#ffe9d6;
+    --purple:#9b30d9; --purple-dk:#6a1b9a; --purple-lt:#f2e6fb;
+    --teal:#0e9488; --teal-lt:#d6f3f0;
+    --good:#1e9e5a; --good-lt:#e2f6ec; --bad:#e2536b; --bad-lt:#fde4e9;
+    --gold:#e0a53c; --line:#f0ddc9; --shadow:0 10px 30px rgba(210,108,30,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:
+      radial-gradient(900px 440px at 50% -10%, #ffe3c6 0%, transparent 60%), var(--bg);
+    color:var(--ink); font-family:"Fredoka",system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:640px; margin:0 auto; padding:18px 14px 40px; min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;}
+  .brand{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--orange-dk); font-weight:700;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .roundbar{display:flex; gap:6px; justify-content:center; margin-bottom:12px;}
+  .roundbar span{flex:1; max-width:90px; height:7px; border-radius:20px; background:var(--orange-lt);}
+  .roundbar span.on{background:linear-gradient(90deg,var(--orange),var(--gold));}
+  .roundbar span.done{background:var(--good);}
+
+  .stage{background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:20px 16px 24px; position:relative; flex:1;}
+  h1{font-family:"Baloo 2",cursive; font-weight:800; text-align:center; font-size:clamp(25px,6.2vw,36px); margin:.1em 0; color:var(--orange-dk);}
+  .hero{text-align:center; font-size:clamp(44px,12vw,66px); line-height:1; margin:6px 0;}
+  .lead{text-align:center; font-size:clamp(15px,3.6vw,18px); color:var(--ink); line-height:1.55; max-width:42ch; margin:8px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.84em; margin-top:4px;}
+  .round-title{text-align:center; font-family:"Baloo 2",cursive; font-weight:700; font-size:18px; color:var(--purple-dk); margin:2px 0 2px;}
+  .round-sub{text-align:center; font-size:13.5px; color:var(--ink-soft); margin-bottom:12px;}
+
+  .board{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; max-width:540px; margin:0 auto;}
+  .tile{padding:14px 10px; border:2px solid var(--line); border-radius:14px; background:#fff; cursor:pointer;
+    font-weight:600; font-size:16px; text-align:center; transition:.12s; user-select:none; min-height:58px; display:flex; align-items:center; justify-content:center; line-height:1.25;}
+  .tile.emoji{font-size:34px;}
+  .tile:hover{border-color:var(--orange);}
+  .tile.sel{border-color:var(--purple); background:var(--purple-lt); transform:scale(1.03);}
+  .tile.ok{border-color:var(--good); background:var(--good-lt); color:var(--good); cursor:default; animation:pop .35s;}
+  .tile.gone{opacity:0; pointer-events:none; transform:scale(.8); transition:.35s;}
+  .tile.bad{border-color:var(--bad); background:var(--bad-lt); animation:shake .4s;}
+  .colhint{text-align:center; font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; font-weight:600; padding-bottom:2px;}
+
+  .feedback{text-align:center; min-height:22px; margin-top:14px; font-size:15px; font-weight:600;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+
+  .btn{display:block; margin:16px auto 0; border:none; cursor:pointer; font-family:"Baloo 2",cursive; font-weight:700;
+    font-size:17px; padding:13px 32px; border-radius:40px; color:#fff; background:linear-gradient(180deg,#f8a254,var(--orange-dk));
+    box-shadow:0 8px 20px rgba(210,108,30,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.5;cursor:default;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+  .field{display:block; width:100%; max-width:330px; margin:14px auto 0; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#fff; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--orange);}
+  .mini{text-align:center; font-size:12.5px; color:var(--orange-dk); margin-top:10px;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .result-stats{display:flex; gap:22px; justify-content:center; margin:16px 0 4px;}
+  .result-stats .n{font-family:"Baloo 2",cursive; font-size:30px; color:var(--orange-dk); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.07em;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Yiyecek & İçecek</div>
+    <div class="meta"><span>⏱ <b id="timer">0:00</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="roundbar" id="roundbar"></div>
+  <div class="stage"><div id="screen"></div></div>
+</div>
+
+<script>
+var timerEl=document.getElementById('timer'), errsEl=document.getElementById('errs'), rbar=document.getElementById('roundbar');
+var errors=0, startTime=null, timerInt=null, elapsed=0, current=0, playerName="";
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function tick(){ elapsed=Math.floor((Date.now()-startTime)/1000); timerEl.textContent=fmt(elapsed); }
+function startTimer(){ startTime=Date.now(); timerInt=setInterval(tick,1000); tick(); }
+function stopTimer(){ clearInterval(timerInt); }
+function addErr(){ errors++; errsEl.textContent=errors; }
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+// ---- ROUNDS: each is {title, sub, pairs:[[left,right,leftIsEmoji?],...]} ----
+var ROUNDS=[
+  { title:"1. Tur — Resim ↔ Kelime", sub:"Resme dokun, sonra Türkçe adına dokun. / Tap the picture, then its name.",
+    leftHint:"Resim", rightHint:"Türkçe", leftEmoji:true,
+    pairs:[["🍎","elma"],["🍞","ekmek"],["🧀","peynir"],["🥚","yumurta"],["🐟","balık"],["🥛","süt"]] },
+  { title:"2. Tur — Resim ↔ Kelime", sub:"Resme dokun, sonra Türkçe adına dokun. / Tap the picture, then its name.",
+    leftHint:"Resim", rightHint:"Türkçe", leftEmoji:true,
+    pairs:[["🍵","çay"],["🍲","çorba"],["🍇","meyve"],["💧","su"],["🍚","pilav"],["🫒","zeytin"]] },
+  { title:"3. Tur — Kalıp ↔ Anlam", sub:"Türkçe kalıba dokun, sonra İngilizce anlamına dokun. / Match the phrase.",
+    leftHint:"Kalıp", rightHint:"Meaning", leftEmoji:false,
+    pairs:[["çayı demlemek","to brew tea"],["sofrayı kurmak","to set the table"],["yemek pişirmek","to cook"],["ekmek almak","to buy bread"],["bulaşık yıkamak","to wash the dishes"],["meyve doğramak","to chop fruit"]] },
+  { title:"4. Tur — Sofra ifadeleri", sub:"İfadeye dokun, sonra ne zaman söylendiğine dokun. / Match the expression.",
+    leftHint:"İfade", rightHint:"Ne zaman?", leftEmoji:false,
+    pairs:[["Afiyet olsun!","Yemeğe başlarken"],["Elinize sağlık.","Aşçıya teşekkür"],["Sofraya buyurun.","Yemek hazır, çağırırken"],["Doydum, teşekkürler.","Artık istemeyince"]] },
+];
+
+function renderRoundbar(){
+  rbar.innerHTML="";
+  for(var i=0;i<ROUNDS.length;i++){
+    var s=document.createElement('span');
+    if(i<current) s.className="done"; else if(i===current) s.className="on";
+    rbar.appendChild(s);
+  }
+}
+
+function renderIntro(){
+  document.getElementById('screen').innerHTML=
+    '<div class="hero">🍎🥛🍵</div>'+
+    '<h1>Yiyecek Eşleştir</h1>'+
+    '<p class="lead">4 turda yiyecek-içecek kelimelerini ve mutfak kalıplarını eşleştir! '+
+    'Önce bir kutuya, sonra eşine dokun. Hızlı ol! ⏱ '+
+    '<span class="tr">Match foods, drinks and kitchen phrases in 4 rounds.</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go">Başla ▶</button>'+
+    '<div class="mini">Yanlış eşleşme = +1 hata. Dikkatli eşleştir! 💪</div>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; errors=0; errsEl.textContent=0; elapsed=0; timerEl.textContent="0:00";
+    startTimer(); renderRound();
+  };
+  renderRoundbar();
+}
+
+var selTile=null, matchedInRound=0;
+function renderRound(){
+  renderRoundbar();
+  var R=ROUNDS[current];
+  var left=shuffle(R.pairs.map(function(p,i){return {txt:p[0],key:i,side:'L'};}));
+  var right=shuffle(R.pairs.map(function(p,i){return {txt:p[1],key:i,side:'R'};}));
+  var html='<div class="round-title">'+R.title+'</div><div class="round-sub">'+R.sub+'</div>'+
+    '<div class="board">'+
+    '<div class="colhint">'+R.leftHint+'</div><div class="colhint">'+R.rightHint+'</div>';
+  // interleave rows: we place all left then all right? grid fills row by row -> alternate
+  var rows=Math.max(left.length,right.length);
+  for(var r=0;r<rows;r++){
+    var L=left[r], Rt=right[r];
+    html+= L? '<div class="tile '+(R.leftEmoji?'emoji':'')+'" data-side="L" data-key="'+L.key+'">'+L.txt+'</div>' : '<div></div>';
+    html+= Rt? '<div class="tile" data-side="R" data-key="'+Rt.key+'">'+Rt.txt+'</div>' : '<div></div>';
+  }
+  html+='</div><div class="feedback" id="fb"></div>';
+  document.getElementById('screen').innerHTML=html;
+  selTile=null; matchedInRound=0;
+  var total=R.pairs.length;
+  document.querySelectorAll('.tile').forEach(function(t){
+    t.addEventListener('click',function(){
+      if(t.classList.contains('ok')||t.classList.contains('gone')) return;
+      if(!selTile){ selTile=t; t.classList.add('sel'); return; }
+      if(t===selTile){ t.classList.remove('sel'); selTile=null; return; }
+      if(t.dataset.side===selTile.dataset.side){ selTile.classList.remove('sel'); selTile=t; t.classList.add('sel'); return; }
+      // one L one R
+      if(t.dataset.key===selTile.dataset.key){
+        t.classList.add('ok'); selTile.classList.add('ok'); selTile.classList.remove('sel');
+        var a=t,bb=selTile; setTimeout(function(){a.classList.add('gone');bb.classList.add('gone');},350);
+        selTile=null; matchedInRound++;
+        good("Doğru! 🎉");
+        if(matchedInRound>=total){ setTimeout(nextRound,500); }
+      } else {
+        var bad1=t, bad2=selTile; bad1.classList.add('bad'); bad2.classList.add('bad','sel');
+        addErr(); badFb("Olmadı, tekrar dene 🔁");
+        setTimeout(function(){bad1.classList.remove('bad'); bad2.classList.remove('bad','sel');},420);
+        selTile=null;
+      }
+    });
+  });
+}
+function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.textContent=m;}}
+function badFb(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.textContent=m;}}
+function nextRound(){ current++; if(current>=ROUNDS.length) renderWin(); else renderRound(); }
+
+function renderWin(){
+  stopTimer(); renderRoundbar();
+  document.getElementById('screen').innerHTML=
+    '<div class="hero">🏆😋</div><h1>Afiyet olsun, '+playerName.replace(/</g,'&lt;')+'!</h1>'+
+    '<p class="lead">Bütün turları tamamladın! Yiyecek kelimelerini ve kalıplarını çok iyi eşleştirdin. 👏 '+
+    '<span class="tr">You finished all the rounds!</span></p>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn ghost" id="again">↺ Baştan oyna</button>';
+  OVT.renderSend("ovtSend", { oyun:"Yiyecek Eşleştirme (Layla)", sure:fmt(elapsed), puan:errors+" hata" });
+  document.getElementById('again').onclick=function(){ renderIntro(); };
+}
+
+renderIntro();
+</script>
+</body>
+</html>

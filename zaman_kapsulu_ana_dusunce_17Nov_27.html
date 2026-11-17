@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zaman Kapsülü – Ana Düşünce ve Destek</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.45;color:#1b1f3a;background:#0b1437;background:linear-gradient(160deg,#1d2a6b 0%,#0b1437 100%);background-attachment:fixed;min-height:100vh}
+[hidden]{display:none!important}
+.wrap{max-width:660px;margin:0 auto;padding:14px 14px 48px}
+.card{background:#fff;border-radius:18px;padding:20px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-bottom:14px}
+.stripe{height:10px;border-radius:6px;border:1px solid #f5b82e;background:repeating-linear-gradient(90deg,#f5b82e 0 18px,#1d2a6b 18px 36px);margin-bottom:14px}
+h1{font-size:30px;line-height:1.15;margin:0 0 6px;color:#1d2a6b}
+h2{font-size:22px;margin:0 0 8px;color:#1d2a6b}
+.sub{color:#555;margin:0 0 14px;font-size:16px}
+.story{background:#fff8e1;border-left:6px solid #f5b82e;border-radius:10px;padding:12px 14px;margin:12px 0 16px}
+label{display:block;font-weight:800;margin:12px 0 6px}
+input[type=text]{width:100%;font:inherit;padding:12px 14px;border:2px solid #d0d0d0;border-radius:12px}
+input[type=text]:focus{outline:none;border-color:#1d2a6b}
+.btn{display:block;width:100%;font:inherit;font-weight:800;font-size:19px;padding:14px;border:none;border-radius:12px;background:#f5b82e;color:#1b1f3a;cursor:pointer;box-shadow:0 5px 0 #b8841a;margin-top:14px}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #b8841a}
+.btn.alt{background:#fff;color:#1d2a6b;border:2px solid #1d2a6b;box-shadow:0 5px 0 #aab3d6}
+.btn.small{font-size:16px;padding:10px;margin-top:10px}
+.navrow{display:flex;gap:10px}
+.navrow .btn{margin-top:14px}
+.hdr{display:flex;justify-content:space-between;align-items:center;color:#fff;font-weight:800;margin:6px 2px 12px;gap:8px;flex-wrap:wrap}
+.dots span{font-size:21px;margin-right:3px}
+.chips{display:flex;gap:8px}
+.chip{background:rgba(255,255,255,.18);border-radius:999px;padding:5px 12px;font-weight:800;font-size:16px;color:#fff}
+.badge{display:inline-block;background:#1d2a6b;color:#fff;font-weight:900;border-radius:10px;padding:6px 14px;font-size:18px}
+.pager{display:flex;justify-content:center;gap:6px;margin:0 0 12px}
+.pager i{width:10px;height:10px;border-radius:50%;background:#c9cde0;display:block}
+.pager i.on{background:#f5b82e}
+.sl p{margin:0 0 10px}
+.ex{border-radius:10px;padding:10px 12px;margin:8px 0;font-size:17px}
+.ex.ana{background:#fff3c4;border:2px solid #f5b82e}
+.ex.dst{background:#e8eeff;border:2px solid #7d93e8}
+.ex.bad{background:#fee2e2;border:2px solid #e57373}
+.ex.good{background:#dcfce7;border:2px solid #16a34a}
+.lab{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.4px;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:middle;background:#1d2a6b;color:#fff}
+.lab.g{background:#b8841a}.lab.r{background:#c0392b}.lab.ok{background:#16a34a}
+.tips{margin:6px 0 0;padding-left:22px}
+.tips li{margin-bottom:8px}
+.fikir{font-size:15px;color:#1d2a6b;font-weight:800;margin-bottom:6px}
+.cumle{background:#fff8e1;border:2px dashed #f5b82e;border-radius:12px;padding:12px 14px;font-size:20px;font-weight:700;margin:6px 0 12px}
+.soru{font-weight:800;margin:6px 0 12px}
+.opt{display:block;width:100%;text-align:left;font:inherit;padding:13px 14px;margin:0 0 10px;border:2px solid #1d2a6b;border-radius:12px;background:#fff;color:#1b1f3a;cursor:pointer}
+.opt:active{background:#eef1ff}
+.opt.bad{background:#fee2e2;border-color:#c0392b;color:#7a1f17;animation:shake .35s}
+.opt.good{background:#dcfce7;border-color:#16a34a;color:#14532d;font-weight:800}
+.opt:disabled{cursor:default}
+.hint{background:#fff7d6;border:2px solid #f5c542;border-radius:12px;padding:10px 12px;margin:4px 0 10px;font-size:16px}
+.why{background:#dcfce7;border:2px solid #16a34a;border-radius:12px;padding:10px 12px;margin:4px 0 4px;font-size:16px}
+.pen{display:inline-block;color:#c0392b;font-weight:900;margin-left:6px}
+.big{font-size:64px;text-align:center;margin:6px 0}
+.stats{display:flex;gap:8px;margin:14px 0}
+.stat{flex:1;text-align:center;background:#fff8e1;border-radius:12px;padding:10px 4px}
+.stat b{display:block;font-size:24px;color:#1d2a6b}
+.stat span{font-size:13px;color:#555}
+.para{background:#fff8e1;border:2px dashed #f5b82e;border-radius:12px;padding:12px 14px;min-height:72px;margin:8px 0 12px}
+.para p{margin:0 0 6px}
+.tag{display:inline-block;font-size:11px;font-weight:900;background:#1d2a6b;color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.tag.t2{background:#b8841a}.tag.t3{background:#7d93e8}.tag.t4{background:#16a34a}
+.write{background:#e8eeff;border:2px solid #7d93e8;border-radius:12px;padding:12px 14px;margin:12px 0;text-align:left;font-size:17px}
+.pop{animation:pop .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:.3}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@media (max-width:420px){h1{font-size:26px}.opt{font-size:17px}.dots span{font-size:18px}}
+</style>
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr" id="hdr" hidden>
+    <div class="dots" id="dots"></div>
+    <div class="chips"><span class="chip">⏱ <span id="stTime">00:00</span></span><span class="chip">✗ <span id="stErr">0</span></span></div>
+  </div>
+
+  <!-- GİRİŞ -->
+  <div id="sIntro">
+    <div class="stripe"></div>
+    <div class="card">
+      <h1>⏳ Zaman Kapsülü</h1>
+      <p class="sub">Ana düşünce, örnek, sayı ve karşılaştırma · 5 kapı, 1 şifre</p>
+      <div class="story">
+        <b>2036’dan bir mesaj geldi!</b> Seninle ilgili bir zaman kapsülü kilitlenmiş. İçinde, on yıl önce yazılmış bir mektup var. Kilidi açmak için önce kısa bir konu anlatımını oku, sonra <b>5 kapıyı</b> geç ve son kapıda paragraf şifresini kur. Doğru cevap kapıyı açar. Yanlış cevap seni <b>5 saniye</b> yavaşlatır!
+      </div>
+      <label for="ad">Adın</label>
+      <input type="text" id="ad" autocomplete="off" placeholder="Adını yaz">
+      <button class="btn" id="btnStart" type="button">📖 Konu Anlatımıyla Başla</button>
+      <button class="btn alt small" id="btnSkip" type="button">Konu anlatımını geç, kapılara git →</button>
+    </div>
+  </div>
+
+  <!-- KONU ANLATIMI (SLAYTLAR) -->
+  <div id="sSlide" hidden>
+    <div class="stripe"></div>
+    <div class="pager" id="pager"></div>
+    <div class="card sl">
+      <h2 id="slTitle"></h2>
+      <div id="slBody"></div>
+      <div class="navrow">
+        <button class="btn alt" id="btnPrev" type="button">← Geri</button>
+        <button class="btn" id="btnSlNext" type="button">İleri →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KAPI GİRİŞ -->
+  <div id="sTip" hidden>
+    <div class="stripe"></div>
+    <div class="card">
+      <h2 id="tipTitle"></h2>
+      <p class="sub" id="tipStory"></p>
+      <div class="badge" id="tipBadge"></div>
+      <div class="ex ana" id="tipText" style="margin-top:12px"></div>
+      <button class="btn" id="btnTip" type="button">Hazırım! →</button>
+    </div>
+  </div>
+
+  <!-- SORU -->
+  <div id="sQ" hidden>
+    <div class="card">
+      <div class="fikir" id="qFikir"></div>
+      <div class="cumle" id="qCumle" hidden></div>
+      <div class="soru" id="qSoru"></div>
+      <div id="qOpts"></div>
+      <div class="hint" id="qHint" hidden></div>
+      <div class="why" id="qWhy" hidden></div>
+      <button class="btn" id="btnNext" type="button" hidden>Devam →</button>
+    </div>
+  </div>
+
+  <!-- KİLİT AÇILDI -->
+  <div id="sLock" hidden>
+    <div class="card" style="text-align:center">
+      <div class="big pop">🔓</div>
+      <h2 id="lockTitle"></h2>
+      <p id="lockText"></p>
+      <button class="btn" id="btnLock" type="button">Devam →</button>
+    </div>
+  </div>
+
+  <!-- ŞİFRE KAPISI -->
+  <div id="sFinal" hidden>
+    <div class="stripe"></div>
+    <div class="card">
+      <h2>🚪 Şifre Kapısı: Paragrafı kur!</h2>
+      <p class="sub">Altı cümlenin biri bu paragrafa ait değil. Cümlelere sırayla dokun ve paragrafı kur: ana düşünce ilk, bitiş en son, ortada üç destek. İlgisiz cümleyi dışarıda bırak.</p>
+      <div class="para" id="fPara"></div>
+      <div class="hint" id="fHint" hidden></div>
+      <div id="fCards"></div>
+    </div>
+  </div>
+
+  <!-- BİTİŞ -->
+  <div id="sEnd" hidden>
+    <div class="stripe"></div>
+    <div class="card" style="text-align:center">
+      <div class="big pop">📬</div>
+      <h1>Zaman kapsülü açıldı!</h1>
+      <p id="endText"></p>
+      <div class="stats">
+        <div class="stat"><b id="eTime">00:00</b><span>süre</span></div>
+        <div class="stat"><b id="eErr">0</b><span>hata</span></div>
+        <div class="stat"><b id="eFirst">0/17</b><span>ilk denemede</span></div>
+      </div>
+      <div class="para" id="endPara" style="text-align:left"></div>
+      <p id="endOut" style="font-size:15px;color:#555;text-align:left;margin:0 0 8px"></p>
+      <div class="write">
+        <b>📝 Yazma görevi</b><br>
+        Kapsülün içindeki mektup boş! Ona kendin yaz: <i>“On yıl sonra, 2036’da…”</i> ile başlayan bir paragraf yaz. Ana düşünce cümlen olsun; ardından bir <b>örnek</b>, bir <b>sayı</b> ve bir <b>karşılaştırma</b> kullan.<br>
+        <b>Yazını, öğretmeninin Google Classroom’da seninle paylaştığı Google Doc’a yaz.</b>
+      </div>
+      <div id="ovtSend"></div>
+      <button class="btn alt" id="btnAgain" type="button">↺ Tekrar oyna</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var TOPLAM=17;       // 16 soru + şifre kapısı
+  var CEZA=5;          // yanlışta +5 sn
+
+  /* ---------- KONU ANLATIMI ---------- */
+  var SLAYT=[
+    {baslik:"1/5 · Ana düşünce cümlesi nedir?",
+     html:
+      '<p>Bir paragraf, <b>tek bir fikri</b> ispat etmek için yazılır. Bu fikri söyleyen cümleye <b>ana düşünce cümlesi</b> denir. Diğer cümleler ona <b>destek</b> olur.</p>'+
+      '<div class="ex ana"><b>Dünya on yılda çok değişti.</b><span class="lab g">ANA DÜŞÜNCE</span></div>'+
+      '<div class="ex dst">Mesela 2016 yazında Pokémon GO çıktı ve milyonlarca insan telefonuyla parklarda oyun oynadı.<span class="lab">DESTEK · örnek</span></div>'+
+      '<div class="ex dst">2016’da dünyada yaklaşık 7,5 milyar insan vardı; bugün yaklaşık 8,3 milyar.<span class="lab">DESTEK · sayı</span></div>'+
+      '<div class="ex dst">2016’da sohbet eden yapay zekâ programları yaygın değildi, bugün ise milyonlarca kişi kullanıyor.<span class="lab">DESTEK · karşılaştırma</span></div>'+
+      '<p>Ana düşünce <b>patrondur</b>; destek cümleleri onun ekibidir.</p>'},
+    {baslik:"2/5 · Ana düşünce mi, destek mi?",
+     html:
+      '<p>Bir cümleyi tanımak için üç ipucu:</p>'+
+      '<ol class="tips">'+
+      '<li><b>Genel mi, somut mu?</b> Ana düşünce genel bir fikirdir. Destek cümlesi somut bilgi verir: kişi, olay, sayı.</li>'+
+      '<li><b>“Neden? Nasıl?” testi.</b> Cümleye bu soruları sor. Cevap veren cümle <b>destektir</b>. Soruyu cevapsız bırakan cümle <b>ana düşüncedir</b>.</li>'+
+      '<li><b>Ne çok geniş, ne çok dar.</b> İyi ana düşünce bütün destek cümlelerini kapsar.</li>'+
+      '</ol>'+
+      '<div class="ex bad">“Dünya güzeldir.” <span class="lab r">çok geniş</span></div>'+
+      '<div class="ex bad">“2016’da bir oyun çıktı.” <span class="lab r">çok dar</span></div>'+
+      '<div class="ex good">“Teknoloji on yılda hayatımızı değiştirdi.” <span class="lab ok">tam</span></div>'+
+      '<p style="font-size:16px">💡 Ana düşünce her zaman ilk cümle olmaz; bazen ortada ya da sonda da olabilir.</p>'},
+    {baslik:"3/5 · ÖRNEK",
+     html:
+      '<p>Örnek, fikri <b>gerçek bir kişi, olay ya da yerle</b> gösterir. “<b>Mesela</b>”, “<b>Örneğin</b>” ya da “<b>Bir başka örnek de…</b>” diye başlar.</p>'+
+      '<div class="ex bad">“Teknoloji çok güzel.” <span class="lab r">örnek değil, yargı</span></div>'+
+      '<div class="ex good">Mesela 2016 yazında Pokémon GO çıktı ve milyonlarca insan telefonuyla parklarda oyun oynadı.<span class="lab ok">güçlü örnek</span></div>'+
+      '<p><b>İyi örnek:</b> gerçek · somut (kim, ne yaptı?) · fikirle ilgili.</p>'},
+    {baslik:"4/5 · SAYI",
+     html:
+      '<p>Sayı, “çok” ya da “az” gibi belirsiz kelimelerin yerine <b>kesin bilgi</b> verir.</p>'+
+      '<div class="ex bad">“Nüfus çok arttı.”</div>'+
+      '<div class="ex good">“Dünya nüfusu 2016’da yaklaşık 7,5 milyardı; bugün yaklaşık 8,3 milyar.”</div>'+
+      '<ol class="tips">'+
+      '<li>Sayı <b>fikirle ilgili</b> olmalı.</li>'+
+      '<li>Tam emin değilsen <b>“yaklaşık”</b> de.</li>'+
+      '<li>Büyük sayıyı küçük, tanıdık bir şeyle karşılaştır: “Almanya’nın nüfusunun yaklaşık on katı.”</li>'+
+      '<li>Hesap yapabilirsin: 8,3 − 7,5 = 0,8 milyar = <b>800 milyon</b>.</li>'+
+      '</ol>'},
+    {baslik:"5/5 · KARŞILAŞTIRMA",
+     html:
+      '<p>Karşılaştırma <b>iki şeyi yan yana</b> koyar.</p>'+
+      '<div class="ex dst"><b>Fark:</b> ise · ama · oysa · buna karşılık</div>'+
+      '<div class="ex dst"><b>Benzerlik:</b> hem … hem de · de/da · aynı</div>'+
+      '<div class="ex good">2016’da çocuklar ödev için çoğunlukla kitaplara bakardı; bugün ise yapay zekâ programlarına da soruyorlar. <span class="lab ok">fark</span></div>'+
+      '<div class="ex good">Hem 2016’da hem bugün çocuklar oyun oynamayı seviyor. <span class="lab ok">benzerlik</span></div>'+
+      '<p>Güçlü karşılaştırma <b>farkı da benzerliği de</b> gösterir.</p>'+
+      '<p><b>Hazır mısın?</b> Zaman kapsülünü açmak için 5 kapı seni bekliyor!</p>'}
+  ];
+
+  /* ---------- KAPILAR ---------- */
+  var KAPI=[
+    {ad:"Kapı 1: Ana Düşünce Kapısı", hikaye:"Kapının üstünde parlayan bir yazı var: “Paragrafın patronunu bul!”",
+     rozet:"ANA DÜŞÜNCE", metin:"Ana düşünce, yazarın ispat etmek istediği tek fikirdir. Ne çok geniş ne çok dar olmalı. Her zaman ilk cümle olmayabilir!"},
+    {ad:"Kapı 2: Ayıklama Kapısı", hikaye:"Kapıdan geçmek için ana düşünceyi destek cümlelerinden ayırmalısın.",
+     rozet:"ANA mı? DESTEK mi?", metin:"Cümleye “Neden? Nasıl?” diye sor. Cevap veriyorsa destektir. Ana düşünceyi destekleyen cümleler fikirle ilgili olmalıdır."},
+    {ad:"Kapı 3: Örnek Kapısı", hikaye:"Duvarda eski bir yazı: “Kim? Ne yaptı? Göster bize!”",
+     rozet:"ÖRNEK", metin:"Örnek, fikri gerçek bir kişi ya da olayla gösterir. “Mesela …” ile başlar."},
+    {ad:"Kapı 4: Sayı Kapısı", hikaye:"Kapının kilidinde sayılar dönüyor. Doğru sayıyı bulmalısın!",
+     rozet:"SAYI", metin:"Sayı, belirsiz kelimelerin yerine kesin bilgi verir. Fikirle ilgili olmalı; emin değilsen “yaklaşık” de."},
+    {ad:"Kapı 5: Karşılaştırma Kapısı", hikaye:"Önünde iki yol var. Kapı, ikisini de yan yana görmeni istiyor.",
+     rozet:"KARŞILAŞTIRMA", metin:"İki şeyi yan yana koy. Fark için “ise, ama, oysa”; benzerlik için “hem … hem de” kullan."}
+  ];
+
+  var LOCKS=[
+    {baslik:"1. kapı açıldı!", metin:"🗝️ Zaman kapsülünün ilk kilidi çözüldü. Bir sonraki kapıda ayıklama zamanı!"},
+    {baslik:"2. kapı açıldı!", metin:"🗝️ Ana düşünceyi ve destekleri ayırdın. Sırada örnekler var!"},
+    {baslik:"3. kapı açıldı!", metin:"🗝️ Örneklerle ispat ettin. Şimdi sayıların zamanı!"},
+    {baslik:"4. kapı açıldı!", metin:"🗝️ Sayılar seni geçirdi. Son kapıdan önce bir karşılaştırma daha!"},
+    {baslik:"5. kapı açıldı!", metin:"🗝️ Beş kapıyı da geçtin! Kapsülün son kilidi bir paragraf şifresi…"}
+  ];
+
+  var Q=[
+    // KAPI 1 — ANA DÜŞÜNCE
+    {k:0, fikir:"Paragrafın cümleleri sırayla verilmiştir.", sirali:true, soru:"Ana düşünce cümlesine dokun.",
+     sec:["2016’da dünyada yaklaşık 7,5 milyar insan yaşıyordu.","Bugün bu sayı yaklaşık 8,3 milyara ulaştı.","Yani on yılda yaklaşık 800 milyon kişi arttı.","Dünya on yılda çok kalabalıklaştı."], dogru:3,
+     ipucu:"Hangi cümle diğer üçünün söylediği şeyi tek fikirde topluyor? Diğerleri sayı veriyor.",
+     neden:"Üç cümle sayıyla ispat ediyor; “Dünya on yılda çok kalabalıklaştı” ise hepsinin ispat ettiği fikir. Ana düşünce bazen sonda da olabilir."},
+    {k:0, fikir:"Paragrafın cümleleri sırayla verilmiştir.", sirali:true, soru:"Ana düşünce cümlesine dokun.",
+     sec:["Film izlerken görüntüler hazır gelir, kitap okurken ise görüntüleri okuyucu kendi zihninde yaratır.","Kitap okumak hayal gücünü geliştirir.","Mesela ejderha anlatan bir bölümü okuyan her çocuk ejderhayı farklı hayal eder."], dogru:1,
+     ipucu:"Hangi cümleye “Neden? Nasıl?” diye sorabilirsin?",
+     neden:"“Kitap okumak hayal gücünü geliştirir” genel fikir. Diğer iki cümle “nasıl?” sorusunu cevaplıyor."},
+    {k:0, fikir:"Destek cümleleri: “2016 yazında Pokémon GO çıktı. 2016’da AlphaGo adlı bir program Go oyununun dünya şampiyonunu yendi. 2022’de ChatGPT gibi sohbet programları çıktı.”", soru:"Bu üç cümlenin ana düşüncesi hangisi olabilir?",
+     sec:["Dünya güzel bir yerdir.","2016 yazında bir oyun çıktı.","Teknoloji on yılda hayatımızı çok değiştirdi."], dogru:2,
+     ipucu:"Üçünü de kapsayan, ama çok geniş olmayan cümleyi seç.",
+     neden:"İyi ana düşünce bütün destekleri kapsar: ne çok geniş (“Dünya güzel”) ne çok dar (“bir oyun çıktı”)."},
+
+    // KAPI 2 — AYIKLAMA
+    {k:1, fikir:"Konu: Sporun çocuklara faydaları", sirali:true, cumle:"Sporun çocuklara pek çok faydası vardır.", soru:"Bu cümle paragrafta ne işe yarıyor?",
+     sec:["ANA DÜŞÜNCE","DESTEK"], dogru:0,
+     ipucu:"Genel mi, somut mu? “Neden?” diye sorulacak bir şey bırakıyor mu?",
+     neden:"Genel bir fikir söylüyor ve “Hangi faydalar? Nasıl?” sorularını açık bırakıyor: ana düşünce."},
+    {k:1, fikir:"Konu: Sporun çocuklara faydaları", sirali:true, cumle:"Mesela düzenli koşan bir çocuk daha az yorulur.", soru:"Bu cümle paragrafta ne işe yarıyor?",
+     sec:["ANA DÜŞÜNCE","DESTEK"], dogru:1,
+     ipucu:"“Mesela” ile başlayan cümle genelde ne yapar?",
+     neden:"“Mesela” ile somut bir durum anlatıyor: ana düşünceyi destekleyen bir örnek."},
+    {k:1, fikir:"Konu: Sporun çocuklara faydaları", sirali:true, cumle:"Çocukların günde en az 60 dakika hareket etmesi önerilir.", soru:"Bu cümle paragrafta ne işe yarıyor?",
+     sec:["ANA DÜŞÜNCE","DESTEK"], dogru:1,
+     ipucu:"Cümlede bir sayı var. Sayı genel mi somut mu?",
+     neden:"Kesin bir sayı veriyor: fikri destekleyen bir sayı cümlesi."},
+    {k:1, fikir:"Ana düşünce: Sporun çocuklara pek çok faydası vardır.", soru:"Hangi cümle bu fikri DESTEKLEMİYOR?",
+     sec:["Düzenli spor yapan çocuk daha az yorulur.","Spor yapmak çocukların arkadaş edinmesine yardım eder.","Bazı spor salonları pazar günleri kapalıdır."], dogru:2,
+     ipucu:"Hangi cümle sporun faydasından değil, başka bir konudan söz ediyor?",
+     neden:"Spor salonunun kapalı olması sporun faydasını göstermez. Destek cümlesi fikirle ilgili olmalıdır."},
+
+    // KAPI 3 — ÖRNEK
+    {k:2, fikir:"Fikir: On yıl, teknolojinin hayatımızı değiştirmesi için yeterli bir süredir.", soru:"Hangisi bu fikre ÖRNEK veriyor?",
+     sec:["Teknoloji çok hızlı gelişiyor.","Mesela 2016 yazında Pokémon GO çıktı ve milyonlarca insan telefonlarıyla parklarda oyun oynadı.","Herkes teknolojiyi sever."], dogru:1,
+     ipucu:"Hangi cümlede gerçek bir olay var?",
+     neden:"Örnek gerçek ve somut: ne zaman, ne çıktı, insanlar ne yaptı?"},
+    {k:2, fikir:"Fikir: Hayvanlar insanlara yardım eder.", cumle:"______ rehber köpekler, görme engelli insanların sokakta güvenle yürümesine yardım eder.", soru:"Boşluğa hangi kelime gelir?",
+     sec:["Mesela","Bu yüzden","Ama"], dogru:0,
+     ipucu:"Örnek vermek için hangi kelimeyle başlarız?",
+     neden:"“Mesela” bir örneği başlatır."},
+    {k:2, fikir:"Fikir: İnsanlar zor zamanda birbirine yardım eder.", soru:"Hangisi en güçlü örnektir?",
+     sec:["İnsanlar çok iyidir.","Fırtınada çatısı uçan komşunun evine mahalleli birlikte yeni bir çatı yaptı.","Yardım etmek güzel bir davranıştır."], dogru:1,
+     ipucu:"Bize bir olay anlatan cümleyi bul.",
+     neden:"Güçlü örnek kim, ne yaptı sorusuna cevap verir: mahalleli, komşunun çatısını yaptı."},
+
+    // KAPI 4 — SAYI
+    {k:3, fikir:"Fikir: Dünya on yılda kalabalıklaştı.", soru:"Hangi cümle SAYIYLA ispat ediyor?",
+     sec:["Dünyada çok fazla insan var.","Dünya nüfusu 2016’da yaklaşık 7,5 milyardı, bugün yaklaşık 8,3 milyar.","İnsanlar her yerde."], dogru:1,
+     ipucu:"Rakam ve karşılaştırma yapan cümleyi bul.",
+     neden:"Sayı, “çok fazla” gibi belirsiz kelimelerin yerine kesin bilgi veriyor."},
+    {k:3, fikir:"2016: yaklaşık 7,5 milyar insan · Bugün: yaklaşık 8,3 milyar insan", soru:"Nüfus on yılda yaklaşık kaç milyon arttı?",
+     sec:["80 milyon","800 milyon","8 milyar"], dogru:1,
+     ipucu:"8,3 − 7,5 kaç eder? Sonra milyara çevir: 1 milyar = 1000 milyon.",
+     neden:"8,3 − 7,5 = 0,8 milyar = 800 milyon."},
+    {k:3, fikir:"Fikir: Bu çocuk on yılda çok büyüdü.", soru:"Hangi sayı bu fikre YARDIM ETMEZ?",
+     sec:["Boyu yaklaşık 50 santimden yaklaşık 140 santime çıktı.","Ayakkabı numarası yaklaşık 18’den yaklaşık 35’e çıktı.","Evlerinin kapı numarası 12."], dogru:2,
+     ipucu:"Hangi sayı çocuğun büyümesini göstermiyor?",
+     neden:"Kapı numarası çocuğun büyümesiyle ilgisiz. Sayı fikirle ilgili olmalıdır."},
+
+    // KAPI 5 — KARŞILAŞTIRMA
+    {k:4, fikir:"Fikir: Çocukların bilgiye ulaşma yolu değişti.", cumle:"2016’da çocuklar ödev için çoğunlukla kitaplara bakardı; bugün ______ yapay zekâ programlarına da soruyorlar.", soru:"Boşluğa hangi kelime gelir?",
+     sec:["ise","çünkü","bu yüzden"], dogru:0,
+     ipucu:"Eskiyi ve bugünü karşı karşıya koyan kelimeyi seç.",
+     neden:"“…; bugün ise …” iki zamanı yan yana koyup farkı gösterir."},
+    {k:4, fikir:"Fikir: On yıl önce ile bugünü karşılaştıralım.", soru:"Hangi cümle bir BENZERLİK söylüyor?",
+     sec:["Hem 2016’da hem bugün çocuklar arkadaşlarıyla oynamayı sever.","Eskiden fotoğraflar albümde saklanırdı, bugün ise telefonda saklanıyor.","2016’da sohbet eden yapay zekâ programları yaygın değildi, bugün ise milyonlarca kişi kullanıyor."], dogru:0,
+     ipucu:"Benzerlik için “hem … hem de” kullanılır.",
+     neden:"“Hem … hem” benzerliği gösterir. Diğer ikisi “ise” ile fark gösteriyor."},
+    {k:4, fikir:"Fikir: Kitap ile film farklı şekillerde etkiler.", soru:"Hangisi daha iyi bir KARŞILAŞTIRMA?",
+     sec:["Kitap güzeldir, film de güzeldir.","Kitapta görüntüleri okuyucu zihninde yaratır, filmde ise görüntüler hazır gelir.","Kitap kalındır."], dogru:1,
+     ipucu:"İki şeyi aynı cümlede yan yana koyan ve farkı gösteren cümleyi seç.",
+     neden:"Bu cümle kitap ile filmi “ise” ile karşı karşıya koyup farkı net gösteriyor."}
+  ];
+
+  var state={}, timer=null, FINAL=null, slideNo=0;
+
+  function $(id){return document.getElementById(id);}
+  function show(id){["sIntro","sSlide","sTip","sQ","sLock","sFinal","sEnd"].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
+  function fmt(s){s=Math.floor(s);var m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+  function elapsed(){return (Date.now()-state.t0)/1000+state.pen;}
+  function tick(){$("stTime").textContent=fmt(elapsed());}
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function dots(){
+    var d=$("dots");d.innerHTML="";
+    for(var i=0;i<KAPI.length;i++){var s=document.createElement("span");s.textContent=(i<state.opened?"🔓":"🔒");d.appendChild(s);}
+    var f=document.createElement("span");f.textContent=(state.done?"📬":"🚪");d.appendChild(f);
+  }
+  function wrong(){state.hata++;state.pen+=CEZA;state.qw++;$("stErr").textContent=state.hata;tick();}
+  function penSpan(){var s=document.createElement("span");s.className="pen";s.textContent="+"+CEZA+" sn";return s;}
+
+  /* ---- slaytlar ---- */
+  function readName(){state.ad=($("ad").value||"").trim()||"Şampiyon";}
+  function openSlides(){
+    state={ad:($("ad").value||"").trim()||"Şampiyon"};
+    slideNo=0; renderSlide(); show("sSlide");
+  }
+  function renderSlide(){
+    var s=SLAYT[slideNo];
+    $("slTitle").textContent=s.baslik;
+    $("slBody").innerHTML=s.html;
+    var p=$("pager"); p.innerHTML="";
+    SLAYT.forEach(function(_,i){var d=document.createElement("i");if(i===slideNo)d.className="on";p.appendChild(d);});
+    $("btnPrev").style.visibility=(slideNo===0?"hidden":"visible");
+    $("btnSlNext").textContent=(slideNo===SLAYT.length-1?"🚪 Kapılara geç":"İleri →");
+    window.scrollTo(0,0);
+  }
+  function slideNext(){
+    if(slideNo<SLAYT.length-1){slideNo++;renderSlide();}
+    else startGame();
+  }
+  function slidePrev(){if(slideNo>0){slideNo--;renderSlide();}}
+
+  /* ---- oyun ---- */
+  function startGame(){
+    var ad=($("ad").value||"").trim()||"Şampiyon";
+    state={ad:ad,i:0,k:0,hata:0,ilk:0,pen:0,t0:Date.now(),qw:0,opened:0,done:false,order:null};
+    $("stErr").textContent="0";$("stTime").textContent="00:00";
+    $("hdr").hidden=false; dots();
+    clearInterval(timer); timer=setInterval(tick,500);
+    showTip(0);
+  }
+  function showTip(k){
+    state.k=k; var K=KAPI[k];
+    $("tipTitle").textContent=K.ad; $("tipStory").textContent=K.hikaye;
+    $("tipBadge").textContent=K.rozet; $("tipText").textContent=K.metin;
+    show("sTip");
+  }
+  function firstIndex(k){for(var i=0;i<Q.length;i++){if(Q[i].k===k)return i;}return 0;}
+
+  function renderQ(){
+    var q=Q[state.i]; state.qw=0;
+    $("qFikir").textContent=q.fikir||"";
+    var c=$("qCumle"); if(q.cumle){c.hidden=false;c.textContent=q.cumle;}else{c.hidden=true;c.textContent="";}
+    $("qSoru").textContent=q.soru;
+    $("qHint").hidden=true; $("qWhy").hidden=true; $("btnNext").hidden=true;
+    var box=$("qOpts"); box.innerHTML="";
+    var opts=q.sec.map(function(t,k){return {t:t,ok:k===q.dogru};});
+    if(!q.sirali) opts=shuffle(opts);
+    opts.forEach(function(o){
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=o.t;
+      b.onclick=function(){pick(b,o,q);};
+      box.appendChild(b);
+    });
+    show("sQ");
+  }
+  function pick(btn,o,q){
+    if(o.ok){
+      btn.className="opt good";
+      Array.prototype.forEach.call($("qOpts").children,function(x){x.disabled=true;});
+      if(state.qw===0) state.ilk++;
+      $("qHint").hidden=true;
+      var w=$("qWhy"); w.hidden=false; w.textContent="✅ "+q.neden;
+      $("btnNext").hidden=false;
+    }else{
+      btn.className="opt bad"; btn.disabled=true;
+      wrong();
+      var h=$("qHint"); h.hidden=false; h.innerHTML="";
+      h.appendChild(document.createTextNode("💡 İpucu: "+q.ipucu)); h.appendChild(penSpan());
+    }
+  }
+  function nextQ(){
+    var cur=Q[state.i], nx=Q[state.i+1];
+    if(nx && nx.k===cur.k){state.i++;renderQ();return;}
+    state.opened=cur.k+1; dots();
+    var L=LOCKS[cur.k];
+    $("lockTitle").textContent=L.baslik; $("lockText").textContent=L.metin;
+    show("sLock");
+  }
+  function afterLock(){
+    if(state.opened<KAPI.length) showTip(state.opened); else startFinal();
+  }
+
+  /* ---- şifre kapısı ---- */
+  function startFinal(){
+    FINAL=[
+      {id:"ana",   t:"On yıl, hayatımızı değiştirmek için yeterli bir süredir.", tag:"ANA DÜŞÜNCE", cls:"t4"},
+      {id:"ornek", t:"Mesela 2016 yazında Pokémon GO çıktı ve herkes telefonuyla parklarda oyun oynadı.", tag:"ÖRNEK", cls:""},
+      {id:"sayi",  t:"2016’da dünyada yaklaşık 7,5 milyar insan vardı; bugün yaklaşık 8,3 milyar.", tag:"SAYI", cls:"t2"},
+      {id:"karsi", t:"2016’da sohbet eden yapay zekâ programları yaygın değildi, bugün ise milyonlarca insan onlarla konuşuyor.", tag:"KARŞILAŞTIRMA", cls:"t3"},
+      {id:"bitis", t:"Bu yüzden on yıl sonra dünyanın nasıl olacağını hayal etmek çok heyecan verici.", tag:"BİTİŞ", cls:"t4"},
+      {id:"ilgisiz", t:"Telefon kılıfları birçok farklı renkte satılıyor.", tag:"İLGİSİZ", cls:""}
+    ];
+    state.picked=[]; state.qw=0; state.order=shuffle(FINAL);
+    $("fHint").hidden=true; renderFinal(); show("sFinal");
+  }
+  function renderFinal(){
+    var para=$("fPara"); para.innerHTML="";
+    if(!state.picked.length){var e=document.createElement("i");e.textContent="Paragrafın burada görünecek…";e.style.color="#999";para.appendChild(e);}
+    state.picked.forEach(function(c){var p=document.createElement("p");p.textContent=c.t;para.appendChild(p);});
+    var box=$("fCards"); box.innerHTML="";
+    state.order.forEach(function(c){
+      if(state.picked.indexOf(c)>=0) return;
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=c.t;
+      b.onclick=function(){pickFinal(c,b);};
+      box.appendChild(b);
+    });
+  }
+  function pickFinal(c,btn){
+    var pos=state.picked.length, msg=null;
+    if(c.id==="ilgisiz") msg="Bu cümle ana düşünceyi desteklemiyor. Başka bir cümle seç.";
+    else if(pos===0 && c.id!=="ana") msg="Paragraf ana düşünce cümlesiyle başlar. Önce fikri söyleyen cümleyi bul.";
+    else if(c.id==="bitis" && pos<4) msg="Bitiş cümlesi en sona gelir. Önce üç desteği (örnek, sayı, karşılaştırma) yerleştir.";
+    if(msg){
+      btn.className="opt bad"; setTimeout(function(){btn.className="opt";},400);
+      wrong();
+      var h=$("fHint"); h.hidden=false; h.innerHTML="";
+      h.appendChild(document.createTextNode("💡 "+msg)); h.appendChild(penSpan());
+      return;
+    }
+    state.picked.push(c); $("fHint").hidden=true;
+    if(state.picked.length===5){ if(state.qw===0) state.ilk++; finish(); }
+    else renderFinal();
+  }
+
+  function finish(){
+    clearInterval(timer);
+    state.done=true; state.opened=KAPI.length; dots();
+    var ts=fmt(elapsed()); $("stTime").textContent=ts;
+    $("endText").textContent=state.ad+", beş kapıyı geçtin ve şifreyi çözdün! Ana düşünceyi destek cümlelerinden ayırmayı ve üç tekniği kullanmayı başardın.";
+    $("eTime").textContent=ts; $("eErr").textContent=state.hata; $("eFirst").textContent=state.ilk+"/"+TOPLAM;
+    var ep=$("endPara"); ep.innerHTML="";
+    state.picked.forEach(function(c){
+      var p=document.createElement("p"); p.appendChild(document.createTextNode(c.t));
+      var tg=document.createElement("span"); tg.className="tag "+c.cls; tg.textContent=c.tag; p.appendChild(tg);
+      ep.appendChild(p);
+    });
+    $("endOut").textContent="Paragrafa ait olmayan, dışarıda bıraktığın cümle: “"+FINAL[5].t+"”";
+    show("sEnd");
+    OVT.renderSend("ovtSend",{oyun:"Zaman Kapsülü – Ana Düşünce ve Destek", sure:ts, puan:state.hata+" hata · "+state.ilk+"/"+TOPLAM+" ilk denemede"});
+  }
+
+  function again(){
+    clearInterval(timer);
+    $("ovtSend").innerHTML=""; $("ovtSend").className="";
+    $("hdr").hidden=true; show("sIntro");
+  }
+
+  $("btnStart").onclick=openSlides;
+  $("btnSkip").onclick=startGame;
+  $("btnPrev").onclick=slidePrev;
+  $("btnSlNext").onclick=slideNext;
+  $("btnTip").onclick=function(){state.i=firstIndex(state.k);renderQ();};
+  $("btnNext").onclick=nextQ;
+  $("btnLock").onclick=afterLock;
+  $("btnAgain").onclick=again;
+  document.addEventListener("keydown",function(e){
+    if(!$("sSlide").hidden){ if(e.key==="ArrowRight")slideNext(); else if(e.key==="ArrowLeft")slidePrev(); }
+  });
+
+  OVT.fill("ad");
+  window.KK={Q:Q,SLAYT:SLAYT,KAPI:KAPI,get state(){return state;},get FINAL(){return FINAL;}};
+})();
+</script>
+</body>
+</html>

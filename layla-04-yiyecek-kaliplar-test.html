@@ -164,25 +164,25 @@ var MATCH=[
 // Bölüm 2: DURUM → doğru İFADE seç (sofra ifadeleri)
 var IFADE=[
   { situation:"Yemek hazır, misafirleri masaya çağırıyorsun.", en:"Dinner is ready, you call people to the table.",
-    opts:["Sofraya buyurun!","Doydum, teşekkürler.","Elinize sağlık."], answer:0 },
+    opts:["Sofraya buyurun!","Doydum, teşekkürler.","Eline sağlık."], answer:0 },
   { situation:"Annen güzel bir yemek yaptı, ona teşekkür ediyorsun.", en:"Your mum cooked a lovely meal; you thank her.",
-    opts:["Afiyet olsun!","Elinize sağlık.","Çay var mı?"], answer:1 },
+    opts:["Afiyet olsun!","Eline sağlık.","Çay var mı?"], answer:1 },
   { situation:"Arkadaşın yemeğe başlıyor, ona iyi dileyeceksin.", en:"Your friend starts eating; you wish them well.",
     opts:["Afiyet olsun!","Sofrayı topla.","Doydum."], answer:0 },
   { situation:"Çok yedin, artık istemiyorsun.", en:"You've eaten a lot; you don't want more.",
     opts:["Biraz daha?","Doydum, teşekkürler.","Sofraya buyurun."], answer:1 },
   { situation:"Kahvaltıda çay olup olmadığını soruyorsun.", en:"You ask if there is tea at breakfast.",
-    opts:["Çay var mı?","Afiyet olsun.","Elinize sağlık."], answer:0 },
+    opts:["Çay var mı?","Afiyet olsun.","Eline sağlık."], answer:0 },
 ];
 // Bölüm 3: BOŞLUK DOLDURMA (seçmeli) — cümledeki kalıbı tamamla
 var BOSLUK=[
-  { prompt:"Annem her sabah çayı ______ .", en:"Mum brews tea every morning.",
-    opts:["demler","doğrar","yıkar"], answer:0 },
-  { prompt:"Akşam yemekten sonra sofrayı ______ .", en:"After dinner we clear the table.",
-    opts:["kurarız","toplarız","alırız"], answer:1 },
-  { prompt:"Fırından taze ekmek ______ .", en:"I buy fresh bread from the bakery.",
+  { prompt:"Annem bu sabah çayı ______ .", en:"Mum brewed the tea this morning.",
+    opts:["demledi","doğradı","yıkadı"], answer:0 },
+  { prompt:"Akşam yemekten sonra sofrayı ______ .", en:"After dinner we cleared the table.",
+    opts:["kurduk","topladık","aldık"], answer:1 },
+  { prompt:"Fırından taze ekmek ______ .", en:"I bought fresh bread from the bakery.",
     opts:["aldım","pişirdim","doğradım"], answer:0 },
-  { prompt:"Yemekten sonra bulaşık ______ .", en:"After the meal I wash the dishes.",
+  { prompt:"Yemekten sonra bulaşık ______ .", en:"After the meal I washed the dishes.",
     opts:["kurdum","yıkadım","demledim"], answer:1 },
   { prompt:"Annem meyveleri ______ ve tabağa koydu.", en:"Mum chopped the fruit and put it on a plate.",
     opts:["doğradı","demledi","yıkadı"], answer:0 },
@@ -253,7 +253,7 @@ function renderMatch(m){
           tally.eslestirme.t+=total; tally.eslestirme.d+=total; // tüm eşleşme doğru tamamlanır
           if(!wrongHere) firstTryCorrect+=total;
           good("👏 Hepsini eşleştirdin!");
-          setTimeout(next,650);
+          showContinue();
         }
       } else {
         wrongHere=true; addErr();
@@ -292,7 +292,7 @@ function renderChoice(step){
         tally[key].d++; if(!wrongHere) firstTryCorrect++;
         document.querySelectorAll('.opt').forEach(function(x){x.classList.add('disabled');});
         good("Doğru! 🎉");
-        setTimeout(next,750);
+        showContinue();
       } else {
         op.classList.add('bad','disabled'); wrongHere=true; addErr();
         badFb("Olmadı, başka şıkkı dene 🔁");
@@ -303,6 +303,16 @@ function renderChoice(step){
 
 function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.innerHTML=m;}}
 function badFb(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.innerHTML=m;}}
+// doğru cevaptan sonra öğrenci kendi hızında ilerlesin: Devam düğmesi
+function showContinue(){
+  var sc=document.getElementById('screen');
+  if(document.getElementById('contBtn')) return;
+  var btn=document.createElement('button'); btn.className="btn"; btn.id="contBtn";
+  btn.textContent = (current>=TOTAL-1) ? "Sonucu gör 🏆" : "Devam ▶";
+  btn.onclick=next;
+  sc.appendChild(btn);
+  btn.focus();
+}
 function next(){ current++; pbar.style.width=((current)/TOTAL*100)+"%"; if(current>=TOTAL) renderWin(); else renderStep(); }
 
 function renderWin(){

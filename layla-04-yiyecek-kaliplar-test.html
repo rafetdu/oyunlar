@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mutfak Kalıpları Testi</title>
+<meta name="description" content="Yiyecek-içecek kalıpları ve sofra ifadeleri — ne kadar öğrendin?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#fff6ee; --card:#ffffff; --ink:#3a2b1e; --ink-soft:#8a7560;
+    --orange:#f08a3c; --orange-dk:#d26c1e; --orange-lt:#ffe9d6;
+    --purple:#9b30d9; --purple-dk:#6a1b9a; --purple-lt:#f2e6fb;
+    --teal:#0e9488; --teal-lt:#d6f3f0;
+    --good:#1e9e5a; --good-lt:#e2f6ec; --bad:#e2536b; --bad-lt:#fde4e9;
+    --gold:#e0a53c; --line:#f0ddc9; --shadow:0 10px 30px rgba(210,108,30,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:
+      radial-gradient(900px 440px at 50% -10%, #ffe3c6 0%, transparent 60%), var(--bg);
+    color:var(--ink); font-family:"Fredoka",system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:640px; margin:0 auto; padding:18px 14px 40px; min-height:100%; display:flex; flex-direction:column;}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;}
+  .brand{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--orange-dk); font-weight:700;}
+  .meta{display:flex; gap:14px; align-items:center; font-size:14px; color:var(--ink-soft);}
+  .meta b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .progress-wrap{height:9px; background:var(--orange-lt); border-radius:20px; overflow:hidden; margin-bottom:12px;}
+  .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--orange),var(--gold)); transition:width .4s;}
+
+  .stage{background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:22px 18px 26px; position:relative; flex:1;}
+  h1{font-family:"Baloo 2",cursive; font-weight:800; text-align:center; font-size:clamp(25px,6.2vw,34px); margin:.1em 0; color:var(--orange-dk);}
+  .hero{text-align:center; font-size:clamp(44px,12vw,64px); line-height:1; margin:6px 0;}
+  .lead{text-align:center; font-size:clamp(15px,3.6vw,18px); color:var(--ink); line-height:1.55; max-width:42ch; margin:8px auto;}
+  .lead .tr{display:block; color:var(--ink-soft); font-size:.84em; margin-top:4px;}
+
+  .sec-tag{text-align:center; font-family:"Baloo 2",cursive; font-weight:700; font-size:14px; color:var(--purple-dk); margin-bottom:2px;}
+  .qcount{text-align:center; font-size:13px; color:var(--ink-soft); margin-bottom:12px;}
+  .prompt{text-align:center; font-size:clamp(17px,4.4vw,21px); font-weight:600; line-height:1.5; margin:6px auto 4px; max-width:34ch;}
+  .prompt .en{display:block; color:var(--ink-soft); font-size:.78em; font-weight:400; margin-top:4px;}
+  .situation{background:var(--purple-lt); border:1px solid #e4d2f5; border-radius:14px; padding:12px 14px; margin:8px auto 2px; max-width:480px; text-align:center; font-size:15.5px; color:var(--purple-dk); font-weight:600;}
+
+  .opts{display:flex; flex-direction:column; gap:10px; max-width:480px; margin:16px auto 0;}
+  .opt{padding:13px 15px; border:2px solid var(--line); border-radius:13px; background:#fff; cursor:pointer;
+    font-weight:600; font-size:16px; text-align:center; transition:.12s; user-select:none;}
+  .opt:hover{border-color:var(--orange);}
+  .opt.good{border-color:var(--good); background:var(--good-lt); color:var(--good);}
+  .opt.bad{border-color:var(--bad); background:var(--bad-lt); color:var(--bad);}
+  .opt.disabled{pointer-events:none; opacity:.75;}
+
+  /* match (section 1) */
+  .matchgrid{display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:520px; margin:12px auto 0;}
+  .col{display:flex; flex-direction:column; gap:9px;}
+  .col-h{font-weight:700; font-size:12px; color:var(--purple-dk); text-transform:uppercase; letter-spacing:.05em; text-align:center;}
+  .mitem{padding:11px 9px; border:2px solid var(--line); border-radius:12px; background:#fff; font-weight:600; font-size:15px; text-align:center; cursor:pointer; transition:.12s; line-height:1.25;}
+  .mitem.sel{border-color:var(--purple); background:var(--purple-lt);}
+  .mitem.done{border-color:var(--good); background:var(--good-lt); color:var(--good); cursor:default;}
+  .mitem.wrongflash{border-color:var(--bad); background:var(--bad-lt); animation:shake .4s;}
+
+  .feedback{text-align:center; min-height:22px; margin-top:14px; font-size:15px; font-weight:600;}
+  .feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+  .feedback .sol{color:var(--orange-dk);}
+
+  .btn{display:block; margin:16px auto 0; border:none; cursor:pointer; font-family:"Baloo 2",cursive; font-weight:700;
+    font-size:17px; padding:13px 32px; border-radius:40px; color:#fff; background:linear-gradient(180deg,#f8a254,var(--orange-dk));
+    box-shadow:0 8px 20px rgba(210,108,30,.3); transition:.15s;}
+  .btn:hover{transform:translateY(-2px)} .btn:disabled{opacity:.5;cursor:default;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft); box-shadow:none; font-size:14px; padding:9px 22px;}
+  .field{display:block; width:100%; max-width:330px; margin:14px auto 0; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#fff; color:var(--ink); font-family:inherit; font-size:17px; text-align:center;}
+  .field:focus{outline:none; border-color:var(--orange);}
+  .mini{text-align:center; font-size:12.5px; color:var(--orange-dk); margin-top:10px;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .pop{animation:pop .35s;}
+  .result-stats{display:flex; gap:20px; justify-content:center; margin:16px 0 4px; flex-wrap:wrap;}
+  .result-stats .n{font-family:"Baloo 2",cursive; font-size:28px; color:var(--orange-dk); font-variant-numeric:tabular-nums;}
+  .result-stats .k{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em;}
+  .verdict{text-align:center; font-size:16px; font-weight:600; color:var(--ink); margin:10px auto; max-width:40ch; line-height:1.5;}
+</style>
+
+<!-- ═══ Özel Orhan Veli Türkçe Okulu — Sonuç Sistemi (her oyunda aynı) ═══ -->
+<style>
+.ovt-box{margin:16px 0 8px;text-align:center;font-family:inherit}
+.ovt-btn{display:block;width:100%;font:inherit;font-weight:800;font-size:18px;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;background:#f59e0b;color:#111;box-shadow:0 6px 18px rgba(245,158,11,.35);transition:transform .1s}
+.ovt-btn:active{transform:scale(.98)}
+.ovt-btn:disabled{opacity:.6;cursor:default}
+.ovt-msg{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}
+.ovt-ok{color:#22c55e}.ovt-err{color:#ef4444}
+.ovt-msg a{color:inherit}
+</style>
+<script>
+var OVT=(function(){
+  var API="https://script.google.com/macros/s/AKfycbxrFZwaMLclRt08PJ_s1FiqcTHOlHuWW8y-XOBXrXy5brsIyt_rVjHMBe4h5LGjj2j0sA/exec";
+  var VITRIN="https://orhanveliturkish.co.uk/oyunlar.html";
+  var q=new URLSearchParams(location.search);
+  var ad=(q.get("ad")||"").trim(), email=(q.get("email")||"").trim().toLowerCase();
+  function el(id){return typeof id==="string"?document.getElementById(id):id;}
+  function renderSend(box,data){
+    box=el(box); if(!box) return;
+    box.className="ovt-box";
+    if(!email){
+      box.innerHTML='<div class="ovt-msg ovt-err">Sonucunun öğretmenine ulaşması için oyunu <a href="'+VITRIN+'" target="_blank" rel="noopener">okulumuzun Oyunlar sayfasından</a> açmalısın.</div>';
+      return;
+    }
+    box.innerHTML='<button type="button" class="ovt-btn">📨 Sonucu Gönder</button><div class="ovt-msg"></div>';
+    var b=box.querySelector("button"), m=box.querySelector(".ovt-msg");
+    b.onclick=function(){
+      b.disabled=true; b.textContent="Gönderiliyor…"; m.textContent=""; m.className="ovt-msg";
+      fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"save",email:email,oyun:data.oyun,sure:String(data.sure),puan:String(data.puan)})})
+      .then(function(r){return r.json();})
+      .then(function(r){
+        if(r.ok){ b.textContent="✅ Gönderildi"; m.textContent="Sonucun öğretmenine ulaştı. Aferin!"; m.className="ovt-msg ovt-ok"; }
+        else { b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent=r.msg||"Gönderilemedi."; m.className="ovt-msg ovt-err"; }
+      })
+      .catch(function(){ b.disabled=false; b.textContent="📨 Tekrar dene"; m.textContent="Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."; m.className="ovt-msg ovt-err"; });
+    };
+  }
+  function fill(id){ var i=el(id); if(i&&ad&&!i.value) i.value=ad; }
+  return {ad:ad,email:email,renderSend:renderSend,fill:fill};
+})();
+</script>
+<!-- ═══ Sonuç Sistemi sonu ═══ -->
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Orhan Veli · Mutfak Kalıpları Testi</div>
+    <div class="meta"><span>⭐ <b id="score">0</b></span><span>❌ <b id="errs">0</b></span></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+  <div class="stage"><div id="screen"></div></div>
+</div>
+
+<script>
+var scoreEl=document.getElementById('score'), errsEl=document.getElementById('errs'), pbar=document.getElementById('pbar');
+var score=0, errors=0, firstTryCorrect=0, startTime=null, timerStarted=false, elapsed=0, current=0, playerName="";
+// bölüm bazlı doğru sayısı (öğretmen raporu için)
+var tally={ eslestirme:{d:0,t:0}, ifade:{d:0,t:0}, bosluk:{d:0,t:0} };
+
+function fmt(s){var m=Math.floor(s/60);var r=s%60;return m+":"+(r<10?"0":"")+r;}
+function addScore(n){ score+=n; scoreEl.textContent=score; }
+function addErr(){ errors++; errsEl.textContent=errors; }
+
+// ---------- SORULAR ----------
+// Bölüm 1: EŞLEŞTİRME — fiil kalıbı ↔ İngilizce (iki eşleştirme turu)
+var MATCH=[
+  { tag:"1. Bölüm — Eşleştirme", pairs:[
+    ["çayı demlemek","to brew tea"],
+    ["sofrayı kurmak","to set the table"],
+    ["yemek pişirmek","to cook a meal"],
+    ["ekmek almak","to buy bread"],
+  ]},
+  { tag:"1. Bölüm — Eşleştirme", pairs:[
+    ["bulaşık yıkamak","to wash the dishes"],
+    ["meyve doğramak","to chop fruit"],
+    ["sofrayı toplamak","to clear the table"],
+    ["kahvaltı hazırlamak","to make breakfast"],
+  ]},
+];
+// Bölüm 2: DURUM → doğru İFADE seç (sofra ifadeleri)
+var IFADE=[
+  { situation:"Yemek hazır, misafirleri masaya çağırıyorsun.", en:"Dinner is ready, you call people to the table.",
+    opts:["Sofraya buyurun!","Doydum, teşekkürler.","Elinize sağlık."], answer:0 },
+  { situation:"Annen güzel bir yemek yaptı, ona teşekkür ediyorsun.", en:"Your mum cooked a lovely meal; you thank her.",
+    opts:["Afiyet olsun!","Elinize sağlık.","Çay var mı?"], answer:1 },
+  { situation:"Arkadaşın yemeğe başlıyor, ona iyi dileyeceksin.", en:"Your friend starts eating; you wish them well.",
+    opts:["Afiyet olsun!","Sofrayı topla.","Doydum."], answer:0 },
+  { situation:"Çok yedin, artık istemiyorsun.", en:"You've eaten a lot; you don't want more.",
+    opts:["Biraz daha?","Doydum, teşekkürler.","Sofraya buyurun."], answer:1 },
+  { situation:"Kahvaltıda çay olup olmadığını soruyorsun.", en:"You ask if there is tea at breakfast.",
+    opts:["Çay var mı?","Afiyet olsun.","Elinize sağlık."], answer:0 },
+];
+// Bölüm 3: BOŞLUK DOLDURMA (seçmeli) — cümledeki kalıbı tamamla
+var BOSLUK=[
+  { prompt:"Annem her sabah çayı ______ .", en:"Mum brews tea every morning.",
+    opts:["demler","doğrar","yıkar"], answer:0 },
+  { prompt:"Akşam yemekten sonra sofrayı ______ .", en:"After dinner we clear the table.",
+    opts:["kurarız","toplarız","alırız"], answer:1 },
+  { prompt:"Fırından taze ekmek ______ .", en:"I buy fresh bread from the bakery.",
+    opts:["aldım","pişirdim","doğradım"], answer:0 },
+  { prompt:"Yemekten sonra bulaşık ______ .", en:"After the meal I wash the dishes.",
+    opts:["kurdum","yıkadım","demledim"], answer:1 },
+  { prompt:"Annem meyveleri ______ ve tabağa koydu.", en:"Mum chopped the fruit and put it on a plate.",
+    opts:["doğradı","demledi","yıkadı"], answer:0 },
+];
+
+// toplam soru = match turları (2) + ifade (5) + boşluk (5) = 12 adım
+var STEPS=[];
+MATCH.forEach(function(m){ STEPS.push({type:"match", data:m}); });
+IFADE.forEach(function(q){ STEPS.push({type:"ifade", data:q}); });
+BOSLUK.forEach(function(q){ STEPS.push({type:"bosluk", data:q}); });
+var TOTAL=STEPS.length;
+
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function renderIntro(){
+  document.getElementById('screen').innerHTML=
+    '<div class="hero">🍽️⭐</div>'+
+    '<h1>Mutfak Kalıpları Testi</h1>'+
+    '<p class="lead">Mutfak kalıplarını ve sofra ifadelerini ne kadar öğrendin? '+
+    'Eşleştir, doğru ifadeyi ve doğru sözcüğü seç. Her soruda tek doğru var! '+
+    '<span class="tr">How well do you know the kitchen phrases?</span></p>'+
+    '<input class="field" id="who" placeholder="Adını yaz / Your name" autocomplete="name">'+
+    '<button class="btn" id="go">Teste başla ▶</button>'+
+    '<div class="mini">Sonucun öğretmenine gider. İlk denemede doğru yapmaya çalış! 💪</div>';
+  OVT.fill("who");
+  var inp=document.getElementById('who');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
+  document.getElementById('go').onclick=function(){
+    playerName=(inp.value||"").trim();
+    if(!playerName){ inp.focus(); inp.style.borderColor="var(--bad)"; return; }
+    current=0; score=0; errors=0; firstTryCorrect=0; scoreEl.textContent=0; errsEl.textContent=0;
+    tally={ eslestirme:{d:0,t:0}, ifade:{d:0,t:0}, bosluk:{d:0,t:0} };
+    startTime=Date.now();
+    renderStep();
+  };
+  pbar.style.width="0%";
+}
+
+function renderStep(){
+  pbar.style.width=((current)/TOTAL*100)+"%";
+  var step=STEPS[current];
+  if(step.type==="match") renderMatch(step.data);
+  else renderChoice(step);
+}
+
+// ---- eşleştirme ----
+function renderMatch(m){
+  var left=shuffle(m.pairs.map(function(p,i){return {txt:p[0],key:i};}));
+  var right=shuffle(m.pairs.map(function(p,i){return {txt:p[1],key:i};}));
+  var html='<div class="sec-tag">'+m.tag+'</div><div class="qcount">Soru '+(current+1)+' / '+TOTAL+' · Kalıpları anlamıyla eşleştir</div>'+
+    '<div class="matchgrid"><div class="col"><div class="col-h">Kalıp</div>';
+  left.forEach(function(x){ html+='<div class="mitem" data-side="L" data-key="'+x.key+'">'+x.txt+'</div>'; });
+  html+='</div><div class="col"><div class="col-h">Meaning</div>';
+  right.forEach(function(x){ html+='<div class="mitem" data-side="R" data-key="'+x.key+'">'+x.txt+'</div>'; });
+  html+='</div></div><div class="feedback" id="fb"></div>';
+  document.getElementById('screen').innerHTML=html;
+  var sel=null, done=0, total=m.pairs.length, wrongHere=false;
+  document.querySelectorAll('.mitem').forEach(function(mi){
+    mi.addEventListener('click',function(){
+      if(mi.classList.contains('done')) return;
+      if(!sel){ if(mi.dataset.side!=='L') return; sel=mi; mi.classList.add('sel'); return; }
+      if(mi===sel){ mi.classList.remove('sel'); sel=null; return; }
+      if(mi.dataset.side!=='R'){ sel.classList.remove('sel'); sel=mi; mi.classList.add('sel'); return; }
+      if(mi.dataset.key===sel.dataset.key){
+        mi.classList.add('done'); sel.classList.add('done'); sel.classList.remove('sel'); sel=null;
+        addScore(2); done++;
+        if(done>=total){
+          tally.eslestirme.t+=total; tally.eslestirme.d+=total; // tüm eşleşme doğru tamamlanır
+          if(!wrongHere) firstTryCorrect+=total;
+          good("👏 Hepsini eşleştirdin!");
+          setTimeout(next,650);
+        }
+      } else {
+        wrongHere=true; addErr();
+        var b1=mi,b2=sel; b1.classList.add('wrongflash'); b2.classList.add('wrongflash');
+        badFb("Olmadı, tekrar dene 🔁");
+        setTimeout(function(){b1.classList.remove('wrongflash'); b2.classList.remove('wrongflash','sel');},450); sel=null;
+      }
+    });
+  });
+}
+
+// ---- çoktan seçmeli (ifade & boşluk) ----
+function renderChoice(step){
+  var q=step.data, isIf=step.type==="ifade";
+  var secTag=isIf?"2. Bölüm — Doğru ifadeyi seç":"3. Bölüm — Boşluğu doldur";
+  var promptHtml = isIf
+    ? '<div class="situation">💬 '+q.situation+'<span style="display:block;font-size:.8em;font-weight:400;color:var(--ink-soft);margin-top:3px">'+q.en+'</span></div><div class="prompt">Ne dersin?</div>'
+    : '<div class="prompt">'+q.prompt+'<span class="en">'+q.en+'</span></div>';
+  // şıkları karıştır ama doğru indeksi takip et
+  var opts=q.opts.map(function(t,i){return {t:t,correct:i===q.answer};});
+  opts=shuffle(opts);
+  var html='<div class="sec-tag">'+secTag+'</div><div class="qcount">Soru '+(current+1)+' / '+TOTAL+'</div>'+
+    promptHtml+'<div class="opts" id="opts">';
+  opts.forEach(function(o,i){ html+='<div class="opt" data-correct="'+o.correct+'">'+o.t+'</div>'; });
+  html+='</div><div class="feedback" id="fb"></div>';
+  document.getElementById('screen').innerHTML=html;
+  var answered=false, wrongHere=false;
+  var key=isIf?"ifade":"bosluk";
+  tally[key].t++;
+  document.querySelectorAll('.opt').forEach(function(op){
+    op.addEventListener('click',function(){
+      if(answered) return;
+      var correct=op.dataset.correct==="true";
+      if(correct){
+        op.classList.add('good'); answered=true; addScore(2);
+        tally[key].d++; if(!wrongHere) firstTryCorrect++;
+        document.querySelectorAll('.opt').forEach(function(x){x.classList.add('disabled');});
+        good("Doğru! 🎉");
+        setTimeout(next,750);
+      } else {
+        op.classList.add('bad','disabled'); wrongHere=true; addErr();
+        badFb("Olmadı, başka şıkkı dene 🔁");
+      }
+    });
+  });
+}
+
+function good(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback good"; fb.innerHTML=m;}}
+function badFb(m){var fb=document.getElementById('fb'); if(fb){fb.className="feedback bad"; fb.innerHTML=m;}}
+function next(){ current++; pbar.style.width=((current)/TOTAL*100)+"%"; if(current>=TOTAL) renderWin(); else renderStep(); }
+
+function renderWin(){
+  elapsed=Math.floor((Date.now()-startTime)/1000);
+  pbar.style.width="100%";
+  // İlk denemede doğru / toplam
+  var ft=firstTryCorrect, tot=TOTAL + (MATCH.reduce(function(a,m){return a+m.pairs.length;},0) - MATCH.length);
+  // basit: toplam "doğru birim" = eşleşme çiftleri + ifade + boşluk
+  var totalUnits = MATCH.reduce(function(a,m){return a+m.pairs.length;},0) + IFADE.length + BOSLUK.length;
+  var verdict="";
+  var oran = ft/totalUnits;
+  if(oran>=0.9) verdict="Harika! Kalıpları çok iyi öğrenmişsin. 🌟";
+  else if(oran>=0.7) verdict="Güzel! Çoğunu biliyorsun, birkaç kalıbı tekrar edelim. 👍";
+  else if(oran>=0.4) verdict="İyi başlangıç! Kalıpları birlikte biraz daha çalışalım. 💪";
+  else verdict="Kalıpları birlikte tekrar edelim, sonra yine deneriz. 📚";
+
+  document.getElementById('screen').innerHTML=
+    '<div class="hero pop">🏆</div><h1>Tebrikler, '+playerName.replace(/</g,'&lt;')+'!</h1>'+
+    '<div class="result-stats">'+
+      '<div><div class="n">'+ft+'/'+totalUnits+'</div><div class="k">İlk denemede</div></div>'+
+      '<div><div class="n">'+fmt(elapsed)+'</div><div class="k">Süre</div></div>'+
+      '<div><div class="n">'+errors+'</div><div class="k">Hata</div></div>'+
+    '</div>'+
+    '<div class="verdict">'+verdict+'</div>'+
+    '<div id="ovtSend"></div>'+
+    '<button class="btn ghost" id="again">↺ Tekrar dene</button>';
+  var puan=ft+"/"+totalUnits+" ilk denemede · "+errors+" hata"+
+    " (eşl "+tally.eslestirme.d+"/"+tally.eslestirme.t+", ifade "+tally.ifade.d+"/"+tally.ifade.t+", boşluk "+tally.bosluk.d+"/"+tally.bosluk.t+")";
+  OVT.renderSend("ovtSend", { oyun:"Mutfak Kalıpları Testi (Layla)", sure:fmt(elapsed), puan:puan });
+  document.getElementById('again').onclick=function(){ renderIntro(); };
+}
+
+renderIntro();
+</script>
+</body>
+</html>
